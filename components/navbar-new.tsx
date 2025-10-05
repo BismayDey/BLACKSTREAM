@@ -84,7 +84,11 @@ export default function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.3 }}
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          isScrolled
+            ? "bg-black/95 backdrop-blur-xl shadow-2xl shadow-red-500/10"
+            : "bg-gradient-to-b from-black/80 via-black/40 to-transparent"
+        }`}
       >
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between h-20">
@@ -227,7 +231,7 @@ export default function Navbar() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                      className="w-64 bg-black/90 backdrop-blur-2xl border-white/10"
+                      className="w-64 bg-black/95 backdrop-blur-xl border-gray-800"
                       align="end"
                       forceMount
                     >
@@ -341,7 +345,7 @@ export default function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="lg:hidden bg-black/95 backdrop-blur-xl border-t border-white/10"
+              className="lg:hidden bg-black/95 backdrop-blur-xl border-t border-gray-800"
             >
               <div className="container mx-auto px-4 py-6">
                 {/* Mobile Search */}
@@ -409,6 +413,9 @@ export default function Navbar() {
           )}
         </AnimatePresence>
       </motion.header>
+
+      {/* Spacer to prevent content from going under navbar */}
+      <div className="h-20" />
     </>
   );
 }

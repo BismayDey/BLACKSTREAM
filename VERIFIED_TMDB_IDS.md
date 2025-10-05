@@ -13,6 +13,12 @@ This document contains all verified TMDB IDs used in the BLACKSTREAM platform. A
 | 5   | Money Heist (La Casa de Papel) | 71446   | ✅ Verified | Oct 2025      |
 | 6   | The Crown                      | 46708   | ✅ Verified | Oct 2025      |
 | 7   | Bridgerton                     | 63247   | ✅ Verified | Oct 2025      |
+| 11  | Breaking Bad                   | 1396    | ✅ Verified | Oct 2025      |
+| 12  | Peaky Blinders                 | 60574   | ✅ Verified | Oct 2025      |
+| 13  | Dark                           | 70523   | ✅ Verified | Oct 2025      |
+| 14  | Ozark                          | 69740   | ✅ Verified | Oct 2025      |
+| 15  | Narcos                         | 63351   | ✅ Verified | Oct 2025      |
+| 16  | The Umbrella Academy           | 75006   | ✅ Verified | Oct 2025      |
 
 ## Movies
 
@@ -21,6 +27,10 @@ This document contains all verified TMDB IDs used in the BLACKSTREAM platform. A
 | 8   | The Adam Project                  | 696806  | ✅ Verified | Oct 2025      |
 | 9   | Glass Onion: A Knives Out Mystery | 661374  | ✅ Verified | Oct 2025      |
 | 10  | Red Notice                        | 512195  | ✅ Verified | Oct 2025      |
+| 17  | Extraction                        | 545609  | ✅ Verified | Oct 2025      |
+| 18  | The Gray Man                      | 725201  | ✅ Verified | Oct 2025      |
+| 19  | Enola Holmes                      | 497582  | ✅ Verified | Oct 2025      |
+| 20  | Don't Look Up                     | 646380  | ✅ Verified | Oct 2025      |
 
 ## How to Verify TMDB IDs
 

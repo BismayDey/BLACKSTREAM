@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
   Heart,
@@ -18,6 +18,10 @@ import {
   MessageSquare,
   Bookmark,
   Download,
+  Info,
+  TrendingUp,
+  Users,
+  Eye,
 } from "lucide-react";
 import {
   doc,
@@ -370,6 +374,7 @@ export default function ShowPage() {
   const [isWatchingFullVideo, setIsWatchingFullVideo] = useState(false);
   const [currentSeason, setCurrentSeason] = useState(1);
   const [currentEpisode, setCurrentEpisode] = useState(1);
+  const [relatedContent, setRelatedContent] = useState<any[]>([]);
 
   const isInWatchlist = profile?.watchlist?.includes(id as string) || false;
 
@@ -386,6 +391,40 @@ export default function ShowPage() {
         }
 
         setShow(foundShow);
+
+        // Find related content based on genre and type
+        const related = shows
+          .filter((s) => {
+            // Exclude current show
+            if (s.id === foundShow.id) return false;
+
+            // Match by type (movie/series)
+            const sameType = s.type === foundShow.type;
+
+            // Match by genre (at least one common genre)
+            const hasCommonGenre = s.genre?.some((g: string) =>
+              foundShow.genre?.includes(g)
+            );
+
+            return sameType && hasCommonGenre;
+          })
+          .slice(0, 10); // Limit to 10 related items
+
+        // If we don't have enough related items, fill with same type
+        if (related.length < 10) {
+          const additional = shows
+            .filter(
+              (s) =>
+                s.id !== foundShow.id &&
+                s.type === foundShow.type &&
+                !related.find((r) => r.id === s.id)
+            )
+            .slice(0, 10 - related.length);
+
+          setRelatedContent([...related, ...additional]);
+        } else {
+          setRelatedContent(related);
+        }
 
         // Check if show is in user's watchlist/favorites
         if (user) {
@@ -576,258 +615,638 @@ export default function ShowPage() {
   }
 
   return (
-    <div className="pt-16">
-      {/* Video Player */}
-      <div className="mb-8">
-        {show.tmdbId ? (
-          <VidkingPlayer
-            tmdbId={show.tmdbId}
-            type={show.type === "series" ? "tv" : "movie"}
-            season={currentSeason}
-            episode={currentEpisode}
-            title={show.title}
-            color="e50914"
-            autoPlay={false}
-            nextEpisode={show.type === "series"}
-            episodeSelector={show.type === "series"}
-            onProgressUpdate={(progress, timestamp) => {
-              console.log(`Progress: ${progress}%, Timestamp: ${timestamp}s`);
-            }}
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-background/95">
+      {/* Hero Section with Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="relative w-full h-[85vh] md:h-[90vh] overflow-hidden"
+      >
+        {/* Backdrop Image */}
+        <div className="absolute inset-0">
+          <Image
+            src={show.backdrop || show.thumbnail || "/placeholder.svg"}
+            alt={show.title}
+            fill
+            className="object-cover"
+            priority
           />
-        ) : (
-          <VideoPlayerSafe
-            videoUrl={show.videoUrl}
-            poster={show.poster}
-            title={show.title}
-            showId={show.id}
-          />
-        )}
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background/50" />
+        </div>
+
+        {/* Content Overlay */}
+        <div className="relative h-full container mx-auto px-4 flex flex-col justify-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            {/* Left side - Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <Link
+                href="/shows"
+                className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors group"
+              >
+                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <span className="font-medium">Back to Shows</span>
+              </Link>
+
+              {/* Genre Badges */}
+              <div className="flex items-center gap-2 mb-4">
+                {show.genre?.slice(0, 3).map((genre, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3 + index * 0.1 }}
+                  >
+                    <Badge className="bg-primary/90 hover:bg-primary text-white border-0 px-4 py-1.5 text-sm backdrop-blur-sm">
+                      {genre}
+                    </Badge>
+                  </motion.div>
+                ))}
+                <Badge
+                  variant="outline"
+                  className="border-white/30 text-white backdrop-blur-sm px-3 py-1.5"
+                >
+                  {show.rating} ⭐
+                </Badge>
+              </div>
+
+              {/* Title */}
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 text-white drop-shadow-2xl leading-tight">
+                {show.title}
+              </h1>
+
+              {/* Meta Info */}
+              <div className="flex flex-wrap items-center gap-6 text-white/90 mb-6">
+                <div className="flex items-center gap-2">
+                  <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                  <span className="font-semibold text-lg">
+                    {show.userRating}/10
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-5 h-5" />
+                  <span>{show.duration}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-5 h-5" />
+                  <span>{show.releaseYear}</span>
+                </div>
+                {show.type === "series" && (
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5" />
+                    <span>
+                      {show.seasons || 1} Season
+                      {(show.seasons || 1) > 1 ? "s" : ""}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Description */}
+              <p className="text-white/80 text-lg leading-relaxed mb-8 max-w-2xl line-clamp-3">
+                {show.description}
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3">
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg gap-3 shadow-2xl hover:shadow-primary/50 transition-all"
+                  onClick={() => {
+                    const playerElement =
+                      document.getElementById("video-player");
+                    playerElement?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  <Play className="w-6 h-6 fill-white" />
+                  Play Now
+                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="px-6 py-6 gap-2 bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-sm"
+                    >
+                      <Info className="w-5 h-5" />
+                      More Info
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-3xl bg-background/95 backdrop-blur-xl border-white/10">
+                    <div className="space-y-4">
+                      <h2 className="text-2xl font-bold">{show.title}</h2>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {show.description}
+                      </p>
+                      <div className="grid grid-cols-2 gap-4 pt-4">
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-1">
+                            Director
+                          </p>
+                          <p className="font-semibold">{show.director}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-1">
+                            Studio
+                          </p>
+                          <p className="font-semibold">{show.studio}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+            </motion.div>
+
+            {/* Right side - Action Buttons Card */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="hidden lg:flex justify-end"
+            >
+              <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6 space-y-4 max-w-sm w-full">
+                <h3 className="text-white font-semibold text-lg mb-4">
+                  Quick Actions
+                </h3>
+
+                <Button
+                  variant={isInWatchlist ? "default" : "outline"}
+                  size="lg"
+                  className={`w-full gap-3 justify-start ${
+                    isInWatchlist
+                      ? "bg-primary hover:bg-primary/90 text-white"
+                      : "bg-white/5 hover:bg-white/10 text-white border-white/20"
+                  }`}
+                  onClick={handleWatchlistToggle}
+                >
+                  <Bookmark
+                    className={`w-5 h-5 ${isInWatchlist ? "fill-white" : ""}`}
+                  />
+                  <span>
+                    {isInWatchlist
+                      ? "Remove from Watchlist"
+                      : "Add to Watchlist"}
+                  </span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className={`w-full gap-3 justify-start ${
+                    isFavorite
+                      ? "bg-red-500/90 hover:bg-red-600 text-white border-red-500"
+                      : "bg-white/5 hover:bg-white/10 text-white border-white/20"
+                  }`}
+                  onClick={toggleFavorite}
+                >
+                  <Heart
+                    className={`w-5 h-5 ${isFavorite ? "fill-white" : ""}`}
+                  />
+                  <span>
+                    {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+                  </span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full gap-3 justify-start bg-white/5 hover:bg-white/10 text-white border-white/20"
+                  onClick={handleShare}
+                >
+                  <Share2 className="w-5 h-5" />
+                  <span>Share</span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full gap-3 justify-start bg-white/5 hover:bg-white/10 text-white border-white/20"
+                  onClick={() => {
+                    if (navigator.share) {
+                      navigator.share({
+                        title: show.title,
+                        text: show.description,
+                        url: window.location.href,
+                      });
+                    }
+                  }}
+                >
+                  <Download className="w-5 h-5" />
+                  <span>Download</span>
+                </Button>
+
+                {/* Quick Stats */}
+                <div className="pt-4 border-t border-white/10 space-y-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-white/70">Rating</span>
+                    <div className="flex items-center gap-1">
+                      <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                      <span className="text-white font-semibold">
+                        {show.userRating}/10
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-white/70">Views</span>
+                    <span className="text-white font-semibold">
+                      {Math.floor(Math.random() * 50 + 10)}M+
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-white/70">Release</span>
+                    <span className="text-white font-semibold">
+                      {show.releaseYear}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Mobile Quick Actions - Bottom of Hero */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="lg:hidden absolute bottom-6 left-4 right-4"
+          >
+            <div className="flex gap-2 justify-center">
+              <Button
+                variant={isInWatchlist ? "default" : "outline"}
+                size="sm"
+                className={`gap-2 ${
+                  isInWatchlist
+                    ? "bg-white/20 hover:bg-white/30 text-white border-white/30"
+                    : "bg-white/10 hover:bg-white/20 text-white border-white/30"
+                } backdrop-blur-sm`}
+                onClick={handleWatchlistToggle}
+              >
+                <Bookmark
+                  className={`w-4 h-4 ${isInWatchlist ? "fill-white" : ""}`}
+                />
+                <span className="hidden sm:inline">Watchlist</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className={`gap-2 backdrop-blur-sm ${
+                  isFavorite
+                    ? "bg-red-500/90 hover:bg-red-600 text-white border-red-500"
+                    : "bg-white/10 hover:bg-white/20 text-white border-white/30"
+                }`}
+                onClick={toggleFavorite}
+              >
+                <Heart
+                  className={`w-4 h-4 ${isFavorite ? "fill-white" : ""}`}
+                />
+                <span className="hidden sm:inline">Favorite</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-sm"
+                onClick={handleShare}
+              >
+                <Share2 className="w-4 h-4" />
+                <span className="hidden sm:inline">Share</span>
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Video Player Section */}
+      <div
+        id="video-player"
+        className="container mx-auto px-4 -mt-16 relative z-10 mb-12"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="rounded-2xl overflow-hidden shadow-2xl border border-white/10"
+        >
+          {show.tmdbId ? (
+            <VidkingPlayer
+              tmdbId={show.tmdbId}
+              type={show.type === "series" ? "tv" : "movie"}
+              season={currentSeason}
+              episode={currentEpisode}
+              title={show.title}
+              color="e50914"
+              autoPlay={false}
+              nextEpisode={show.type === "series"}
+              episodeSelector={show.type === "series"}
+              onProgressUpdate={(progress, timestamp) => {
+                console.log(`Progress: ${progress}%, Timestamp: ${timestamp}s`);
+              }}
+            />
+          ) : (
+            <VideoPlayerSafe
+              videoUrl={show.videoUrl}
+              poster={show.poster}
+              title={show.title}
+              showId={show.id}
+            />
+          )}
+        </motion.div>
       </div>
 
       <div className="container mx-auto px-4 pb-12">
-        <Link
-          href="/shows"
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 hover-underline"
+        {/* Stats Cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12"
         >
-          <ChevronLeft className="w-4 h-4" />
-          Back to Shows
-        </Link>
+          <div className="bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 rounded-xl p-6 backdrop-blur-sm">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-primary/20 rounded-lg">
+                <Star className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{show.userRating}</p>
+                <p className="text-xs text-muted-foreground">Rating</p>
+              </div>
+            </div>
+          </div>
 
+          <div className="bg-gradient-to-br from-blue-500/20 to-blue-500/5 border border-blue-500/20 rounded-xl p-6 backdrop-blur-sm">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-blue-500/20 rounded-lg">
+                <Eye className="w-5 h-5 text-blue-500" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">
+                  {Math.floor(Math.random() * 50 + 10)}M
+                </p>
+                <p className="text-xs text-muted-foreground">Views</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-green-500/20 to-green-500/5 border border-green-500/20 rounded-xl p-6 backdrop-blur-sm">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-green-500/20 rounded-lg">
+                <Users className="w-5 h-5 text-green-500" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{reviews.length}K</p>
+                <p className="text-xs text-muted-foreground">Reviews</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-purple-500/20 to-purple-500/5 border border-purple-500/20 rounded-xl p-6 backdrop-blur-sm">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-purple-500/20 rounded-lg">
+                <Award className="w-5 h-5 text-purple-500" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{show.awards ? "5+" : "2"}</p>
+                <p className="text-xs text-muted-foreground">Awards</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
         {/* Show Info */}
         <div className="mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
           >
-            <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-6">
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                  {show.genre?.map((genre, index) => (
-                    <Badge
-                      key={index}
-                      className="bg-primary/80 hover:bg-primary text-white"
-                    >
-                      {genre}
-                    </Badge>
-                  ))}
-                  <Badge variant="outline">{show.rating}</Badge>
-                </div>
-                <h1 className="text-3xl md:text-4xl font-bold mb-2 gradient-text">
-                  {show.title}
-                </h1>
-                <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground mb-4">
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                    <span>{show.userRating}/10</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    <span>{show.duration}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
-                    <span>{show.releaseYear}</span>
-                  </div>
-                  {show.awards && (
-                    <div className="flex items-center gap-1">
-                      <Award className="w-4 h-4 text-yellow-500" />
-                      <span>{show.awards}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Button
-                  variant={isInWatchlist ? "default" : "outline"}
-                  size="sm"
-                  className={`gap-2 ${
-                    isInWatchlist ? "bg-primary hover:bg-primary/90" : ""
-                  }`}
-                  onClick={handleWatchlistToggle}
-                >
-                  <Bookmark
-                    className={`w-4 h-4 ${isInWatchlist ? "fill-white" : ""}`}
-                  />
-                  {isInWatchlist ? "In Watchlist" : "Add to Watchlist"}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={`gap-2 ${
-                    isFavorite
-                      ? "bg-red-500 hover:bg-red-600 text-white border-red-500"
-                      : ""
-                  }`}
-                  onClick={toggleFavorite}
-                >
-                  <Heart
-                    className={`w-4 h-4 ${isFavorite ? "fill-white" : ""}`}
-                  />
-                  {isFavorite ? "Favorited" : "Favorite"}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-2"
-                  onClick={handleShare}
-                >
-                  <Share2 className="w-4 h-4" />
-                  Share
-                </Button>
-              </div>
-            </div>
-
             <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="mb-6 bg-muted/30">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="episodes">Episodes</TabsTrigger>
-                <TabsTrigger value="reviews">Reviews</TabsTrigger>
-                <TabsTrigger value="related">Related</TabsTrigger>
+              <TabsList className="mb-8 bg-muted/50 backdrop-blur-sm p-1.5 rounded-xl border border-white/10">
+                <TabsTrigger
+                  value="overview"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg px-6 py-2.5 transition-all"
+                >
+                  <Info className="w-4 h-4 mr-2" />
+                  Overview
+                </TabsTrigger>
+                <TabsTrigger
+                  value="episodes"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg px-6 py-2.5 transition-all"
+                >
+                  <Play className="w-4 h-4 mr-2" />
+                  Episodes
+                </TabsTrigger>
+                <TabsTrigger
+                  value="reviews"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg px-6 py-2.5 transition-all"
+                >
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Reviews
+                </TabsTrigger>
+                <TabsTrigger
+                  value="related"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg px-6 py-2.5 transition-all"
+                >
+                  <TrendingUp className="w-4 h-4 mr-2" />
+                  Related
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview" className="mt-0">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                  <div className="lg:col-span-2">
-                    <p className="text-lg mb-8 leading-relaxed">
-                      {show.description}
-                    </p>
+                  <div className="lg:col-span-2 space-y-8">
+                    {/* Description */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 }}
+                      className="bg-muted/30 backdrop-blur-sm border border-white/10 rounded-xl p-6"
+                    >
+                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <Info className="w-5 h-5 text-primary" />
+                        Synopsis
+                      </h3>
+                      <p className="text-lg leading-relaxed text-muted-foreground">
+                        {show.description}
+                      </p>
+                    </motion.div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                      <div>
-                        <h3 className="font-semibold mb-3 text-lg">Cast</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Cast */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="bg-muted/30 backdrop-blur-sm border border-white/10 rounded-xl p-6"
+                      >
+                        <h3 className="font-semibold mb-4 text-lg flex items-center gap-2">
+                          <Users className="w-5 h-5 text-primary" />
+                          Cast
+                        </h3>
                         <div className="space-y-3">
                           {show.cast?.map((actor: string, index: number) => (
-                            <div
+                            <motion.div
                               key={index}
-                              className="flex items-center gap-3"
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.3 + index * 0.05 }}
+                              className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors"
                             >
-                              <Avatar className="h-8 w-8">
+                              <Avatar className="h-10 w-10 ring-2 ring-primary/20">
                                 <AvatarImage src="/placeholder.svg" />
-                                <AvatarFallback>
+                                <AvatarFallback className="bg-primary/20 text-primary font-semibold">
                                   {actor.charAt(0)}
                                 </AvatarFallback>
                               </Avatar>
-                              <span>{actor}</span>
-                            </div>
+                              <span className="font-medium">{actor}</span>
+                            </motion.div>
                           ))}
                         </div>
-                      </div>
-                      <div>
-                        <h3 className="font-semibold mb-3 text-lg">Details</h3>
-                        <div className="space-y-2">
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">
+                      </motion.div>
+
+                      {/* Details */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.25 }}
+                        className="bg-muted/30 backdrop-blur-sm border border-white/10 rounded-xl p-6"
+                      >
+                        <h3 className="font-semibold mb-4 text-lg flex items-center gap-2">
+                          <Award className="w-5 h-5 text-primary" />
+                          Details
+                        </h3>
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                            <span className="text-muted-foreground font-medium">
                               Director
                             </span>
-                            <span>{show.director}</span>
+                            <span className="font-semibold">
+                              {show.director}
+                            </span>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">
+                          <div className="flex justify-between items-center p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                            <span className="text-muted-foreground font-medium">
                               Studio
                             </span>
-                            <span>{show.studio || "Unknown"}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">
-                              Release Date
+                            <span className="font-semibold">
+                              {show.studio || "Unknown"}
                             </span>
-                            <span>{show.releaseDate || show.releaseYear}</span>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Audio</span>
-                            <span>5.1 Surround Sound</span>
+                          <div className="flex justify-between items-center p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                            <span className="text-muted-foreground font-medium">
+                              Release
+                            </span>
+                            <span className="font-semibold">
+                              {show.releaseDate || show.releaseYear}
+                            </span>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">
+                          <div className="flex justify-between items-center p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                            <span className="text-muted-foreground font-medium">
+                              Audio
+                            </span>
+                            <span className="font-semibold">5.1 Surround</span>
+                          </div>
+                          <div className="flex justify-between items-center p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                            <span className="text-muted-foreground font-medium">
                               Subtitles
                             </span>
-                            <span>English, Spanish, French</span>
+                            <span className="font-semibold">
+                              Multi-language
+                            </span>
                           </div>
                         </div>
-                      </div>
+                      </motion.div>
                     </div>
                   </div>
 
+                  {/* Trailer Card */}
                   <div className="lg:col-span-1">
-                    <div className="rounded-lg overflow-hidden border border-white/10 bg-muted/30 card-hover">
-                      <div className="relative aspect-video">
-                        <Image
-                          src={show.thumbnail || "/placeholder.svg"}
-                          alt={show.title}
-                          fill
-                          className="object-cover"
-                        />
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              className="absolute inset-0 w-full h-full rounded-none bg-black/40 hover:bg-black/60 flex items-center justify-center"
-                            >
-                              <Play className="w-16 h-16 text-white" />
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-4xl p-0 bg-black border-none">
-                            <VideoPlayerSafe
-                              videoUrl={show.trailerUrl}
-                              title={`${show.title} - Trailer`}
-                            />
-                          </DialogContent>
-                        </Dialog>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="sticky top-24"
+                    >
+                      <div className="rounded-xl overflow-hidden border border-white/10 bg-muted/30 backdrop-blur-sm hover:border-primary/50 transition-all duration-300 group">
+                        <div className="relative aspect-video">
+                          <Image
+                            src={show.thumbnail || "/placeholder.svg"}
+                            alt={show.title}
+                            fill
+                            className="object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="absolute inset-0 w-full h-full rounded-none bg-black/20 hover:bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-all"
+                              >
+                                <div className="relative">
+                                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl group-hover:blur-2xl transition-all" />
+                                  <Play className="w-20 h-20 text-white relative group-hover:scale-110 transition-transform fill-white" />
+                                </div>
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-5xl p-0 bg-black border-none">
+                              <VideoPlayerSafe
+                                videoUrl={show.trailerUrl}
+                                title={`${show.title} - Trailer`}
+                              />
+                            </DialogContent>
+                          </Dialog>
+                          <div className="absolute top-4 right-4 bg-primary/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-semibold text-white">
+                            HD
+                          </div>
+                        </div>
+                        <div className="p-6">
+                          <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
+                            <Play className="w-5 h-5 text-primary" />
+                            Official Trailer
+                          </h3>
+                          <p className="text-sm text-muted-foreground mb-4">
+                            Watch the official trailer for {show.title}.
+                            Released on {show.trailerDate || "2023-01-15"}.
+                          </p>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full gap-2 hover:bg-primary hover:text-white hover:border-primary transition-all"
+                          >
+                            <Download className="w-4 h-4" />
+                            Download Trailer
+                          </Button>
+                        </div>
                       </div>
-                      <div className="p-4">
-                        <h3 className="font-semibold mb-2">Official Trailer</h3>
-                        <p className="text-sm text-muted-foreground">
-                          Watch the official trailer for {show.title}. Released
-                          on {show.trailerDate || "2023-01-15"}.
-                        </p>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="mt-4 w-full gap-2"
-                        >
-                          <Download className="w-4 h-4" />
-                          Download
-                        </Button>
-                      </div>
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="episodes" className="mt-0">
                 {show.episodes ? (
-                  <div className="space-y-6">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between mb-6">
+                      <h2 className="text-2xl font-bold">
+                        Season {currentSeason}
+                      </h2>
+                      <Badge variant="outline" className="px-4 py-1.5">
+                        {show.episodes.length} Episodes
+                      </Badge>
+                    </div>
                     {show.episodes.map((episode: any, index: number) => (
                       <motion.div
                         key={index}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
-                        className="flex flex-col sm:flex-row gap-4 p-4 rounded-lg border border-white/10 hover:bg-muted/50 transition-colors card-hover"
+                        transition={{ duration: 0.3, delay: index * 0.05 }}
+                        className="group relative flex flex-col sm:flex-row gap-4 p-4 rounded-xl border border-white/10 bg-muted/20 hover:bg-muted/40 hover:border-primary/50 transition-all duration-300 backdrop-blur-sm"
                       >
-                        <div className="relative w-full sm:w-48 aspect-video rounded-md overflow-hidden">
+                        <div className="relative w-full sm:w-64 aspect-video rounded-lg overflow-hidden">
                           <Image
                             src={
                               episode.thumbnail ||
@@ -835,42 +1254,68 @@ export default function ShowPage() {
                             }
                             alt={episode.title}
                             fill
-                            className="object-cover"
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
                           />
-                          <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                             <Button
                               size="icon"
                               variant="ghost"
-                              className="bg-black/50 hover:bg-black/70"
+                              className="bg-primary/90 hover:bg-primary rounded-full w-14 h-14"
+                              onClick={() => setCurrentEpisode(index + 1)}
                             >
-                              <Play className="w-8 h-8 text-white" />
+                              <Play className="w-6 h-6 text-white fill-white" />
                             </Button>
+                          </div>
+                          <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-semibold">
+                            EP {index + 1}
                           </div>
                         </div>
-                        <div className="flex-1">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <h3 className="font-semibold">{`Episode ${
-                                index + 1
-                              }: ${episode.title}`}</h3>
-                              <span className="text-sm text-muted-foreground">
-                                {episode.duration}
-                              </span>
+                        <div className="flex-1 flex flex-col justify-between">
+                          <div>
+                            <div className="flex justify-between items-start mb-2">
+                              <div>
+                                <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                                  {episode.title}
+                                </h3>
+                                <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
+                                  <span className="flex items-center gap-1">
+                                    <Clock className="w-3.5 h-3.5" />
+                                    {episode.duration}
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <Eye className="w-3.5 h-3.5" />
+                                    {Math.floor(Math.random() * 5 + 1)}M views
+                                  </span>
+                                </div>
+                              </div>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="hover:bg-primary/20"
+                              >
+                                <Heart className="w-4 h-4" />
+                              </Button>
                             </div>
-                            <Button variant="ghost" size="icon">
-                              <Heart className="w-4 h-4" />
-                            </Button>
+                            <p className="text-sm text-muted-foreground leading-relaxed">
+                              {episode.description}
+                            </p>
                           </div>
-                          <p className="text-sm text-muted-foreground mt-2">
-                            {episode.description}
-                          </p>
                         </div>
                       </motion.div>
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-12 text-muted-foreground">
-                    No episodes available for this content.
+                  <div className="flex flex-col items-center justify-center py-20 text-center">
+                    <div className="w-20 h-20 bg-muted/50 rounded-full flex items-center justify-center mb-4">
+                      <Play className="w-10 h-10 text-muted-foreground" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">
+                      No Episodes Available
+                    </h3>
+                    <p className="text-muted-foreground">
+                      Episodes for this content will be added soon.
+                    </p>
                   </div>
                 )}
               </TabsContent>
@@ -1030,66 +1475,132 @@ export default function ShowPage() {
               </TabsContent>
 
               <TabsContent value="related" className="mt-0">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                  {relatedShows.map((show, index) => (
-                    <motion.div
-                      key={show.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.05 }}
-                      whileHover={{ scale: 1.05 }}
-                      className="card-hover"
-                    >
-                      <Link href={`/shows/${show.id}`} className="group block">
-                        <div className="relative aspect-[2/3] rounded-lg overflow-hidden mb-2">
-                          <Image
-                            src={
-                              show.poster ||
-                              show.thumbnail ||
-                              "/placeholder.svg"
-                            }
-                            alt={show.title}
-                            fill
-                            className="object-cover transition-transform group-hover:scale-105"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              className="rounded-full bg-white/20 hover:bg-white/30"
-                            >
-                              <Play className="w-8 h-8 text-white" />
-                            </Button>
-                          </div>
-                          {show.userRating && (
-                            <div className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-md flex items-center">
-                              <Star className="w-3 h-3 text-yellow-400 fill-yellow-400 mr-1" />
-                              {show.userRating}
-                            </div>
-                          )}
-                        </div>
-                        <h3 className="font-medium text-sm truncate">
-                          {show.title}
-                        </h3>
-                        <p className="text-muted-foreground text-xs">
-                          {show.genre}
-                        </p>
-                      </Link>
-                    </motion.div>
-                  ))}
+                <div className="mb-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h2 className="text-3xl font-bold mb-2">
+                        More Like This
+                      </h2>
+                      <p className="text-muted-foreground">
+                        {show.type === "series" ? "Series" : "Movies"} similar
+                        to {show.title}
+                      </p>
+                    </div>
+                    <Badge variant="outline" className="px-4 py-2">
+                      {relatedContent.length}{" "}
+                      {show.type === "series" ? "Series" : "Movies"}
+                    </Badge>
+                  </div>
+
+                  {/* Genre Filter Info */}
+                  <div className="flex items-center gap-2 mb-6">
+                    <span className="text-sm text-muted-foreground">
+                      Based on:
+                    </span>
+                    {show.genre?.slice(0, 3).map((genre, index) => (
+                      <Badge key={index} variant="outline" className="text-xs">
+                        {genre}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
+
+                {relatedContent.length > 0 ? (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                    {relatedContent.map((relatedShow, index) => (
+                      <motion.div
+                        key={relatedShow.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: index * 0.05 }}
+                        whileHover={{ y: -8 }}
+                        className="group"
+                      >
+                        <Link
+                          href={`/shows/${relatedShow.id}`}
+                          className="block"
+                        >
+                          <div className="relative aspect-[2/3] rounded-xl overflow-hidden mb-3 border border-white/10 group-hover:border-primary/50 transition-all duration-300">
+                            <Image
+                              src={
+                                relatedShow.poster ||
+                                relatedShow.thumbnail ||
+                                "/placeholder.svg"
+                              }
+                              alt={relatedShow.title}
+                              fill
+                              className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              <div className="relative">
+                                <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl" />
+                                <Button
+                                  size="icon"
+                                  variant="ghost"
+                                  className="rounded-full bg-primary hover:bg-primary/90 w-14 h-14 relative"
+                                >
+                                  <Play className="w-6 h-6 text-white fill-white" />
+                                </Button>
+                              </div>
+                            </div>
+                            {relatedShow.userRating && (
+                              <div className="absolute top-3 right-3 bg-black/80 backdrop-blur-sm text-white text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
+                                {relatedShow.userRating}
+                              </div>
+                            )}
+                            <div className="absolute bottom-0 left-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              <Badge className="bg-primary/90 backdrop-blur-sm text-xs">
+                                {relatedShow.genre}
+                              </Badge>
+                            </div>
+                          </div>
+                          <h3 className="font-semibold text-sm truncate group-hover:text-primary transition-colors">
+                            {relatedShow.title}
+                          </h3>
+                          <p className="text-muted-foreground text-xs mt-1">
+                            {relatedShow.genre}
+                          </p>
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-20 text-center">
+                    <div className="w-20 h-20 bg-muted/50 rounded-full flex items-center justify-center mb-4">
+                      <TrendingUp className="w-10 h-10 text-muted-foreground" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">
+                      No Related Content
+                    </h3>
+                    <p className="text-muted-foreground">
+                      We couldn't find similar content at the moment.
+                    </p>
+                  </div>
+                )}
               </TabsContent>
             </Tabs>
           </motion.div>
-        </div>
-
+        </div>{" "}
         {/* Continue Watching Section */}
-        <ContinueWatching />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="mt-16"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="h-8 w-1 bg-primary rounded-full" />
+            <h2 className="text-3xl font-bold">Continue Watching</h2>
+          </div>
+          <ContinueWatching />
+        </motion.div>
       </div>
 
       {/* Share Dialog */}
       <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md border-white/10 bg-background/95 backdrop-blur-xl">
           <ShareDialog
             title={show.title}
             id={show.id}
@@ -1097,6 +1608,17 @@ export default function ShowPage() {
           />
         </DialogContent>
       </Dialog>
+
+      {/* Scroll to top button */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 1 }}
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className="fixed bottom-8 right-8 z-50 p-4 bg-primary hover:bg-primary/90 text-white rounded-full shadow-2xl hover:shadow-primary/50 transition-all duration-300 group"
+      >
+        <ChevronLeft className="w-6 h-6 rotate-90 group-hover:-translate-y-1 transition-transform" />
+      </motion.button>
     </div>
   );
 }
