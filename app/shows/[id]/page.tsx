@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useParams, useRouter } from "next/navigation"
-import Image from "next/image"
-import Link from "next/link"
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
 import {
   ChevronLeft,
   Heart,
@@ -18,63 +18,99 @@ import {
   MessageSquare,
   Bookmark,
   Download,
-} from "lucide-react"
-import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, setDoc } from "firebase/firestore"
+} from "lucide-react";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  setDoc,
+} from "firebase/firestore";
 
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Skeleton } from "@/components/ui/skeleton"
-import { useToast } from "@/hooks/use-toast"
-import { useAuth } from "@/context/auth-context"
-import { db } from "@/lib/firebase"
-import ContinueWatching from "@/components/continue-watching"
-import ShareDialog from "@/components/share-dialog"
-import { useUser } from "@/context/user-context"
-import { VideoPlayerSafe } from "@/components/video-player-safe"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/auth-context";
+import { db } from "@/lib/firebase";
+import ContinueWatching from "@/components/continue-watching";
+import ShareDialog from "@/components/share-dialog";
+import { useUser } from "@/context/user-context";
+import { VideoPlayerSafe } from "@/components/video-player-safe";
+import { VidkingPlayer } from "@/components/vidking-player";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import netflixShows, { type NetflixContent } from "@/lib/netflix-content";
 
 interface Show {
-  id: string
-  title: string
-  description: string
-  releaseYear: number
-  genre: string[]
-  rating: number
-  duration: string
-  poster: string
-  backdrop: string
-  videoUrl: string
-  trailerUrl: string
-  cast: { name: string; character: string; photo: string }[]
-  director: string
-  episodes?: { title: string; duration: string; thumbnail: string }[]
-  seasons?: number
-  type: "movie" | "series"
+  id: string;
+  title: string;
+  description: string;
+  releaseYear: number;
+  genre: string[];
+  rating: number;
+  duration: string;
+  poster: string;
+  backdrop: string;
+  videoUrl: string;
+  trailerUrl: string;
+  cast: string[];
+  director: string;
+  episodes?: {
+    title: string;
+    duration: string;
+    thumbnail: string;
+    description?: string;
+  }[];
+  seasons?: number;
+  type: "movie" | "series" | string;
+  tmdbId: string;
+  currentSeason?: number;
+  currentEpisode?: number;
+  thumbnail?: string;
+  userRating?: number;
+  awards?: string;
+  studio?: string;
+  releaseDate?: string;
+  trailerDate?: string;
+  videoSrc?: string;
+  chapters?: { title: string; startTime: number }[];
 }
 
-// Sample data - in a real app, this would come from an API or database
-const shows = [
+// Use real Netflix content from imported data
+const shows: any[] = netflixShows || [
   {
     id: "1",
-    title: "Cosmic Odyssey",
+    title: "Squid Game",
+    tmdbId: "93405",
     genre: ["Sci-Fi", "Adventure"],
     duration: "45 min",
-    releaseYear: 2023,
-    releaseDate: "March 15, 2023",
+    releaseYear: 2021,
+    releaseDate: "September 17, 2021",
     rating: 8.7,
-    userRating: 8.7,
+    userRating: 8.0,
     thumbnail: "/placeholder.svg?height=720&width=1280",
     poster: "/placeholder.svg?height=900&width=600",
-    videoSrc: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    videoSrc:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     description:
-      "A team of astronauts embarks on a journey to explore the farthest reaches of our galaxy, encountering strange new worlds and civilizations along the way. As they venture deeper into uncharted space, they discover a mysterious signal that could change humanity's understanding of the universe forever.",
-    cast: ["Emma Stone", "Ryan Gosling", "Idris Elba", "Zoe Saldana", "John Cho", "Tessa Thompson"],
-    director: "Christopher Nolan",
-    studio: "Cosmic Productions",
+      "Hundreds of cash-strapped players accept a strange invitation to compete in children's games. Inside, a tempting prize awaits with deadly high stakes. A survival game that has a whopping 45.6 billion-won prize at stake.",
+    cast: [
+      "Lee Jung-jae",
+      "Park Hae-soo",
+      "Wi Ha-joon",
+      "Jung Ho-yeon",
+      "O Yeong-su",
+      "Heo Sung-tae",
+    ],
+    director: "Hwang Dong-hyuk",
+    studio: "Siren Pictures",
     awards: "Best Visual Effects",
     trailerDate: "January 15, 2023",
+    currentSeason: 1,
+    currentEpisode: 1,
     chapters: [
       { title: "Introduction", startTime: 0 },
       { title: "Launch Sequence", startTime: 30 },
@@ -106,27 +142,33 @@ const shows = [
       },
     ],
     backdrop: "/placeholder.svg?height=720&width=1280",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    trailerUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     type: "series",
   },
   {
     id: "2",
-    title: "The Last Kingdom",
+    title: "Breaking Bad",
+    tmdbId: "1396",
     genre: ["Historical Drama", "Action"],
     duration: "50 min",
-    releaseYear: 2022,
-    releaseDate: "March 15, 2023",
+    releaseYear: 2008,
+    releaseDate: "January 20, 2008",
     rating: 9.2,
-    userRating: 9.2,
+    userRating: 9.5,
     thumbnail: "/placeholder.svg?height=720&width=1280",
     poster: "/placeholder.svg?height=900&width=600",
-    videoSrc: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    videoSrc:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     description:
-      "Set in the 9th century, this epic tale follows the journey of Uhtred, a Saxon-born warrior raised by Vikings who finds himself caught between two worlds.",
-    cast: ["Alexander Dreymon", "Emily Cox", "David Dawson", "Eliza Butterworth"],
-    director: "Edward Bazalgette",
-    studio: "Historical Films",
+      "A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family's future.",
+    cast: ["Bryan Cranston", "Aaron Paul", "Anna Gunn", "Dean Norris"],
+    director: "Vince Gilligan",
+    studio: "Sony Pictures Television",
+    currentSeason: 1,
+    currentEpisode: 1,
     chapters: [
       { title: "Prologue", startTime: 0 },
       { title: "The Invasion", startTime: 25 },
@@ -138,44 +180,51 @@ const shows = [
       {
         title: "The Saxon Boy",
         duration: "50 min",
-        description: "Young Uhtred witnesses the Danish invasion and the fall of his father's kingdom.",
+        description:
+          "Young Uhtred witnesses the Danish invasion and the fall of his father's kingdom.",
         thumbnail: "/placeholder.svg?height=720&width=1280",
       },
       {
         title: "The Pale Horseman",
         duration: "52 min",
-        description: "Uhtred begins his training as a Viking warrior under the guidance of Earl Ragnar.",
+        description:
+          "Uhtred begins his training as a Viking warrior under the guidance of Earl Ragnar.",
         thumbnail: "/placeholder.svg?height=720&width=1280",
       },
       {
         title: "Divided Loyalties",
         duration: "49 min",
-        description: "Uhtred must choose between his Saxon birth and his Viking upbringing as tensions rise.",
+        description:
+          "Uhtred must choose between his Saxon birth and his Viking upbringing as tensions rise.",
         thumbnail: "/placeholder.svg?height=720&width=1280",
       },
     ],
     backdrop: "/placeholder.svg?height=720&width=1280",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-    trailerUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     type: "series",
   },
   {
     id: "3",
-    title: "Urban Legends",
-    genre: ["Mystery", "Thriller"],
-    duration: "42 min",
-    releaseYear: 2023,
-    releaseDate: "March 15, 2023",
+    title: "Inception",
+    tmdbId: "27205",
+    genre: ["Mystery", "Thriller", "Sci-Fi"],
+    duration: "148 min",
+    releaseYear: 2010,
+    releaseDate: "July 16, 2010",
     rating: 8.5,
-    userRating: 8.5,
+    userRating: 8.8,
     thumbnail: "/placeholder.svg?height=720&width=1280",
     poster: "/placeholder.svg?height=900&width=600",
-    videoSrc: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    videoSrc:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
     description:
-      "A team of investigators delve into the truth behind famous urban legends, discovering that some myths have terrifying origins in reality.",
-    cast: ["Zendaya", "Tom Holland", "Florence Pugh", "Daniel Kaluuya"],
-    director: "Jordan Peele",
-    studio: "Mystery Box Productions",
+      "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.",
+    cast: ["Leonardo DiCaprio", "Tom Hardy", "Ellen Page", "Marion Cotillard"],
+    director: "Christopher Nolan",
+    studio: "Warner Bros.",
     chapters: [
       { title: "The Hook", startTime: 0 },
       { title: "Investigation Begins", startTime: 20 },
@@ -206,11 +255,13 @@ const shows = [
       },
     ],
     backdrop: "/placeholder.svg?height=720&width=1280",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-    trailerUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
     type: "movie",
   },
-]
+];
 
 // Sample related shows
 const relatedShows = [
@@ -254,7 +305,7 @@ const relatedShows = [
     poster: "/placeholder.svg?height=900&width=600",
     userRating: 9.3,
   },
-]
+];
 
 // Sample reviews
 const reviews = [
@@ -294,67 +345,71 @@ const reviews = [
       "A solid show with great performances. The pacing is a bit slow at times, but the payoff is worth it. Looking forward to the next season!",
     likes: 12,
   },
-]
+];
 
 export default function ShowPage() {
-  const params = useParams()
-  const { id } = params
-  const router = useRouter()
-  const { toast } = useToast()
-  const authContext = useAuth()
-  const user = authContext?.user || null
+  const params = useParams();
+  const { id } = params;
+  const router = useRouter();
+  const { toast } = useToast();
+  const authContext = useAuth();
+  const user = authContext?.user || null;
   const { profile, addToWatchlist, removeFromWatchlist } = useUser() || {
     profile: null,
     addToWatchlist: null,
     removeFromWatchlist: null,
-  }
+  };
 
-  const [show, setShow] = useState<Show | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [isInWatchlistState, setIsInWatchlistState] = useState(false)
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [showShareDialog, setShowShareDialog] = useState(false)
-  const [isWatchingTrailer, setIsWatchingTrailer] = useState(false)
-  const [isWatchingFullVideo, setIsWatchingFullVideo] = useState(false)
+  const [show, setShow] = useState<Show | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isInWatchlistState, setIsInWatchlistState] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState(false);
+  const [isWatchingTrailer, setIsWatchingTrailer] = useState(false);
+  const [isWatchingFullVideo, setIsWatchingFullVideo] = useState(false);
+  const [currentSeason, setCurrentSeason] = useState(1);
+  const [currentEpisode, setCurrentEpisode] = useState(1);
 
-  const isInWatchlist = profile?.watchlist?.includes(id as string) || false
+  const isInWatchlist = profile?.watchlist?.includes(id as string) || false;
 
   useEffect(() => {
     const fetchShow = async () => {
       try {
-        setLoading(true)
+        setLoading(true);
         // In a real app, this would be an API call
-        const foundShow = shows.find((s) => s.id === params.id)
+        const foundShow = shows.find((s) => s.id === params.id);
 
         if (!foundShow) {
-          setError("Show not found")
-          return
+          setError("Show not found");
+          return;
         }
 
-        setShow(foundShow)
+        setShow(foundShow);
 
         // Check if show is in user's watchlist/favorites
         if (user) {
-          const userDoc = await getDoc(doc(db, "users", user.uid))
+          const userDoc = await getDoc(doc(db, "users", user.uid));
           if (userDoc.exists()) {
-            const userData = userDoc.data()
-            setIsInWatchlistState(userData.watchlist?.includes(params.id) || false)
-            setIsFavorite(userData.favorites?.includes(params.id) || false)
+            const userData = userDoc.data();
+            setIsInWatchlistState(
+              userData.watchlist?.includes(params.id) || false
+            );
+            setIsFavorite(userData.favorites?.includes(params.id) || false);
           }
         }
       } catch (err) {
-        console.error("Error fetching show:", err)
-        setError("Failed to load show details")
+        console.error("Error fetching show:", err);
+        setError("Failed to load show details");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
     if (params.id) {
-      fetchShow()
+      fetchShow();
     }
-  }, [params.id, user])
+  }, [params.id, user]);
 
   const handleWatchlistToggle = async () => {
     if (!user || !addToWatchlist || !removeFromWatchlist) {
@@ -362,34 +417,34 @@ export default function ShowPage() {
         title: "Authentication required",
         description: "Please sign in to add shows to your watchlist",
         variant: "destructive",
-      })
-      router.push("/login")
-      return
+      });
+      router.push("/login");
+      return;
     }
 
     try {
       if (isInWatchlist) {
-        await removeFromWatchlist(id as string)
+        await removeFromWatchlist(id as string);
         toast({
           title: "Removed from watchlist",
           description: `${show?.title} removed from watchlist`,
-        })
+        });
       } else {
-        await addToWatchlist(id as string)
+        await addToWatchlist(id as string);
         toast({
           title: "Added to watchlist",
           description: `${show?.title} added to watchlist`,
-        })
+        });
       }
     } catch (error: any) {
-      console.error("Error toggling watchlist:", error)
+      console.error("Error toggling watchlist:", error);
       toast({
         title: "Error",
         description: error.message || "Failed to update watchlist",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const toggleFavorite = async () => {
     if (!user) {
@@ -397,56 +452,56 @@ export default function ShowPage() {
         title: "Sign in required",
         description: "Please sign in to add shows to your favorites",
         variant: "destructive",
-      })
-      router.push("/login")
-      return
+      });
+      router.push("/login");
+      return;
     }
 
     try {
-      const userRef = doc(db, "users", user.uid)
+      const userRef = doc(db, "users", user.uid);
 
       // Optimistic UI update
-      setIsFavorite(!isFavorite)
+      setIsFavorite(!isFavorite);
 
       if (isFavorite) {
         // Remove from favorites
         await updateDoc(userRef, {
           favorites: arrayRemove(id),
-        })
+        });
 
         toast({
           title: "Removed from favorites",
           description: `${show?.title} has been removed from your favorites`,
-        })
+        });
       } else {
         // Add to favorites
         await updateDoc(userRef, {
           favorites: arrayUnion(id),
-        })
+        });
 
         toast({
           title: "Added to favorites",
           description: `${show?.title} has been added to your favorites`,
-        })
+        });
       }
     } catch (error) {
       // Revert optimistic update on error
-      setIsFavorite(!isFavorite)
-      console.error("Error updating favorites:", error)
+      setIsFavorite(!isFavorite);
+      console.error("Error updating favorites:", error);
       toast({
         title: "Error",
         description: "Failed to update your favorites",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const handleShare = () => {
-    setShowShareDialog(true)
-  }
+    setShowShareDialog(true);
+  };
 
   const saveToWatchHistory = async () => {
-    if (!user || !show) return
+    if (!user || !show) return;
 
     try {
       const historyItem = {
@@ -457,33 +512,35 @@ export default function ShowPage() {
         timestamp: "00:00",
         duration: show.duration,
         lastWatched: new Date().toISOString(),
-      }
+      };
 
       // Save to Firestore
-      const historyRef = doc(db, "users", user.uid, "watchHistory", show.id)
-      await setDoc(historyRef, historyItem)
+      const historyRef = doc(db, "users", user.uid, "watchHistory", show.id);
+      await setDoc(historyRef, historyItem);
 
       // Also save to localStorage for redundancy
-      const savedHistory = localStorage.getItem("watchHistory")
-      let history = savedHistory ? JSON.parse(savedHistory) : []
+      const savedHistory = localStorage.getItem("watchHistory");
+      let history = savedHistory ? JSON.parse(savedHistory) : [];
 
       // Update or add item
-      const existingIndex = history.findIndex((item: any) => item.id === show.id)
+      const existingIndex = history.findIndex(
+        (item: any) => item.id === show.id
+      );
       if (existingIndex >= 0) {
-        history[existingIndex] = historyItem
+        history[existingIndex] = historyItem;
       } else {
-        history.unshift(historyItem)
+        history.unshift(historyItem);
       }
 
       // Limit history to 20 items
-      history = history.slice(0, 20)
+      history = history.slice(0, 20);
 
       // Save back to localStorage
-      localStorage.setItem("watchHistory", JSON.stringify(history))
+      localStorage.setItem("watchHistory", JSON.stringify(history));
     } catch (err) {
-      console.error("Error saving to watch history:", err)
+      console.error("Error saving to watch history:", err);
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -501,26 +558,50 @@ export default function ShowPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (error || !show) {
     return (
       <div className="container mx-auto px-4 py-8 pt-24 min-h-[60vh] flex flex-col items-center justify-center">
         <h2 className="text-2xl font-bold mb-4">Error</h2>
-        <p className="text-muted-foreground mb-6">{error || "Show not found"}</p>
+        <p className="text-muted-foreground mb-6">
+          {error || "Show not found"}
+        </p>
         <Button asChild>
           <Link href="/shows">Browse Shows</Link>
         </Button>
       </div>
-    )
+    );
   }
 
   return (
     <div className="pt-16">
       {/* Video Player */}
       <div className="mb-8">
-        <VideoPlayerSafe videoUrl={show.videoUrl} poster={show.poster} title={show.title} showId={show.id} />
+        {show.tmdbId ? (
+          <VidkingPlayer
+            tmdbId={show.tmdbId}
+            type={show.type === "series" ? "tv" : "movie"}
+            season={currentSeason}
+            episode={currentEpisode}
+            title={show.title}
+            color="e50914"
+            autoPlay={false}
+            nextEpisode={show.type === "series"}
+            episodeSelector={show.type === "series"}
+            onProgressUpdate={(progress, timestamp) => {
+              console.log(`Progress: ${progress}%, Timestamp: ${timestamp}s`);
+            }}
+          />
+        ) : (
+          <VideoPlayerSafe
+            videoUrl={show.videoUrl}
+            poster={show.poster}
+            title={show.title}
+            showId={show.id}
+          />
+        )}
       </div>
 
       <div className="container mx-auto px-4 pb-12">
@@ -534,18 +615,27 @@ export default function ShowPage() {
 
         {/* Show Info */}
         <div className="mb-12">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-6">
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   {show.genre?.map((genre, index) => (
-                    <Badge key={index} className="bg-primary/80 hover:bg-primary text-white">
+                    <Badge
+                      key={index}
+                      className="bg-primary/80 hover:bg-primary text-white"
+                    >
                       {genre}
                     </Badge>
                   ))}
                   <Badge variant="outline">{show.rating}</Badge>
                 </div>
-                <h1 className="text-3xl md:text-4xl font-bold mb-2 gradient-text">{show.title}</h1>
+                <h1 className="text-3xl md:text-4xl font-bold mb-2 gradient-text">
+                  {show.title}
+                </h1>
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground mb-4">
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
@@ -571,22 +661,37 @@ export default function ShowPage() {
                 <Button
                   variant={isInWatchlist ? "default" : "outline"}
                   size="sm"
-                  className={`gap-2 ${isInWatchlist ? "bg-primary hover:bg-primary/90" : ""}`}
+                  className={`gap-2 ${
+                    isInWatchlist ? "bg-primary hover:bg-primary/90" : ""
+                  }`}
                   onClick={handleWatchlistToggle}
                 >
-                  <Bookmark className={`w-4 h-4 ${isInWatchlist ? "fill-white" : ""}`} />
+                  <Bookmark
+                    className={`w-4 h-4 ${isInWatchlist ? "fill-white" : ""}`}
+                  />
                   {isInWatchlist ? "In Watchlist" : "Add to Watchlist"}
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className={`gap-2 ${isFavorite ? "bg-red-500 hover:bg-red-600 text-white border-red-500" : ""}`}
+                  className={`gap-2 ${
+                    isFavorite
+                      ? "bg-red-500 hover:bg-red-600 text-white border-red-500"
+                      : ""
+                  }`}
                   onClick={toggleFavorite}
                 >
-                  <Heart className={`w-4 h-4 ${isFavorite ? "fill-white" : ""}`} />
+                  <Heart
+                    className={`w-4 h-4 ${isFavorite ? "fill-white" : ""}`}
+                  />
                   {isFavorite ? "Favorited" : "Favorite"}
                 </Button>
-                <Button variant="outline" size="sm" className="gap-2" onClick={handleShare}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-2"
+                  onClick={handleShare}
+                >
                   <Share2 className="w-4 h-4" />
                   Share
                 </Button>
@@ -604,18 +709,24 @@ export default function ShowPage() {
               <TabsContent value="overview" className="mt-0">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                   <div className="lg:col-span-2">
-                    <p className="text-lg mb-8 leading-relaxed">{show.description}</p>
+                    <p className="text-lg mb-8 leading-relaxed">
+                      {show.description}
+                    </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                       <div>
                         <h3 className="font-semibold mb-3 text-lg">Cast</h3>
                         <div className="space-y-3">
-                          {/* @ts-expect-error */}
                           {show.cast?.map((actor: string, index: number) => (
-                            <div key={index} className="flex items-center gap-3">
+                            <div
+                              key={index}
+                              className="flex items-center gap-3"
+                            >
                               <Avatar className="h-8 w-8">
                                 <AvatarImage src="/placeholder.svg" />
-                                <AvatarFallback>{actor.charAt(0)}</AvatarFallback>
+                                <AvatarFallback>
+                                  {actor.charAt(0)}
+                                </AvatarFallback>
                               </Avatar>
                               <span>{actor}</span>
                             </div>
@@ -626,15 +737,21 @@ export default function ShowPage() {
                         <h3 className="font-semibold mb-3 text-lg">Details</h3>
                         <div className="space-y-2">
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Director</span>
+                            <span className="text-muted-foreground">
+                              Director
+                            </span>
                             <span>{show.director}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Studio</span>
+                            <span className="text-muted-foreground">
+                              Studio
+                            </span>
                             <span>{show.studio || "Unknown"}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Release Date</span>
+                            <span className="text-muted-foreground">
+                              Release Date
+                            </span>
                             <span>{show.releaseDate || show.releaseYear}</span>
                           </div>
                           <div className="flex justify-between">
@@ -642,7 +759,9 @@ export default function ShowPage() {
                             <span>5.1 Surround Sound</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Subtitles</span>
+                            <span className="text-muted-foreground">
+                              Subtitles
+                            </span>
                             <span>English, Spanish, French</span>
                           </div>
                         </div>
@@ -670,16 +789,24 @@ export default function ShowPage() {
                             </Button>
                           </DialogTrigger>
                           <DialogContent className="max-w-4xl p-0 bg-black border-none">
-                            <VideoPlayerSafe videoUrl={show.trailerUrl} title={`${show.title} - Trailer`} />
+                            <VideoPlayerSafe
+                              videoUrl={show.trailerUrl}
+                              title={`${show.title} - Trailer`}
+                            />
                           </DialogContent>
                         </Dialog>
                       </div>
                       <div className="p-4">
                         <h3 className="font-semibold mb-2">Official Trailer</h3>
                         <p className="text-sm text-muted-foreground">
-                          Watch the official trailer for {show.title}. Released on {show.trailerDate || "2023-01-15"}.
+                          Watch the official trailer for {show.title}. Released
+                          on {show.trailerDate || "2023-01-15"}.
                         </p>
-                        <Button variant="outline" size="sm" className="mt-4 w-full gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="mt-4 w-full gap-2"
+                        >
                           <Download className="w-4 h-4" />
                           Download
                         </Button>
@@ -702,13 +829,20 @@ export default function ShowPage() {
                       >
                         <div className="relative w-full sm:w-48 aspect-video rounded-md overflow-hidden">
                           <Image
-                            src={episode.thumbnail || "/placeholder.svg?height=720&width=1280"}
+                            src={
+                              episode.thumbnail ||
+                              "/placeholder.svg?height=720&width=1280"
+                            }
                             alt={episode.title}
                             fill
                             className="object-cover"
                           />
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <Button size="icon" variant="ghost" className="bg-black/50 hover:bg-black/70">
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="bg-black/50 hover:bg-black/70"
+                            >
                               <Play className="w-8 h-8 text-white" />
                             </Button>
                           </div>
@@ -716,20 +850,28 @@ export default function ShowPage() {
                         <div className="flex-1">
                           <div className="flex justify-between items-start">
                             <div>
-                              <h3 className="font-semibold">{`Episode ${index + 1}: ${episode.title}`}</h3>
-                              <span className="text-sm text-muted-foreground">{episode.duration}</span>
+                              <h3 className="font-semibold">{`Episode ${
+                                index + 1
+                              }: ${episode.title}`}</h3>
+                              <span className="text-sm text-muted-foreground">
+                                {episode.duration}
+                              </span>
                             </div>
                             <Button variant="ghost" size="icon">
                               <Heart className="w-4 h-4" />
                             </Button>
                           </div>
-                          <p className="text-sm text-muted-foreground mt-2">{episode.description}</p>
+                          <p className="text-sm text-muted-foreground mt-2">
+                            {episode.description}
+                          </p>
                         </div>
                       </motion.div>
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-12 text-muted-foreground">No episodes available for this content.</div>
+                  <div className="text-center py-12 text-muted-foreground">
+                    No episodes available for this content.
+                  </div>
                 )}
               </TabsContent>
 
@@ -748,11 +890,17 @@ export default function ShowPage() {
                           <div className="flex justify-between items-start mb-3">
                             <div className="flex items-center gap-3">
                               <Avatar>
-                                <AvatarImage src={review.user.avatar || "/placeholder.svg"} />
-                                <AvatarFallback>{review.user.name.charAt(0)}</AvatarFallback>
+                                <AvatarImage
+                                  src={review.user.avatar || "/placeholder.svg"}
+                                />
+                                <AvatarFallback>
+                                  {review.user.name.charAt(0)}
+                                </AvatarFallback>
                               </Avatar>
                               <div>
-                                <div className="font-medium">{review.user.name}</div>
+                                <div className="font-medium">
+                                  {review.user.name}
+                                </div>
                                 <div className="text-sm text-muted-foreground">
                                   {new Date(review.date).toLocaleDateString()}
                                 </div>
@@ -760,16 +908,26 @@ export default function ShowPage() {
                             </div>
                             <div className="flex items-center bg-muted px-2 py-1 rounded-md">
                               <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 mr-1" />
-                              <span className="text-sm font-medium">{review.rating}</span>
+                              <span className="text-sm font-medium">
+                                {review.rating}
+                              </span>
                             </div>
                           </div>
                           <p className="text-sm mb-3">{review.content}</p>
                           <div className="flex items-center gap-4">
-                            <Button variant="ghost" size="sm" className="gap-2 text-xs">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="gap-2 text-xs"
+                            >
                               <ThumbsUp className="w-3 h-3" />
                               Helpful ({review.likes})
                             </Button>
-                            <Button variant="ghost" size="sm" className="gap-2 text-xs">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="gap-2 text-xs"
+                            >
                               <MessageSquare className="w-3 h-3" />
                               Reply
                             </Button>
@@ -796,12 +954,18 @@ export default function ShowPage() {
                               fill="none"
                               stroke="#ff0080"
                               strokeWidth="3"
-                              strokeDasharray={`${show.userRating * 10}, 100`}
+                              strokeDasharray={`${
+                                (show.userRating || 0) * 10
+                              }, 100`}
                             />
                           </svg>
                           <div className="absolute flex flex-col items-center justify-center">
-                            <span className="text-2xl font-bold">{show.userRating}</span>
-                            <span className="text-xs text-muted-foreground">out of 10</span>
+                            <span className="text-2xl font-bold">
+                              {show.userRating || 0}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              out of 10
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -809,40 +973,57 @@ export default function ShowPage() {
                         <div className="flex items-center gap-2">
                           <div className="text-sm w-16 text-right">5 stars</div>
                           <div className="h-2 bg-muted rounded-full flex-1">
-                            <div className="h-2 bg-primary rounded-full" style={{ width: "70%" }}></div>
+                            <div
+                              className="h-2 bg-primary rounded-full"
+                              style={{ width: "70%" }}
+                            ></div>
                           </div>
                           <div className="text-sm w-8">70%</div>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="text-sm w-16 text-right">4 stars</div>
                           <div className="h-2 bg-muted rounded-full flex-1">
-                            <div className="h-2 bg-primary rounded-full" style={{ width: "20%" }}></div>
+                            <div
+                              className="h-2 bg-primary rounded-full"
+                              style={{ width: "20%" }}
+                            ></div>
                           </div>
                           <div className="text-sm w-8">20%</div>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="text-sm w-16 text-right">3 stars</div>
                           <div className="h-2 bg-muted rounded-full flex-1">
-                            <div className="h-2 bg-primary rounded-full" style={{ width: "5%" }}></div>
+                            <div
+                              className="h-2 bg-primary rounded-full"
+                              style={{ width: "5%" }}
+                            ></div>
                           </div>
                           <div className="text-sm w-8">5%</div>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="text-sm w-16 text-right">2 stars</div>
                           <div className="h-2 bg-muted rounded-full flex-1">
-                            <div className="h-2 bg-primary rounded-full" style={{ width: "3%" }}></div>
+                            <div
+                              className="h-2 bg-primary rounded-full"
+                              style={{ width: "3%" }}
+                            ></div>
                           </div>
                           <div className="text-sm w-8">3%</div>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="text-sm w-16 text-right">1 star</div>
                           <div className="h-2 bg-muted rounded-full flex-1">
-                            <div className="h-2 bg-primary rounded-full" style={{ width: "2%" }}></div>
+                            <div
+                              className="h-2 bg-primary rounded-full"
+                              style={{ width: "2%" }}
+                            ></div>
                           </div>
                           <div className="text-sm w-8">2%</div>
                         </div>
                       </div>
-                      <Button className="w-full bg-primary hover:bg-primary/90">Write a Review</Button>
+                      <Button className="w-full bg-primary hover:bg-primary/90">
+                        Write a Review
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -862,13 +1043,21 @@ export default function ShowPage() {
                       <Link href={`/shows/${show.id}`} className="group block">
                         <div className="relative aspect-[2/3] rounded-lg overflow-hidden mb-2">
                           <Image
-                            src={show.poster || show.thumbnail || "/placeholder.svg"}
+                            src={
+                              show.poster ||
+                              show.thumbnail ||
+                              "/placeholder.svg"
+                            }
                             alt={show.title}
                             fill
                             className="object-cover transition-transform group-hover:scale-105"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <Button size="icon" variant="ghost" className="rounded-full bg-white/20 hover:bg-white/30">
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="rounded-full bg-white/20 hover:bg-white/30"
+                            >
                               <Play className="w-8 h-8 text-white" />
                             </Button>
                           </div>
@@ -879,8 +1068,12 @@ export default function ShowPage() {
                             </div>
                           )}
                         </div>
-                        <h3 className="font-medium text-sm truncate">{show.title}</h3>
-                        <p className="text-muted-foreground text-xs">{show.genre}</p>
+                        <h3 className="font-medium text-sm truncate">
+                          {show.title}
+                        </h3>
+                        <p className="text-muted-foreground text-xs">
+                          {show.genre}
+                        </p>
                       </Link>
                     </motion.div>
                   ))}
@@ -897,9 +1090,13 @@ export default function ShowPage() {
       {/* Share Dialog */}
       <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
         <DialogContent className="sm:max-w-md">
-          <ShareDialog title={show.title} id={show.id} onClose={() => setShowShareDialog(false)} />
+          <ShareDialog
+            title={show.title}
+            id={show.id}
+            onClose={() => setShowShareDialog(false)}
+          />
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

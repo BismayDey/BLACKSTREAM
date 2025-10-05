@@ -1,225 +1,147 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { Play, Filter, SearchIcon, X } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Play, Filter, SearchIcon, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Badge } from "@/components/ui/badge"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import netflixShows from "@/lib/netflix-content";
 
-// Sample data - in a real app, this would come from an API
-const shows = [
-  {
-    id: "1",
-    title: "Cosmic Odyssey",
-    genre: "Sci-Fi",
-    duration: "45 min",
-    releaseYear: "2023",
-    rating: "TV-14",
-    thumbnail: "/placeholder.svg?height=720&width=1280",
-  },
-  {
-    id: "2",
-    title: "The Last Kingdom",
-    genre: "Historical Drama",
-    duration: "50 min",
-    releaseYear: "2022",
-    rating: "TV-MA",
-    thumbnail: "/placeholder.svg?height=720&width=1280",
-  },
-  {
-    id: "3",
-    title: "Urban Legends",
-    genre: "Mystery",
-    duration: "42 min",
-    releaseYear: "2023",
-    rating: "TV-MA",
-    thumbnail: "/placeholder.svg?height=720&width=1280",
-  },
-  {
-    id: "4",
-    title: "Wilderness",
-    genre: "Adventure",
-    duration: "48 min",
-    releaseYear: "2022",
-    rating: "TV-14",
-    thumbnail: "/placeholder.svg?height=720&width=1280",
-  },
-  {
-    id: "5",
-    title: "Tech Titans",
-    genre: "Documentary",
-    duration: "60 min",
-    releaseYear: "2023",
-    rating: "TV-PG",
-    thumbnail: "/placeholder.svg?height=720&width=1280",
-  },
-  {
-    id: "6",
-    title: "Laugh Factory",
-    genre: "Comedy",
-    duration: "30 min",
-    releaseYear: "2023",
-    rating: "TV-14",
-    thumbnail: "/placeholder.svg?height=720&width=1280",
-  },
-  {
-    id: "7",
-    title: "Criminal Minds",
-    genre: "Crime",
-    duration: "55 min",
-    releaseYear: "2022",
-    rating: "TV-MA",
-    thumbnail: "/placeholder.svg?height=720&width=1280",
-  },
-  {
-    id: "8",
-    title: "Love & Life",
-    genre: "Romance",
-    duration: "45 min",
-    releaseYear: "2023",
-    rating: "TV-14",
-    thumbnail: "/placeholder.svg?height=720&width=1280",
-  },
-  {
-    id: "9",
-    title: "Mystic Falls",
-    genre: "Fantasy",
-    duration: "50 min",
-    releaseYear: "2022",
-    rating: "TV-14",
-    thumbnail: "/placeholder.svg?height=720&width=1280",
-  },
-  {
-    id: "10",
-    title: "Space Explorers",
-    genre: "Sci-Fi",
-    duration: "45 min",
-    releaseYear: "2023",
-    rating: "TV-PG",
-    thumbnail: "/placeholder.svg?height=720&width=1280",
-  },
-  {
-    id: "11",
-    title: "Historical Secrets",
-    genre: "Documentary",
-    duration: "60 min",
-    releaseYear: "2022",
-    rating: "TV-PG",
-    thumbnail: "/placeholder.svg?height=720&width=1280",
-  },
-  {
-    id: "12",
-    title: "Comedy Club",
-    genre: "Comedy",
-    duration: "30 min",
-    releaseYear: "2023",
-    rating: "TV-MA",
-    thumbnail: "/placeholder.svg?height=720&width=1280",
-  },
-]
+// Use real Netflix content
+const shows = netflixShows.map((show) => ({
+  ...show,
+  genre: show.genre[0], // Use first genre for compatibility
+  rating: `${show.rating}/10`,
+  releaseYear: show.releaseYear.toString(),
+}));
 
 export default function ShowsPage() {
-  const [filteredShows, setFilteredShows] = useState(shows)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [category, setCategory] = useState("all")
-  const [sortBy, setSortBy] = useState("newest")
-  const [isLoading, setIsLoading] = useState(true)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [showsPerPage] = useState(8)
-  const [yearFilter, setYearFilter] = useState("all")
-  const [ratingFilter, setRatingFilter] = useState("all")
+  const [filteredShows, setFilteredShows] = useState(shows);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [category, setCategory] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showsPerPage] = useState(8);
+  const [yearFilter, setYearFilter] = useState("all");
+  const [ratingFilter, setRatingFilter] = useState("all");
 
   // Simulate loading
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
+      setIsLoading(false);
+    }, 1000);
 
-    return () => clearTimeout(timer)
-  }, [])
+    return () => clearTimeout(timer);
+  }, []);
 
   // Filter and sort shows
   useEffect(() => {
-    let result = [...shows]
+    let result = [...shows];
 
     // Apply search filter
     if (searchQuery) {
-      const query = searchQuery.toLowerCase()
+      const query = searchQuery.toLowerCase();
       result = result.filter(
-        (show) => show.title.toLowerCase().includes(query) || show.genre.toLowerCase().includes(query),
-      )
+        (show) =>
+          show.title.toLowerCase().includes(query) ||
+          show.genre.toLowerCase().includes(query)
+      );
     }
 
     // Apply category filter
     if (category !== "all") {
-      result = result.filter((show) => show.genre.toLowerCase() === category.toLowerCase())
+      result = result.filter(
+        (show) => show.genre.toLowerCase() === category.toLowerCase()
+      );
     }
 
     // Apply year filter
     if (yearFilter !== "all") {
-      result = result.filter((show) => show.releaseYear === yearFilter)
+      result = result.filter((show) => show.releaseYear === yearFilter);
     }
 
     // Apply rating filter
     if (ratingFilter !== "all") {
-      result = result.filter((show) => show.rating === ratingFilter)
+      result = result.filter((show) => show.rating === ratingFilter);
     }
 
     // Apply sorting
     switch (sortBy) {
       case "oldest":
-        result.sort((a, b) => Number.parseInt(a.releaseYear) - Number.parseInt(b.releaseYear))
-        break
+        result.sort(
+          (a, b) =>
+            Number.parseInt(a.releaseYear) - Number.parseInt(b.releaseYear)
+        );
+        break;
       case "a-z":
-        result.sort((a, b) => a.title.localeCompare(b.title))
-        break
+        result.sort((a, b) => a.title.localeCompare(b.title));
+        break;
       case "z-a":
-        result.sort((a, b) => b.title.localeCompare(a.title))
-        break
+        result.sort((a, b) => b.title.localeCompare(a.title));
+        break;
       case "newest":
       default:
-        result.sort((a, b) => Number.parseInt(b.releaseYear) - Number.parseInt(a.releaseYear))
+        result.sort(
+          (a, b) =>
+            Number.parseInt(b.releaseYear) - Number.parseInt(a.releaseYear)
+        );
     }
 
-    setFilteredShows(result)
-    setCurrentPage(1) // Reset to first page when filters change
-  }, [searchQuery, category, sortBy, yearFilter, ratingFilter])
+    setFilteredShows(result);
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [searchQuery, category, sortBy, yearFilter, ratingFilter]);
 
   // Get current shows for pagination
-  const indexOfLastShow = currentPage * showsPerPage
-  const indexOfFirstShow = indexOfLastShow - showsPerPage
-  const currentShows = filteredShows.slice(indexOfFirstShow, indexOfLastShow)
-  const totalPages = Math.ceil(filteredShows.length / showsPerPage)
+  const indexOfLastShow = currentPage * showsPerPage;
+  const indexOfFirstShow = indexOfLastShow - showsPerPage;
+  const currentShows = filteredShows.slice(indexOfFirstShow, indexOfLastShow);
+  const totalPages = Math.ceil(filteredShows.length / showsPerPage);
 
   // Change page
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   // Clear all filters
   const clearFilters = () => {
-    setSearchQuery("")
-    setCategory("all")
-    setSortBy("newest")
-    setYearFilter("all")
-    setRatingFilter("all")
-  }
+    setSearchQuery("");
+    setCategory("all");
+    setSortBy("newest");
+    setYearFilter("all");
+    setRatingFilter("all");
+  };
 
   // Get unique years and ratings for filters
   const years = [...new Set(shows.map((show) => show.releaseYear))].sort(
-    (a, b) => Number.parseInt(b) - Number.parseInt(a),
-  )
-  const ratings = [...new Set(shows.map((show) => show.rating))]
+    (a, b) => Number.parseInt(b) - Number.parseInt(a)
+  );
+  const ratings = [...new Set(shows.map((show) => show.rating))];
 
   return (
     <div className="container mx-auto px-4 py-8 pt-24">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-        <h1 className="text-3xl font-bold mb-4 md:mb-0 gradient-text">Explore Shows</h1>
+        <h1 className="text-3xl font-bold mb-4 md:mb-0 gradient-text">
+          Explore Shows
+        </h1>
 
         <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
           {/* Search input */}
@@ -297,7 +219,10 @@ export default function ShowsPage() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Rating</label>
-                    <Select value={ratingFilter} onValueChange={setRatingFilter}>
+                    <Select
+                      value={ratingFilter}
+                      onValueChange={setRatingFilter}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select rating" />
                       </SelectTrigger>
@@ -452,7 +377,9 @@ export default function ShowsPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-300"></div>
                     <div className="absolute bottom-0 left-0 p-4">
-                      <h3 className="text-lg font-semibold text-white">{show.title}</h3>
+                      <h3 className="text-lg font-semibold text-white">
+                        {show.title}
+                      </h3>
                       <div className="flex items-center space-x-2 mt-2">
                         <Badge variant="secondary">{show.genre}</Badge>
                         <Badge variant="secondary">{show.rating}</Badge>
@@ -475,20 +402,24 @@ export default function ShowsPage() {
           {totalPages > 1 && (
             <div className="flex justify-center mt-8">
               <nav className="flex items-center space-x-2">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-                  <Button
-                    key={pageNumber}
-                    variant={currentPage === pageNumber ? "default" : "outline"}
-                    onClick={() => paginate(pageNumber)}
-                  >
-                    {pageNumber}
-                  </Button>
-                ))}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (pageNumber) => (
+                    <Button
+                      key={pageNumber}
+                      variant={
+                        currentPage === pageNumber ? "default" : "outline"
+                      }
+                      onClick={() => paginate(pageNumber)}
+                    >
+                      {pageNumber}
+                    </Button>
+                  )
+                )}
               </nav>
             </div>
           )}
         </>
       )}
     </div>
-  )
+  );
 }

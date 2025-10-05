@@ -26,6 +26,7 @@ import Footer from "@/components/footer";
 
 export default function HomePage() {
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+  const [isHeroPlaying, setIsHeroPlaying] = useState(false);
   const authContext = useAuth();
   const user = authContext?.user || null;
   const { profile, addToWatchlist, removeFromWatchlist } = useUser() || {};
@@ -49,6 +50,9 @@ export default function HomePage() {
   const recentlyAdded = netflixShows
     .sort((a, b) => b.releaseYear - a.releaseYear)
     .slice(0, 6);
+
+  // Continue Watching (mock for now)
+  const [continueWatching, setContinueWatching] = useState<any[]>([]);
 
   // Auto-rotate hero
   useEffect(() => {
@@ -330,6 +334,9 @@ function ContentRow({
   onWatchlistToggle,
   isInWatchlist,
 }: ContentRowProps) {
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const scrollContainerRef = useState<HTMLDivElement | null>(null)[0];
+
   const scroll = (direction: "left" | "right") => {
     const container = document.getElementById(
       `scroll-${title.replace(/\s/g, "")}`

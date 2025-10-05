@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Menu, X, Search, Bell, User, LogOut } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu, X, Search, Bell, User, LogOut } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useMobile } from "@/hooks/use-mobile"
-import { useAuth } from "@/context/auth-context"
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/context/auth-context";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,49 +17,52 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const isMobile = useMobile()
-  const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const isMobile = useMobile();
+  const pathname = usePathname();
 
-  const auth = useAuth()
-  const user = auth?.user
-  const signOut = auth?.signOut
+  const auth = useAuth();
+  const user = auth?.user;
+  const signOut = auth?.signOut;
 
   const isAuthPage =
-    pathname?.includes("/login") || pathname?.includes("/register") || pathname?.includes("/forgot-password")
+    pathname?.includes("/login") ||
+    pathname?.includes("/register") ||
+    pathname?.includes("/forgot-password");
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
-        setIsScrolled(true)
+        setIsScrolled(true);
       } else {
-        setIsScrolled(false)
+        setIsScrolled(false);
       }
-    }
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Don't render navbar on auth pages
-  if (isAuthPage) return null
+  if (isAuthPage) return null;
 
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/shows", label: "Shows" },
     { href: "/movies", label: "Movies" },
     { href: "/series", label: "Series" },
-  ]
+    { href: "/video-demo", label: "Player Demo" },
+  ];
 
   const handleSignOut = async () => {
     if (signOut) {
-      await signOut()
+      await signOut();
     }
-  }
+  };
 
   return (
     <header
@@ -86,7 +89,9 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={`text-sm font-medium transition-colors hover:text-primary ${
-                    pathname === link.href ? "text-primary" : "text-muted-foreground"
+                    pathname === link.href
+                      ? "text-primary"
+                      : "text-muted-foreground"
                   }`}
                 >
                   {link.label}
@@ -97,30 +102,48 @@ export default function Navbar() {
 
           {/* Right side actions */}
           <div className="flex items-center space-x-4">
-            <Link href="/shows" className="text-muted-foreground hover:text-foreground">
+            <Link
+              href="/shows"
+              className="text-muted-foreground hover:text-foreground"
+            >
               <Search className="h-5 w-5" />
             </Link>
 
             {user ? (
               <>
-                <Link href="/watchlist" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/watchlist"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   <Bell className="h-5 w-5" />
                 </Link>
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Button
+                      variant="ghost"
+                      className="relative h-8 w-8 rounded-full"
+                    >
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={user.photoURL || undefined} alt={user.displayName || "User"} />
-                        <AvatarFallback>{user.displayName?.charAt(0) || user.email?.charAt(0)}</AvatarFallback>
+                        <AvatarImage
+                          src={user.photoURL || undefined}
+                          alt={user.displayName || "User"}
+                        />
+                        <AvatarFallback>
+                          {user.displayName?.charAt(0) || user.email?.charAt(0)}
+                        </AvatarFallback>
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56" align="end" forceMount>
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{user.displayName || "User"}</p>
-                        <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                        <p className="text-sm font-medium leading-none">
+                          {user.displayName || "User"}
+                        </p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                          {user.email}
+                        </p>
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
@@ -156,8 +179,17 @@ export default function Navbar() {
 
             {/* Mobile menu button */}
             {isMobile && (
-              <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
-                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                {isOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
               </Button>
             )}
           </div>
@@ -180,7 +212,9 @@ export default function Navbar() {
                     key={link.href}
                     href={link.href}
                     className={`text-sm font-medium transition-colors hover:text-primary ${
-                      pathname === link.href ? "text-primary" : "text-muted-foreground"
+                      pathname === link.href
+                        ? "text-primary"
+                        : "text-muted-foreground"
                     }`}
                     onClick={() => setIsOpen(false)}
                   >
@@ -225,5 +259,5 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </header>
-  )
+  );
 }
