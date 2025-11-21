@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "BLACKSTREAM - Streaming Platform",
   description: "A modern streaming platform for movies and TV shows",
-  generator: "v0.dev",
+
 };
 
 export default function RootLayout({

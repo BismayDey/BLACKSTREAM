@@ -26,6 +26,7 @@ import Footer from "@/components/footer";
 
 export default function HomePage() {
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+  const [isHeroPlaying, setIsHeroPlaying] = useState(false);
   const authContext = useAuth();
   const user = authContext?.user || null;
   const { profile, addToWatchlist, removeFromWatchlist } = useUser() || {};
@@ -50,6 +51,9 @@ export default function HomePage() {
     .sort((a, b) => b.releaseYear - a.releaseYear)
     .slice(0, 6);
 
+  // Continue Watching (mock for now)
+  const [continueWatching, setContinueWatching] = useState<any[]>([]);
+
   // Auto-rotate hero
   useEffect(() => {
     const interval = setInterval(() => {
@@ -57,6 +61,18 @@ export default function HomePage() {
     }, 8000);
     return () => clearInterval(interval);
   }, [featuredContent.length]);
+
+  // Genre images for Browse by Genre section
+  const genreImages: Record<string, string> = {
+    "Action": "https://image.tmdb.org/t/p/w500/cZ0d3rtvXPVvuiX22sP79K3Hmjz.jpg",
+    "Drama": "https://image.tmdb.org/t/p/w500/luoKpgVwi1E5nQsi7W0UuKHu2Rq.jpg",
+    "Comedy": "https://image.tmdb.org/t/p/w500/vDGr1YdrlfbU9wxTOdpf3zChmv9.jpg",
+    "Thriller": "https://image.tmdb.org/t/p/w500/wlfDxbGEsW58vGhFljKkcR5IxDj.jpg",
+    "Sci-Fi": "https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
+    "Horror": "https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
+    "Romance": "https://image.tmdb.org/t/p/w500/luoKpgVwi1E5nQsi7W0UuKHu2Rq.jpg",
+    "Mystery": "https://image.tmdb.org/t/p/w500/8jWzCHn4PLpRiwa4O2jpSy2lxHZ.jpg",
+  };
 
   // Check if item is in watchlist
   const isInWatchlist = (id: string) => {
@@ -299,7 +315,13 @@ export default function HomePage() {
                 href={`/shows?genre=${genre.toLowerCase()}`}
                 className="group relative aspect-video overflow-hidden rounded-lg"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-purple-900 opacity-80 group-hover:opacity-100 transition-opacity" />
+                <Image
+                  src={genreImages[genre]}
+                  alt={genre}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="text-2xl font-bold text-white">{genre}</span>
                 </div>
@@ -330,6 +352,9 @@ function ContentRow({
   onWatchlistToggle,
   isInWatchlist,
 }: ContentRowProps) {
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const scrollContainerRef = useState<HTMLDivElement | null>(null)[0];
+
   const scroll = (direction: "left" | "right") => {
     const container = document.getElementById(
       `scroll-${title.replace(/\s/g, "")}`
