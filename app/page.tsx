@@ -36,10 +36,11 @@ export default function HomePage() {
   const featuredContent = netflixShows.slice(0, 3);
   const currentHero = featuredContent[currentHeroIndex];
 
-  // Trending (TV series only)
-  const trendingSeries = netflixShows
-    .filter((show) => show.type === "series")
-    .slice(0, 6);
+  // Trending (TV series only) - ensure Stranger Things is first
+  const strangerThings = netflixShows.find(show => show.title === "Stranger Things");
+  const trendingSeries = strangerThings
+    ? [strangerThings, ...netflixShows.filter(show => show.type === "series" && show.id !== strangerThings.id).slice(0, 5)]
+    : netflixShows.filter(show => show.type === "series").slice(0, 6);
 
   // Top Rated Movies
   const topMovies = netflixShows
