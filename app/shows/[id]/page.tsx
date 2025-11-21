@@ -37,6 +37,13 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
@@ -68,7 +75,16 @@ interface Show {
     thumbnail: string;
     description?: string;
   }[];
-  seasons?: number;
+  seasons?: {
+    seasonNumber: number;
+    episodes: {
+      title: string;
+      duration: string;
+      thumbnail: string;
+      description?: string;
+    }[];
+  }[];
+  totalSeasons?: number;
   type: "movie" | "series" | string;
   tmdbId: string;
   currentSeason?: number;
@@ -700,8 +716,8 @@ export default function ShowPage() {
                   <div className="flex items-center gap-2">
                     <TrendingUp className="w-5 h-5" />
                     <span>
-                      {show.seasons || 1} Season
-                      {(show.seasons || 1) > 1 ? "s" : ""}
+                      {show.totalSeasons || 1} Season
+                      {(show.totalSeasons || 1) > 1 ? "s" : ""}
                     </span>
                   </div>
                 )}
@@ -1228,17 +1244,45 @@ export default function ShowPage() {
               </TabsContent>
 
               <TabsContent value="episodes" className="mt-0">
-                {show.episodes ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-2xl font-bold">
-                        Season {currentSeason}
-                      </h2>
-                      <Badge variant="outline" className="px-4 py-1.5">
-                        {show.episodes.length} Episodes
-                      </Badge>
-                    </div>
-                    {show.episodes.map((episode: any, index: number) => (
+                {(() => {
+                  const currentSeasonData = show.seasons?.find(s => s.seasonNumber === currentSeason);
+                  const seasonEpisodes = currentSeasonData?.episodes || show.episodes || [];
+                  return seasonEpisodes.length > 0 ? (
+                    <div className="space-y-4">
+                      {/* Season Selector */}
+                      {show.totalSeasons && show.totalSeasons > 1 && (
+                        <div className="flex items-center justify-between mb-6">
+                          <Select
+                            value={currentSeason.toString()}
+                            onValueChange={(value) => setCurrentSeason(parseInt(value))}
+                          >
+                            <SelectTrigger className="w-48">
+                              <SelectValue placeholder="Select Season" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Array.from({ length: show.totalSeasons }, (_, i) => (
+                                <SelectItem key={i + 1} value={(i + 1).toString()}>
+                                  Season {i + 1}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <Badge variant="outline" className="px-4 py-1.5">
+                            {seasonEpisodes.length} Episodes
+                          </Badge>
+                        </div>
+                      )}
+                      {!show.totalSeasons || show.totalSeasons === 1 ? (
+                        <div className="flex items-center justify-between mb-6">
+                          <h2 className="text-2xl font-bold">
+                            Season {currentSeason}
+                          </h2>
+                          <Badge variant="outline" className="px-4 py-1.5">
+                            {seasonEpisodes.length} Episodes
+                          </Badge>
+                        </div>
+                      ) : null}
+                      {seasonEpisodes.map((episode: any, index: number) => (
                       <motion.div
                         key={index}
                         initial={{ opacity: 0, y: 10 }}
@@ -1303,24 +1347,23 @@ export default function ShowPage() {
                           </div>
                         </div>
                       </motion.div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-20 text-center">
-                    <div className="w-20 h-20 bg-muted/50 rounded-full flex items-center justify-center mb-4">
-                      <Play className="w-10 h-10 text-muted-foreground" />
+                      ))}
                     </div>
-                    <h3 className="text-xl font-semibold mb-2">
-                      No Episodes Available
-                    </h3>
-                    <p className="text-muted-foreground">
-                      Episodes for this content will be added soon.
-                    </p>
-                  </div>
-                )}
-              </TabsContent>
-
-              <TabsContent value="reviews" className="mt-0">
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-20 text-center">
+                      <div className="w-20 h-20 bg-muted/50 rounded-full flex items-center justify-center mb-4">
+                        <Play className="w-10 h-10 text-muted-foreground" />
+                      </div>
+                      <h3 className="text-xl font-semibold mb-2">
+                        No Episodes Available
+                      </h3>
+                      <p className="text-muted-foreground">
+                        Episodes for this content will be added soon.
+                      </p>
+                    </div>
+                  );
+                })()}
+              </TabsContent>              <TabsContent value="reviews" className="mt-0">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                   <div className="lg:col-span-2">
                     <div className="space-y-6">

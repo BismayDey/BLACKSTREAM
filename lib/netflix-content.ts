@@ -37,6 +37,15 @@ export interface NetflixContent {
     description: string;
     thumbnail: string;
   }[];
+  seasons?: {
+    seasonNumber: number;
+    episodes: {
+      title: string;
+      duration: string;
+      description: string;
+      thumbnail: string;
+    }[];
+  }[];
 }
 
 export const netflixShows: NetflixContent[] = [
@@ -44,6 +53,270 @@ export const netflixShows: NetflixContent[] = [
   // VERIFIED: These are the most popular shows with confirmed TMDB IDs
   {
     id: "1",
+    title: "Stranger Things",
+    tmdbId: "66732", // ✅ Verified on TMDB
+    type: "series",
+    genre: ["Sci-Fi", "Horror", "Drama"],
+    duration: "51 min",
+    releaseYear: 2016,
+    releaseDate: "July 15, 2016",
+    rating: 9.1,
+    userRating: 8.7,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/49WJfeN0moxb9IPfGn8AIqMGskD.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/56v2KjBlU4XaOv9rVYEQypROD7P.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    description:
+      "When a young boy disappears, his mother, a police chief and his friends must confront terrifying supernatural forces in order to get him back.",
+    cast: [
+      "Millie Bobby Brown",
+      "Finn Wolfhard",
+      "Winona Ryder",
+      "David Harbour",
+      "Gaten Matarazzo",
+      "Caleb McLaughlin",
+    ],
+    director: "The Duffer Brothers",
+    studio: "Netflix",
+    awards: "Screen Actors Guild Awards",
+    currentSeason: 1,
+    currentEpisode: 1,
+    totalSeasons: 4,
+    totalEpisodes: 34,
+    seasons: [
+      {
+        seasonNumber: 1,
+        episodes: [
+          {
+            title: "Chapter One: The Vanishing of Will Byers",
+            duration: "48 min",
+            description: "On his way home from a friend's house, young Will sees something terrifying. Nearby, a sinister secret lurks in the depths of a government lab.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Two: The Weirdo on Maple Street",
+            duration: "55 min",
+            description: "Lucas, Mike and Dustin try to talk to the girl they found in the woods. Hopper questions an anxious Joyce about an unsettling phone call.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Three: Holly, Jolly",
+            duration: "51 min",
+            description: "An increasingly concerned Nancy looks for Barb and finds out what Jonathan's been up to. Joyce is convinced Will is trying to talk to her.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Four: The Body",
+            duration: "49 min",
+            description: "Refusing to believe Will is dead, Joyce tries to connect with her son. The boys give Eleven a makeover. Nancy and Jonathan form an unlikely alliance.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Five: The Flea and the Acrobat",
+            duration: "52 min",
+            description: "Hopper breaks into the lab while Nancy and Jonathan confront the force that took Will. The boys ask Mr. Clarke how to travel to another dimension.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Six: The Monster",
+            duration: "46 min",
+            description: "A frantic Jonathan looks for Nancy in the darkness, but Steve's looking for her, too. Hopper and Joyce uncover the truth about the lab's experiments.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Seven: The Bathtub",
+            duration: "41 min",
+            description: "Eleven struggles to reach Will, while Lucas warns that 'the bad men are coming.' Nancy and Jonathan show the police what Jonathan caught on camera.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Eight: The Upside Down",
+            duration: "54 min",
+            description: "Dr. Brenner holds Hopper and Joyce for questioning while the boys wait with Eleven in the gym. Back at Will's, something unexpected happens.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+        ],
+      },
+      {
+        seasonNumber: 2,
+        episodes: [
+          {
+            title: "Chapter One: MADMAX",
+            duration: "48 min",
+            description: "As the town preps for Halloween, a high-scoring rival shakes things up at the arcade, and a skeptical Hopper inspects a field of rotting pumpkins.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Two: Trick or Treat, Freak",
+            duration: "56 min",
+            description: "After Will sees something terrible on trick-or-treat night, Mike wonders whether Eleven's still out there. Nancy wrestles with the truth about Barb.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Three: The Pollywog",
+            duration: "50 min",
+            description: "Dustin adopts a strange new pet, and Eleven grows increasingly impatient. A well-meaning Bob urges Will to stand up to his fears.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Four: Will the Wise",
+            duration: "45 min",
+            description: "An ailing Will opens up to Joyce -- with disturbing results. While Hopper digs for the truth, Eleven unearths a surprising discovery.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Five: Dig Dug",
+            duration: "58 min",
+            description: "Nancy and Jonathan swap conspiracy theories with a new ally as Eleven searches for someone from her past. 'Bob the Brain' tackles a difficult problem.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Six: The Spy",
+            duration: "51 min",
+            description: "Will's connection to a shadowy evil grows stronger, but no one's quite sure how to stop it. Elsewhere, Dustin and Steve forge an unlikely bond.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Seven: The Lost Sister",
+            duration: "46 min",
+            description: "Psychic visions draw Eleven to a band of violent outcasts and an angry girl with a shadowy past.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Eight: The Mind Flayer",
+            duration: "55 min",
+            description: "An unlikely hero steps forward when a deadly development puts the Hawkins lab on lockdown, trapping Will and several others inside.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Nine: The Gate",
+            duration: "62 min",
+            description: "Eleven makes plans to finish what she started while the survivors turn up the heat on the monstrous force that's holding Will hostage.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+        ],
+      },
+      {
+        seasonNumber: 3,
+        episodes: [
+          {
+            title: "Chapter One: Suzie's Got a Hula Hoop",
+            duration: "50 min",
+            description: "Things change over the summer: Jonathan, Nancy, Steve, and Robin take new jobs and pursue their own interests. Mike tries to occupy his time.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Two: The Mall Rats",
+            duration: "49 min",
+            description: "Nancy and Jonathan follow a lead, Steve and Robin sign on to a secret mission, and Max and Eleven go shopping. A rattled Billy has troubling visions.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Three: The Case of the Missing Lifeguard",
+            duration: "49 min",
+            description: "With El and Max looking for Billy, Will declares a day without girls. Steve and Dustin go on a stakeout, and Joyce and Hopper return to Hawkins Lab.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Four: The Sauna Test",
+            duration: "52 min",
+            description: "A code red brings the gang back together to face a frighteningly familiar evil. Karen urges Nancy to keep digging, and Robin finds a useful map.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Five: The Flayed",
+            duration: "51 min",
+            description: "Strange surprises lurk inside an old farmhouse and deep beneath the Starcourt Mall. Meanwhile, the Mind Flayer is gathering strength.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Six: E Pluribus Unum",
+            duration: "59 min",
+            description: "Dr. Alexei reveals what the Russians have been building. Meanwhile, the kids find themselves split up in the underground labyrinth of Hawkins Lab.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Seven: The Bite",
+            duration: "55 min",
+            description: "With time running out -- and an assassin close behind -- Hopper's crew races back to Hawkins in the new Starcourt Mall.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Eight: The Battle of Starcourt",
+            duration: "77 min",
+            description: "The Mall goes on lockdown as the Russians reveal their master plan. Meanwhile, Eleven and her friends make plans to finish what they started.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+        ],
+      },
+      {
+        seasonNumber: 4,
+        episodes: [
+          {
+            title: "Chapter One: The Hellfire Club",
+            duration: "77 min",
+            description: "El is bullied at school. Joyce opens a mysterious package. The Hawkins crew gathers for a special occasion, and Mike asks El to the dance.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Two: Vecna's Curse",
+            duration: "79 min",
+            description: "A plane brings Mike to California. A plague of rats descends on Hawkins. In the Upside Down, a dark force targets victims.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Three: The Monster and the Superhero",
+            duration: "63 min",
+            description: "Nancy and Robin follow a lead. Dustin and Eddie form an unlikely alliance. Back in Hawkins, the gang gathers at Murray's for a movie night.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Four: Dear Billy",
+            duration: "78 min",
+            description: "Max is in grave danger... and running out of time. A patient at Hawkins Lab exposes a shocking secret, and Eleven unearths new questions.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Five: The Nina Project",
+            duration: "75 min",
+            description: "The group splits up to close the gates and face the horrors of the Upside Down. But the gang encounters a terrifying new threat.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Six: The Dive",
+            duration: "74 min",
+            description: "A new player joins the fight. The Mind Flayer's first attack tests everyone's limits. Meanwhile, the Nina project advances.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Seven: The Massacre at Hawkins Lab",
+            duration: "99 min",
+            description: "As the town preps for battle, Eleven spars with a devastating memory from her past. A vicious attack rocks Hawkins Lab.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Eight: Papa",
+            duration: "85 min",
+            description: "Nancy has sobering visions, and El passes an important test. The gang debates whether to interrogate a prisoner, and Steve takes one for the team.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Chapter Nine: The Piggyback",
+            duration: "150 min",
+            description: "With the fate of Hawkins at stake, the gang must defeat an otherworldly threat once and for all. But the battle will require unimaginable sacrifice.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "2",
     title: "Squid Game",
     tmdbId: "93405", // ✅ Verified on TMDB
     type: "series",
@@ -105,52 +378,6 @@ export const netflixShows: NetflixContent[] = [
   },
   {
     id: "2",
-    title: "Stranger Things",
-    tmdbId: "66732", // ✅ Verified on TMDB
-    type: "series",
-    genre: ["Sci-Fi", "Horror", "Drama"],
-    duration: "51 min",
-    releaseYear: 2016,
-    releaseDate: "July 15, 2016",
-    rating: 9.1,
-    userRating: 8.7,
-    thumbnail:
-      "https://image.tmdb.org/t/p/w1280/49WJfeN0moxb9IPfGn8AIqMGskD.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
-    backdrop:
-      "https://image.tmdb.org/t/p/original/56v2KjBlU4XaOv9rVYEQypROD7P.jpg",
-    videoUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-    trailerUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-    description:
-      "When a young boy disappears, his mother, a police chief and his friends must confront terrifying supernatural forces in order to get him back.",
-    cast: [
-      "Millie Bobby Brown",
-      "Finn Wolfhard",
-      "Winona Ryder",
-      "David Harbour",
-      "Gaten Matarazzo",
-      "Caleb McLaughlin",
-    ],
-    director: "The Duffer Brothers",
-    studio: "Netflix",
-    awards: "Screen Actors Guild Awards",
-    currentSeason: 1,
-    currentEpisode: 1,
-    totalSeasons: 4,
-    episodes: [
-      {
-        title: "Chapter One: The Vanishing of Will Byers",
-        duration: "48 min",
-        description:
-          "On his way home from a friend's house, young Will sees something terrifying. Nearby, a sinister secret lurks in the depths of a government lab.",
-        thumbnail: "/placeholder.svg?height=720&width=1280",
-      },
-    ],
-  },
-  {
-    id: "3",
     title: "Wednesday",
     tmdbId: "119051", // ✅ Verified on TMDB
     type: "series",
@@ -195,7 +422,7 @@ export const netflixShows: NetflixContent[] = [
     ],
   },
   {
-    id: "4",
+    id: "3",
     title: "The Witcher",
     tmdbId: "71912",
     type: "series",
@@ -231,7 +458,7 @@ export const netflixShows: NetflixContent[] = [
     totalSeasons: 3,
   },
   {
-    id: "5",
+    id: "4",
     title: "Money Heist (La Casa de Papel)",
     tmdbId: "71446", // ✅ Verified on TMDB
     type: "series",
@@ -267,7 +494,7 @@ export const netflixShows: NetflixContent[] = [
     totalSeasons: 5,
   },
   {
-    id: "6",
+    id: "5",
     title: "The Crown",
     tmdbId: "46708", // ✅ Verified on TMDB - Correct ID for The Crown
     type: "series",
@@ -303,7 +530,7 @@ export const netflixShows: NetflixContent[] = [
     totalSeasons: 6,
   },
   {
-    id: "7",
+    id: "6",
     title: "Bridgerton",
     tmdbId: "63247", // ✅ Verified on TMDB - Correct ID for Bridgerton (was 100088)
     type: "series",
@@ -341,7 +568,7 @@ export const netflixShows: NetflixContent[] = [
 
   // === MOVIES ===
   {
-    id: "8",
+    id: "7",
     title: "The Adam Project",
     tmdbId: "696806",
     type: "movie",
@@ -374,7 +601,7 @@ export const netflixShows: NetflixContent[] = [
     studio: "Netflix",
   },
   {
-    id: "9",
+    id: "8",
     title: "Glass Onion: A Knives Out Mystery",
     tmdbId: "661374", // ✅ Verified on TMDB - Correct ID (was 620249)
     type: "movie",
@@ -407,7 +634,7 @@ export const netflixShows: NetflixContent[] = [
     studio: "Netflix",
   },
   {
-    id: "10",
+    id: "9",
     title: "Red Notice",
     tmdbId: "512195",
     type: "movie",
@@ -439,7 +666,7 @@ export const netflixShows: NetflixContent[] = [
     studio: "Netflix",
   },
   {
-    id: "11",
+    id: "10",
     title: "Breaking Bad",
     tmdbId: "1396", // ✅ Verified on TMDB
     type: "series",
@@ -514,7 +741,7 @@ export const netflixShows: NetflixContent[] = [
     ],
   },
   {
-    id: "12",
+    id: "11",
     title: "Peaky Blinders",
     tmdbId: "60574", // ✅ Verified on TMDB
     type: "series",
@@ -575,7 +802,7 @@ export const netflixShows: NetflixContent[] = [
     ],
   },
   {
-    id: "13",
+    id: "12",
     title: "Dark",
     tmdbId: "70523", // ✅ Verified on TMDB
     type: "series",
@@ -636,7 +863,7 @@ export const netflixShows: NetflixContent[] = [
     ],
   },
   {
-    id: "14",
+    id: "13",
     title: "Ozark",
     tmdbId: "69740", // ✅ Verified on TMDB
     type: "series",
@@ -697,7 +924,7 @@ export const netflixShows: NetflixContent[] = [
     ],
   },
   {
-    id: "15",
+    id: "14",
     title: "Narcos",
     tmdbId: "63351", // ✅ Verified on TMDB
     type: "series",
@@ -758,7 +985,7 @@ export const netflixShows: NetflixContent[] = [
     ],
   },
   {
-    id: "16",
+    id: "15",
     title: "The Umbrella Academy",
     tmdbId: "75006", // ✅ Verified on TMDB
     type: "series",
@@ -818,7 +1045,7 @@ export const netflixShows: NetflixContent[] = [
     ],
   },
   {
-    id: "17",
+    id: "16",
     title: "Extraction",
     tmdbId: "545609", // ✅ Verified on TMDB
     type: "movie",
@@ -851,7 +1078,7 @@ export const netflixShows: NetflixContent[] = [
     studio: "Netflix",
   },
   {
-    id: "18",
+    id: "17",
     title: "The Gray Man",
     tmdbId: "725201", // ✅ Verified on TMDB
     type: "movie",
@@ -884,7 +1111,7 @@ export const netflixShows: NetflixContent[] = [
     studio: "Netflix",
   },
   {
-    id: "19",
+    id: "18",
     title: "Enola Holmes",
     tmdbId: "497582", // ✅ Verified on TMDB
     type: "movie",
@@ -917,7 +1144,7 @@ export const netflixShows: NetflixContent[] = [
     studio: "Netflix",
   },
   {
-    id: "20",
+    id: "19",
     title: "Don't Look Up",
     tmdbId: "646380", // ✅ Verified on TMDB
     type: "movie",
