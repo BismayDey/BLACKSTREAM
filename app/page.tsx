@@ -32,8 +32,10 @@ export default function HomePage() {
   const { profile, addToWatchlist, removeFromWatchlist } = useUser() || {};
   const { toast } = useToast();
 
-  // Get featured content (first 3 items for hero rotation)
-  const featuredContent = netflixShows.slice(0, 3);
+  // Get featured content (specific shows for hero rotation)
+  const featuredContent = netflixShows.filter(show => 
+    ["Wednesday", "Stranger Things", "Breaking Bad", "Squid Game", "The Witcher"].includes(show.title)
+  );
   const currentHero = featuredContent[currentHeroIndex];
 
   // Trending (TV series only) - ensure Stranger Things is first
