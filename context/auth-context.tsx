@@ -35,6 +35,11 @@ export const useAuth = () => useContext(AuthContext)
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -210,6 +215,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     updateUserData,
     getUserData,
     isSignInLink,
+  }
+
+  // Don't render children until mounted to prevent hydration mismatch
+  if (!mounted) {
+    return null
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

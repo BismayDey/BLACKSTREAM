@@ -58,6 +58,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<FirebaseUser | null>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Listen for auth state changes
   useEffect(() => {
@@ -248,6 +253,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         }
       })
     }
+  }
+
+  // Don't render children until mounted to prevent hydration mismatch
+  if (!mounted) {
+    return null
   }
 
   return (
