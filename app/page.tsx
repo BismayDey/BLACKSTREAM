@@ -32,30 +32,33 @@ export default function HomePage() {
   const { profile, addToWatchlist, removeFromWatchlist } = useUser() || {};
   const { toast } = useToast();
 
+  // Remove duplicates based on ID
+  const uniqueShows = Array.from(new Map(netflixShows.map(show => [show.id, show])).values());
+
   // Get featured content (specific shows for hero rotation)
-  const featuredContent = netflixShows.filter(show => 
+  const featuredContent = uniqueShows.filter(show => 
     ["Wednesday", "Stranger Things", "Breaking Bad", "Squid Game", "The Witcher"].includes(show.title)
   );
   const currentHero = featuredContent[currentHeroIndex];
 
   // Trending (TV series only) - ensure Stranger Things is first
-  const strangerThings = netflixShows.find(show => show.title === "Stranger Things");
+  const strangerThings = uniqueShows.find(show => show.title === "Stranger Things");
   const trendingSeries = strangerThings
-    ? [strangerThings, ...netflixShows.filter(show => show.type === "series" && show.id !== strangerThings.id).slice(0, 5)]
-    : netflixShows.filter(show => show.type === "series").slice(0, 6);
+    ? [strangerThings, ...uniqueShows.filter(show => show.type === "series" && show.id !== strangerThings.id).slice(0, 5)]
+    : uniqueShows.filter(show => show.type === "series").slice(0, 6);
 
   // Top Rated Movies
-  const topMovies = netflixShows
+  const topMovies = uniqueShows
     .filter((show) => show.type === "movie")
     .sort((a, b) => b.userRating - a.userRating);
 
   // Recently Added
-  const recentlyAdded = netflixShows
+  const recentlyAdded = uniqueShows
     .sort((a, b) => b.releaseYear - a.releaseYear)
     .slice(0, 6);
 
   // Bengali Movies
-  const bengaliMovies = netflixShows.filter(
+  const bengaliMovies = uniqueShows.filter(
     (show) => 
       show.type === "movie" && 
       (show.id === "20" || 
@@ -68,7 +71,7 @@ export default function HomePage() {
   );
 
   // Hindi Movies (Latest Bollywood Blockbusters)
-  const hindiMovies = netflixShows.filter(
+  const hindiMovies = uniqueShows.filter(
     (show) => 
       show.type === "movie" && 
       (show.id === "25" || 
@@ -85,7 +88,7 @@ export default function HomePage() {
   );
 
   // Action Blockbusters
-  const actionMovies = netflixShows.filter(
+  const actionMovies = uniqueShows.filter(
     (show) => 
       show.type === "movie" && 
       show.genre.includes("Action")
@@ -469,11 +472,11 @@ function ContentRow({
         className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        {items.map((item, index) => (
+        {items.map((item) => (
           <ContentCard
             key={item.id}
             item={item}
-            index={index}
+            index={0}
             onWatchlistToggle={onWatchlistToggle}
             isInWatchlist={isInWatchlist(item.id)}
           />

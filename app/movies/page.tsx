@@ -8,8 +8,35 @@ import { motion } from "framer-motion"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Play, Star } from "lucide-react"
+import { Play, Star, Grid3x3, Grid2x2, LayoutGrid } from "lucide-react"
 import netflixShows from "@/lib/netflix-content"
+
+// Language mapping for movies (inferred from content)
+const movieLanguages: Record<string, string> = {
+  "12th Fail": "Hindi",
+  "Rocky Aur Rani": "Hindi",
+  "Jawan": "Hindi",
+  "Pathaan": "Hindi",
+  "Animal": "Hindi",
+  "Tiger 3": "Hindi",
+  "Dunki": "Hindi",
+  "Squid Game: The Challenge": "Korean",
+  "Money Heist: Korea": "Korean",
+  "All of Us Are Dead": "Korean",
+  "Physical: 100": "Korean",
+  "Extraordinary Attorney Woo": "Korean",
+  "Narcos: Mexico": "Spanish",
+  "Elite": "Spanish",
+  "Money Heist": "Spanish",
+  "Sky Rojo": "Spanish",
+  "Lupin": "French",
+  "Emily in Paris": "French",
+  "Dark": "German",
+  "Barbarians": "German",
+  "Sacred Games": "Hindi",
+  "Delhi Crime": "Hindi",
+  "Jamtara": "Hindi",
+}
 
 export default function MoviesPage() {
   // Filter to only include movies
@@ -20,13 +47,26 @@ export default function MoviesPage() {
     new Set(allMovies.flatMap((movie) => movie.genre))
   ).sort()
 
-  const [selectedGenre, setSelectedGenre] = useState<string | null>(null)
-  const [showBrowseByGenre, setShowBrowseByGenre] = useState<boolean>(true)
+  // Extract unique languages from movies
+  const allLanguages = Array.from(
+    new Set(
+      allMovies.map((movie) => movieLanguages[movie.title] || "English")
+    )
+  ).sort()
 
-  // Filter movies by selected genre - show all if nothing selected
-  const filteredMovies = selectedGenre 
-    ? allMovies.filter((movie) => movie.genre.includes(selectedGenre))
-    : allMovies
+  const [selectedGenre, setSelectedGenre] = useState<string | null>(null)
+  const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null)
+  const [showBrowseByGenre, setShowBrowseByGenre] = useState<boolean>(false)
+  const [showBrowseByLanguage, setShowBrowseByLanguage] = useState<boolean>(false)
+  const [gridSize, setGridSize] = useState<"small" | "medium" | "large">("medium")
+
+  // Filter movies by selected genre and language - show all if nothing selected
+  const filteredMovies = allMovies.filter((movie) => {
+    const matchesGenre = selectedGenre ? movie.genre.includes(selectedGenre) : true
+    const movieLanguage = movieLanguages[movie.title] || "English"
+    const matchesLanguage = selectedLanguage ? movieLanguage === selectedLanguage : true
+    return matchesGenre && matchesLanguage
+  })
 
   // Genre images for Browse by Genre section - using popular shows
   const genreImages: Record<string, string> = {
@@ -48,27 +88,96 @@ export default function MoviesPage() {
     "Family": "https://image.tmdb.org/t/p/w500/riYInlsq2kf1AWoGm80JQW5dLKp.jpg", // Enola Holmes
   }
 
+  // Language images for Browse by Language section
+  const languageImages: Record<string, string> = {
+    "English": "https://image.tmdb.org/t/p/w500/wFjboE0aFZNbVOF05fzrka9Fqyx.jpg", // The Adam Project
+    "Hindi": "https://image.tmdb.org/t/p/w500/fYaYwY7xMDx0G3JppAc8abMPZCp.jpg", // 12th Fail
+    "Korean": "https://image.tmdb.org/t/p/w500/lbg7ku1wvjyD1d6cD9MZbdjwVfL.jpg", // Squid Game
+    "Spanish": "https://image.tmdb.org/t/p/w500/reEMJA1uzscCbkpeRJeTT2bjqUp.jpg", // Money Heist
+    "French": "https://image.tmdb.org/t/p/w500/ga4OLltZf0Z8IxJYzS5PhhCMZKP.jpg", // Lupin
+    "German": "https://image.tmdb.org/t/p/w500/56v2KjBlU4XaOv9rVYEQypROD7P.jpg", // Dark
+    "Japanese": "https://image.tmdb.org/t/p/w500/qbJkpKW3iRuNpbBvzXcQYf7U9Tk.jpg", // Anime
+    "Portuguese": "https://image.tmdb.org/t/p/w500/mXuqn7L8prDqjxT8keil2bwdSg5.jpg", // 3%
+  }
+
   return (
     <div className="pt-24 pb-16 min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
               Movies
             </h1>
-            <Button
-              variant="outline"
-              className="border-red-500 text-red-500 hover:bg-red-500/10"
-              onClick={() => setShowBrowseByGenre(!showBrowseByGenre)}
-            >
-              {showBrowseByGenre ? "Hide Browse by Genre" : "Show Browse by Genre"}
-            </Button>
+            <div className="flex gap-2 flex-wrap">
+              {/* Grid View Toggle */}
+              <div className="flex gap-1 bg-white/5 border border-white/10 rounded-lg p-1">
+                <Button
+                  size="sm"
+                  variant={gridSize === "large" ? "default" : "ghost"}
+                  onClick={() => setGridSize("large")}
+                  className={gridSize === "large" ? "bg-red-600 hover:bg-red-700" : "hover:bg-white/10"}
+                  title="Large Grid"
+                >
+                  <Grid2x2 className="w-4 h-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant={gridSize === "medium" ? "default" : "ghost"}
+                  onClick={() => setGridSize("medium")}
+                  className={gridSize === "medium" ? "bg-red-600 hover:bg-red-700" : "hover:bg-white/10"}
+                  title="Medium Grid"
+                >
+                  <Grid3x3 className="w-4 h-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant={gridSize === "small" ? "default" : "ghost"}
+                  onClick={() => setGridSize("small")}
+                  className={gridSize === "small" ? "bg-red-600 hover:bg-red-700" : "hover:bg-white/10"}
+                  title="Small Grid"
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                </Button>
+              </div>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-red-500 text-red-500 hover:bg-red-500/10"
+                onClick={() => setShowBrowseByGenre(!showBrowseByGenre)}
+              >
+                {showBrowseByGenre ? "Hide Genre" : "Show Genre"}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-orange-500 text-orange-500 hover:bg-orange-500/10"
+                onClick={() => setShowBrowseByLanguage(!showBrowseByLanguage)}
+              >
+                {showBrowseByLanguage ? "Hide Language" : "Show Language"}
+              </Button>
+            </div>
           </div>
           <p className="text-gray-400">
             Explore our collection of {allMovies.length} amazing movies
             {selectedGenre && ` in ${selectedGenre}`}
+            {selectedLanguage && ` in ${selectedLanguage}`}
           </p>
+          {(selectedGenre || selectedLanguage) && (
+            <div className="mt-4">
+              <Button
+                variant="outline"
+                className="border-purple-500 text-purple-500 hover:bg-purple-500/10"
+                onClick={() => {
+                  setSelectedGenre(null)
+                  setSelectedLanguage(null)
+                }}
+              >
+                Clear All Filters
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Browse by Genre Section */}
@@ -125,16 +234,84 @@ export default function MoviesPage() {
           </section>
         )}
 
+        {/* Browse by Language Section */}
+        {showBrowseByLanguage && (
+          <section className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-white">
+                Browse by Language
+              </h2>
+              {selectedLanguage && (
+                <Button
+                  variant="outline"
+                  className="border-orange-500 text-orange-500 hover:bg-orange-500/10"
+                  onClick={() => setSelectedLanguage(null)}
+                >
+                  Clear Filter
+                </Button>
+              )}
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+              {allLanguages.map((language) => {
+                const count = allMovies.filter((m) => 
+                  (movieLanguages[m.title] || "English") === language
+                ).length
+                return (
+                  <motion.div
+                    key={language}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setSelectedLanguage(language)}
+                    className={`group relative aspect-[4/5] overflow-hidden rounded-lg cursor-pointer ${
+                      selectedLanguage === language ? "ring-4 ring-orange-500" : ""
+                    }`}
+                  >
+                    <Image
+                      src={languageImages[language] || languageImages["English"]}
+                      alt={language}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className={`absolute inset-0 transition-all duration-300 ${
+                      selectedLanguage === language 
+                        ? "bg-orange-600/60" 
+                        : "bg-black/40 group-hover:bg-black/20"
+                    }`} />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-xl md:text-2xl font-bold text-white mb-1">{language}</span>
+                      <Badge className="bg-white/20 text-white text-xs backdrop-blur-sm">
+                        {count} {count === 1 ? "movie" : "movies"}
+                      </Badge>
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </div>
+          </section>
+        )}
+
         {/* Movies Grid */}
         <div className="mb-6">
           <h3 className="text-xl md:text-2xl font-bold text-white">
-            {selectedGenre ? `${selectedGenre} Movies` : "All Movies"} ({filteredMovies.length})
+            {selectedGenre && selectedLanguage 
+              ? `${selectedGenre} Movies in ${selectedLanguage}` 
+              : selectedGenre 
+              ? `${selectedGenre} Movies` 
+              : selectedLanguage
+              ? `${selectedLanguage} Movies`
+              : "All Movies"} ({filteredMovies.length})
           </h3>
         </div>
 
         <motion.div 
           layout
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6"
+          className={`grid gap-4 md:gap-6 ${
+            gridSize === "large" 
+              ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5"
+              : gridSize === "medium"
+              ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
+              : "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8"
+          }`}
         >
           {filteredMovies.map((movie, index) => (
             <motion.div

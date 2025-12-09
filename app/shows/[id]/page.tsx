@@ -1288,7 +1288,15 @@ export default function ShowPage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.05 }}
-                        className="group relative flex flex-col sm:flex-row gap-4 p-4 rounded-xl border border-white/10 bg-muted/20 hover:bg-muted/40 hover:border-primary/50 transition-all duration-300 backdrop-blur-sm"
+                        className="group relative flex flex-col sm:flex-row gap-4 p-4 rounded-xl border border-white/10 bg-muted/20 hover:bg-muted/40 hover:border-primary/50 transition-all duration-300 backdrop-blur-sm cursor-pointer"
+                        onClick={() => {
+                          setCurrentEpisode(index + 1);
+                          // Scroll to video player
+                          const videoPlayer = document.getElementById('video-player');
+                          if (videoPlayer) {
+                            videoPlayer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }
+                        }}
                       >
                         <div className="relative w-full sm:w-64 aspect-video rounded-lg overflow-hidden">
                           <Image
@@ -1306,7 +1314,15 @@ export default function ShowPage() {
                               size="icon"
                               variant="ghost"
                               className="bg-primary/90 hover:bg-primary rounded-full w-14 h-14"
-                              onClick={() => setCurrentEpisode(index + 1)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setCurrentEpisode(index + 1);
+                                // Scroll to video player
+                                const videoPlayer = document.getElementById('video-player');
+                                if (videoPlayer) {
+                                  videoPlayer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }
+                              }}
                             >
                               <Play className="w-6 h-6 text-white fill-white" />
                             </Button>
@@ -1337,6 +1353,7 @@ export default function ShowPage() {
                                 variant="ghost"
                                 size="icon"
                                 className="hover:bg-primary/20"
+                                onClick={(e) => e.stopPropagation()}
                               >
                                 <Heart className="w-4 h-4" />
                               </Button>
