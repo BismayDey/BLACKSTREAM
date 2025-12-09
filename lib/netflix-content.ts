@@ -63,14 +63,14 @@ export const netflixShows: NetflixContent[] = [
     rating: 9.1,
     userRating: 8.7,
     thumbnail:
-      "https://image.tmdb.org/t/p/w1280/49WJfeN0moxb9IPfGn8AIqMGskD.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
+      "https://image.tmdb.org/t/p/original/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
+    poster: "https://image.tmdb.org/t/p/original/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
     backdrop:
       "https://image.tmdb.org/t/p/original/56v2KjBlU4XaOv9rVYEQypROD7P.jpg",
     videoUrl:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     trailerUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "https://www.youtube.com/watch?v=b9EkMc79ZSU",
     description:
       "When a young boy disappears, his mother, a police chief and his friends must confront terrifying supernatural forces in order to get him back.",
     cast: [
@@ -380,14 +380,14 @@ export const netflixShows: NetflixContent[] = [
     rating: 8.8,
     userRating: 8.2,
     thumbnail:
-      "https://image.tmdb.org/t/p/w1280/MoEKaPFHABtA1xKoOteirGaHl1.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/reEMJA1uzscCbkpeRJeTT2bjqUp.jpg",
+      "https://image.tmdb.org/t/p/original/reEMJA1uzscCbkpeRJeTT2bjqUp.jpg",
+    poster: "https://image.tmdb.org/t/p/original/reEMJA1uzscCbkpeRJeTT2bjqUp.jpg",
     backdrop:
-      "https://image.tmdb.org/t/p/original/5vUux2vNUTqwCzb7tVcH18XnsF.jpg",
+      "https://image.tmdb.org/t/p/original/piuRhGiQBYWgW668eSNJ2ug5uAO.jpg",
     videoUrl:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
     trailerUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+      "https://www.youtube.com/watch?v=_InqQJRqGW4",
     description:
       "To carry out the biggest heist in history, a mysterious man called The Professor recruits a band of eight robbers who have a single characteristic: none of them has anything to lose.",
     cast: [
@@ -487,14 +487,14 @@ export const netflixShows: NetflixContent[] = [
     rating: 7.6,
     userRating: 7.6,
     thumbnail:
-      "https://image.tmdb.org/t/p/w1280/daSFbrt8QCXV2hSwB0hqYjbjnal.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/jcEl8SISNfGdlQFwLzeEtsjDvpw.jpg",
+      "https://image.tmdb.org/t/p/original/jcEl8SISNfGdlQFwLzeEtsjDvpw.jpg",
+    poster: "https://image.tmdb.org/t/p/original/jcEl8SISNfGdlQFwLzeEtsjDvpw.jpg",
     backdrop:
       "https://image.tmdb.org/t/p/original/edmk8xjGBsYVIf4QtLY9WMaMcXZ.jpg",
     videoUrl:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
     trailerUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "https://www.youtube.com/watch?v=Bls47__eQVY",
     description:
       "Follows the personal and professional lives of surgical interns, residents, and attendings at Seattle Grace Hospital as they become seasoned doctors while balancing personal relationships and complicated medical cases.",
     cast: [
@@ -1084,14 +1084,14 @@ export const netflixShows: NetflixContent[] = [
     rating: 8.8,
     userRating: 8.8,
     thumbnail:
-      "https://image.tmdb.org/t/p/original/wiE9doxiLwq3WCGamDIOb2PqBqc.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/vC324sEQJgBNTe6WWpHD9CaO2f8.jpg",
+      "https://image.tmdb.org/t/p/original/vC324sEQJgBNTe6WWpHD9CaO2f8.jpg",
+    poster: "https://image.tmdb.org/t/p/original/vC324sEQJgBNTe6WWpHD9CaO2f8.jpg",
     backdrop:
-      "https://image.tmdb.org/t/p/original/wiE9doxiLwq3WCGamDIOb2PqBqc.jpg",
+      "https://image.tmdb.org/t/p/original/4C8BevMqYa0JkAifJ66ec6QM0p9.jpg",
     videoUrl:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     trailerUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "https://www.youtube.com/watch?v=oVzVdvGIC7U",
     description:
       "A gangster family epic set in 1900s England, centering on a gang who sew razor blades in the peaks of their caps, and their fierce boss Tommy Shelby.",
     cast: [
@@ -1190,14 +1190,14 @@ export const netflixShows: NetflixContent[] = [
     rating: 9.5,
     userRating: 9.5,
     thumbnail:
-      "https://image.tmdb.org/t/p/original/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
+      "https://image.tmdb.org/t/p/original/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
+    poster: "https://image.tmdb.org/t/p/original/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
     backdrop:
-      "https://image.tmdb.org/t/p/original/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",
+      "https://image.tmdb.org/t/p/original/9faGSFi5jam6pDWGNd0p8JcJgXQ.jpg",
     videoUrl:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     trailerUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "https://www.youtube.com/watch?v=HhesaQXLuRY",
     description:
       "A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine in order to secure his family's future.",
     cast: [
@@ -1317,14 +1317,14 @@ export const netflixShows: NetflixContent[] = [
     rating: 7.8,
     userRating: 7.8,
     thumbnail:
-      "https://image.tmdb.org/t/p/original/AmM9bXsACwh5bESDMzFpapSsUVw.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/vRuXy8C7OGgfvF1VPTFKixX5lij.jpg",
+      "https://image.tmdb.org/t/p/original/vRuXy8C7OGgfvF1VPTFKixX5lij.jpg",
+    poster: "https://image.tmdb.org/t/p/original/vRuXy8C7OGgfvF1VPTFKixX5lij.jpg",
     backdrop:
-      "https://image.tmdb.org/t/p/original/AmM9bXsACwh5bESDMzFpapSsUVw.jpg",
+      "https://image.tmdb.org/t/p/original/aU4Dc52eTcvVJWRq9VrjL4OcWck.jpg",
     videoUrl:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     trailerUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "https://www.youtube.com/watch?v=5gQ8-C5-vPk",
     description:
       "A new generation of heroes fight to save the world from a zombie apocalypse in this animated series set in the Marvel Cinematic Universe.",
     cast: [
@@ -1365,14 +1365,14 @@ export const netflixShows: NetflixContent[] = [
     rating: 7.7,
     userRating: 7.7,
     thumbnail:
-      "https://image.tmdb.org/t/p/original/fE38s4myIP89bBFxcIP0BD7klGU.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/szoJE44DeCMtYbshATWEZNUgsDe.jpg",
+      "https://image.tmdb.org/t/p/original/szoJE44DeCMtYbshATWEZNUgsDe.jpg",
+    poster: "https://image.tmdb.org/t/p/original/szoJE44DeCMtYbshATWEZNUgsDe.jpg",
     backdrop:
-      "https://image.tmdb.org/t/p/original/fE38s4myIP89bBFxcIP0BD7klGU.jpg",
+      "https://image.tmdb.org/t/p/original/7g3KiaqJ7Q5XtCqzLin7DPSxGkW.jpg",
     videoUrl:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     trailerUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "https://www.youtube.com/watch?v=FStMMcj-RiA",
     description:
       "The early life of child genius Sheldon Cooper, later seen in The Big Bang Theory. In this comedy prequel, Sheldon navigates growing up in East Texas with his family.",
     cast: [
@@ -1579,14 +1579,14 @@ export const netflixShows: NetflixContent[] = [
     rating: 7.6,
     userRating: 7.7,
     thumbnail:
-      "https://image.tmdb.org/t/p/original/qp8pW00VlhDkhl7DgAXMh9uF0Y2.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/jbLlXiaAyRJJSmQ9C81bI9N1Esn.jpg",
+      "https://image.tmdb.org/t/p/original/jbLlXiaAyRJJSmQ9C81bI9N1Esn.jpg",
+    poster: "https://image.tmdb.org/t/p/original/jbLlXiaAyRJJSmQ9C81bI9N1Esn.jpg",
     backdrop:
-      "https://image.tmdb.org/t/p/original/qp8pW00VlhDkhl7DgAXMh9uF0Y2.jpg",
+      "https://image.tmdb.org/t/p/original/nQCXF2Qz5H6n5OjkJSxaUJxvEhp.jpg",
     videoUrl:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     trailerUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "https://www.youtube.com/watch?v=VkXuPdHoJtI",
     description:
       "Marinette and Adrien, two Parisian teenagers, are entrusted with powerful jewels called Miraculous. They transform into superheroes Ladybug and Cat Noir to protect Paris from the evil Hawk Moth.",
     cast: [
@@ -1782,14 +1782,14 @@ export const netflixShows: NetflixContent[] = [
     rating: 7.7,
     userRating: 7.8,
     thumbnail:
-      "https://image.tmdb.org/t/p/original/3KCAZaKHRYrOy93AUnFGsXP9XT3.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/3sleYBlWxOviLtZS0bRsF2V0VV4.jpg",
+      "https://image.tmdb.org/t/p/original/3sleYBlWxOviLtZS0bRsF2V0VV4.jpg",
+    poster: "https://image.tmdb.org/t/p/original/3sleYBlWxOviLtZS0bRsF2V0VV4.jpg",
     backdrop:
-      "https://image.tmdb.org/t/p/original/3KCAZaKHRYrOy93AUnFGsXP9XT3.jpg",
+      "https://image.tmdb.org/t/p/original/oZt6ujZdgZCBylIGxDIIOM5AEt8.jpg",
     videoUrl:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     trailerUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "https://www.youtube.com/watch?v=qp-LwLZlDLo",
     description:
       "When Shadow Moon is released from prison, he meets the mysterious Mr. Wednesday and is recruited as his bodyguard. Shadow discovers that a storm is brewing between the old gods and the new gods, and he's caught in the middle.",
     cast: [
@@ -1864,13 +1864,13 @@ export const netflixShows: NetflixContent[] = [
     userRating: 9.3,
     thumbnail:
       "https://image.tmdb.org/t/p/original/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
+    poster: "https://image.tmdb.org/t/p/original/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
     backdrop:
-      "https://image.tmdb.org/t/p/original/suopoADq0k8YZr4dQXcU6pToj6s.jpg",
+      "https://image.tmdb.org/t/p/original/2OMB0ynKlyIenMJWI2Dy9IWT4c.jpg",
     videoUrl:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     trailerUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "https://www.youtube.com/watch?v=gcTbLzH4y_8",
     description:
       "Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia. Based on George R.R. Martin's epic fantasy series.",
     cast: [
@@ -2016,14 +2016,14 @@ export const netflixShows: NetflixContent[] = [
     rating: 8.2,
     userRating: 8.2,
     thumbnail:
-      "https://image.tmdb.org/t/p/original/xf9wuDcqlUPWABZNeDKPbZUjWx0.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/n7PVu0hSz2sAsVekpOIoCnkWlbn.jpg",
+      "https://image.tmdb.org/t/p/original/n7PVu0hSz2sAsVekpOIoCnkWlbn.jpg",
+    poster: "https://image.tmdb.org/t/p/original/n7PVu0hSz2sAsVekpOIoCnkWlbn.jpg",
     backdrop:
-      "https://image.tmdb.org/t/p/original/xf9wuDcqlUPWABZNeDKPbZUjWx0.jpg",
+      "https://image.tmdb.org/t/p/original/wU5yV3FqrufjVP3iePlClJCD2wv.jpg",
     videoUrl:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     trailerUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "https://www.youtube.com/watch?v=R3pvn2vj18k",
     description:
       "Sheriff Deputy Rick Grimes wakes from a coma to find the world ravaged by a zombie apocalypse. He sets out to find his family and encounters many other survivors along the way.",
     cast: [
@@ -2287,13 +2287,13 @@ export const netflixShows: NetflixContent[] = [
     userRating: 8.3,
     thumbnail:
       "https://image.tmdb.org/t/p/original/5E1BhkCgjLBlqx557Z5yzcN0i88.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/7R6w8dfEUgXsmjfqPJe2l9LQfaD.jpg",
+    poster: "https://image.tmdb.org/t/p/original/5E1BhkCgjLBlqx557Z5yzcN0i88.jpg",
     backdrop:
-      "https://image.tmdb.org/t/p/original/5E1BhkCgjLBlqx557Z5yzcN0i88.jpg",
+      "https://image.tmdb.org/t/p/original/92OPBZpLc82y8CzOtrQ8P9RDvIN.jpg",
     videoUrl:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     trailerUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "https://www.youtube.com/watch?v=AL9zLctGJaU",
     description:
       "Due to a political conspiracy, an innocent man is sent to death row and his only hope is his brother, who makes it his mission to deliberately get himself sent to the same prison in order to break the both of them out, from the inside.",
     cast: [
@@ -3969,9 +3969,9 @@ export const netflixShows: NetflixContent[] = [
     releaseDate: "December 20, 2019",
     rating: 8.2,
     userRating: 8.0,
-    thumbnail: "https://image.tmdb.org/t/p/w1280/cZ0d3rtvXPVvuiX22sP79K3Hmjz.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/original/yFjuDZztVikaH0p1POfZ0WuWzLY.jpg",
     poster: "https://image.tmdb.org/t/p/w500/7vjaCdMw15FEbXyLQTVa04URsPm.jpg",
-    backdrop: "https://image.tmdb.org/t/p/original/xKvKauxiliOJo99wQnTBtkp6zRz.jpg",
+    backdrop: "https://image.tmdb.org/t/p/original/yFjuDZztVikaH0p1POfZ0WuWzLY.jpg",
     videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     trailerUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     description: "Geralt of Rivia, a solitary monster hunter, struggles to find his place in a world where people often prove more wicked than beasts.",
@@ -4075,9 +4075,9 @@ export const netflixShows: NetflixContent[] = [
     releaseDate: "December 25, 2020",
     rating: 7.3,
     userRating: 7.5,
-    thumbnail: "https://image.tmdb.org/t/p/w1280/luoKyIVsTsyxrb4N4YPiFJEZVDH.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/original/3Abw7WswckJfWy4z2FNKhGTrTiJ.jpg",
     poster: "https://image.tmdb.org/t/p/w500/hxZR0LRFetPRAk4opknSWeLenuu.jpg",
-    backdrop: "https://image.tmdb.org/t/p/original/qp3vJYPsZDQj6JJn6xr24mxPaZJ.jpg",
+    backdrop: "https://image.tmdb.org/t/p/original/3Abw7WswckJfWy4z2FNKhGTrTiJ.jpg",
     videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     trailerUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     description: "The eight close-knit siblings of the Bridgerton family look for love and happiness in London high society.",
@@ -4141,9 +4141,9 @@ export const netflixShows: NetflixContent[] = [
     releaseDate: "July 21, 2017",
     rating: 8.5,
     userRating: 8.4,
-    thumbnail: "https://image.tmdb.org/t/p/w1280/nVdLFGBliZvirY81d99jDy01Vvx.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/original/kPtpp1FhswqBxzKjPMkVHtWkfO0.jpg",
     poster: "https://image.tmdb.org/t/p/w500/m73VRAOqIu2UDFhGkxhWZaWNNoQ.jpg",
-    backdrop: "https://image.tmdb.org/t/p/original/aGJJ3ogIPJSeFr0q33g7NMZpggE.jpg",
+    backdrop: "https://image.tmdb.org/t/p/original/kPtpp1FhswqBxzKjPMkVHtWkfO0.jpg",
     videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     trailerUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     description: "A financial adviser drags his family from Chicago to the Missouri Ozarks, where he must launder $500 million in five years to appease a drug boss.",
