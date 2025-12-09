@@ -33,7 +33,7 @@ export default function CTASection() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-white text-primary hover:bg-white/90 text-lg px-8" asChild>
-              <Link href="/register">Start Free Trial</Link>
+              <Link href="/login">Get Started</Link>
             </Button>
             <Button
               size="lg"

@@ -7,40 +7,40 @@ import { useToast } from "@/hooks/use-toast"
 import { useUser } from "@/context/user-context"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Bookmark, X, Play, Clock, Star } from "lucide-react"
+import { Clock, X, Play, Loader2 } from "lucide-react"
 import { netflixShows } from "@/lib/netflix-content"
 
-export default function Watchlist() {
-  const [watchlistShows, setWatchlistShows] = useState<any[]>([])
+export default function WatchLater() {
+  const [watchLaterShows, setWatchLaterShows] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const { toast } = useToast()
-  const { profile, removeFromWatchlist } = useUser()
+  const { profile, removeFromWatchLater } = useUser()
 
   useEffect(() => {
     if (profile) {
-      fetchWatchlist()
+      fetchWatchLater()
     } else {
       setLoading(false)
     }
   }, [profile])
 
-  const fetchWatchlist = async () => {
+  const fetchWatchLater = async () => {
     try {
       setLoading(true)
-      const watchlistIds = profile?.watchlist || []
+      const watchLaterIds = profile?.watchLater || []
 
       // Get show details from netflix-content
-      const showsData = watchlistIds
+      const showsData = watchLaterIds
         .map((id) => netflixShows.find((show) => show.id === id))
         .filter(Boolean)
 
-      setWatchlistShows(showsData)
+      setWatchLaterShows(showsData)
     } catch (error) {
-      console.error("Error fetching watchlist:", error)
+      console.error("Error fetching watch later:", error)
       toast({
         title: "Error",
-        description: "Failed to load your watchlist. Please try again.",
+        description: "Failed to load your watch later list. Please try again.",
         variant: "destructive",
       })
     } finally {
@@ -50,17 +50,17 @@ export default function Watchlist() {
 
   const handleRemove = async (showId: string) => {
     try {
-      await removeFromWatchlist(showId)
-      setWatchlistShows((prev) => prev.filter((show) => show.id !== showId))
+      await removeFromWatchLater(showId)
+      setWatchLaterShows((prev) => prev.filter((show) => show.id !== showId))
       toast({
-        title: "Removed from My List",
-        description: "The show has been removed from your list.",
+        title: "Removed from watch later",
+        description: "The show has been removed from your watch later list.",
       })
     } catch (error) {
-      console.error("Error removing from watchlist:", error)
+      console.error("Error removing from watch later:", error)
       toast({
         title: "Error",
-        description: "Failed to remove from watchlist. Please try again.",
+        description: "Failed to remove from watch later. Please try again.",
         variant: "destructive",
       })
     }
@@ -73,7 +73,7 @@ export default function Watchlist() {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <h2 className="text-3xl font-bold mb-6 text-white">My List</h2>
+        <h2 className="text-3xl font-bold mb-6 text-white">Watch Later</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {[1, 2, 3, 4, 5].map((i) => (
             <Card key={i} className="overflow-hidden bg-zinc-900/50 border-zinc-800">
@@ -92,12 +92,12 @@ export default function Watchlist() {
   if (!profile) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
-        <h2 className="text-3xl font-bold mb-6 text-white">My List</h2>
+        <h2 className="text-3xl font-bold mb-6 text-white">Watch Later</h2>
         <div className="p-12 rounded-lg bg-zinc-900/50 border border-zinc-800">
-          <Bookmark className="mx-auto h-16 w-16 text-zinc-500 mb-4" />
-          <p className="text-xl text-zinc-300 mb-2">Sign in to access your list</p>
+          <Clock className="mx-auto h-16 w-16 text-zinc-500 mb-4" />
+          <p className="text-xl text-zinc-300 mb-2">Sign in to access your watch later list</p>
           <p className="text-sm text-zinc-500 mb-6">
-            Save your favorite shows and movies
+            Keep track of shows and movies you want to watch
           </p>
           <Button onClick={() => router.push("/login")} size="lg">
             Sign In
@@ -107,15 +107,15 @@ export default function Watchlist() {
     )
   }
 
-  if (watchlistShows.length === 0) {
+  if (watchLaterShows.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
-        <h2 className="text-3xl font-bold mb-6 text-white">My List</h2>
+        <h2 className="text-3xl font-bold mb-6 text-white">Watch Later</h2>
         <div className="p-12 rounded-lg bg-zinc-900/50 border border-zinc-800">
-          <Bookmark className="mx-auto h-16 w-16 text-zinc-500 mb-4" />
-          <p className="text-xl text-zinc-300 mb-2">Your list is empty</p>
+          <Clock className="mx-auto h-16 w-16 text-zinc-500 mb-4" />
+          <p className="text-xl text-zinc-300 mb-2">Your watch later list is empty</p>
           <p className="text-sm text-zinc-500 mb-6">
-            Add shows and movies you want to watch
+            Save shows to watch them later
           </p>
           <Button onClick={() => router.push("/shows")} size="lg">
             Browse Shows
@@ -127,10 +127,10 @@ export default function Watchlist() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold mb-6 text-white">My List</h2>
-      <p className="text-zinc-400 mb-8">{watchlistShows.length} {watchlistShows.length === 1 ? 'show' : 'shows'} saved</p>
+      <h2 className="text-3xl font-bold mb-6 text-white">Watch Later</h2>
+      <p className="text-zinc-400 mb-8">{watchLaterShows.length} {watchLaterShows.length === 1 ? 'show' : 'shows'} saved</p>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        {watchlistShows.map((show) => (
+        {watchLaterShows.map((show) => (
           <Card
             key={show.id}
             className="group relative overflow-hidden bg-zinc-900/50 border-zinc-800 hover:border-red-500/50 transition-all duration-300 hover:scale-105"
@@ -144,7 +144,7 @@ export default function Watchlist() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
-              {/* Play overlay on hover */}
+              {/* Hover overlay with actions */}
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <Button
                   onClick={() => handlePlay(show.id)}

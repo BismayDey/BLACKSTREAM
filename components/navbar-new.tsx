@@ -49,7 +49,6 @@ export default function Navbar() {
 
   const isAuthPage =
     pathname?.includes("/login") ||
-    pathname?.includes("/register") ||
     pathname?.includes("/forgot-password");
 
   useEffect(() => {

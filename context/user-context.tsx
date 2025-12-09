@@ -18,12 +18,15 @@ export interface UserProfile {
   displayName: string | null
   photoURL: string | null
   watchlist: string[]
+  watchLater: string[]
   continueWatching: {
     id: string
     title: string
     poster: string
     progress: number
     timestamp: number
+    duration: string
+    lastWatched: number
   }[]
 }
 
@@ -35,11 +38,14 @@ interface UserContextType {
   signOut: () => Promise<void>
   addToWatchlist: (showId: string) => Promise<void>
   removeFromWatchlist: (showId: string) => Promise<void>
+  addToWatchLater: (showId: string) => Promise<void>
+  removeFromWatchLater: (showId: string) => Promise<void>
   updateContinueWatching: (show: {
     id: string
     title: string
     poster: string
     progress: number
+    duration: string
   }) => Promise<void>
   removeContinueWatching: (showId: string) => Promise<void>
 }
@@ -73,6 +79,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             displayName: user.displayName,
             photoURL: user.photoURL,
             watchlist: [],
+            watchLater: [],
             continueWatching: [],
           }
 
@@ -132,12 +139,51 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     })
   }
 
+  // Add to watch later
+  const addToWatchLater = async (showId: string) => {
+    if (!user) return
+
+    const userRef = doc(db, "users", user.uid)
+    await updateDoc(userRef, {
+      watchLater: arrayUnion(showId),
+    })
+
+    // Update local state
+    setProfile((prev) => {
+      if (!prev) return prev
+      return {
+        ...prev,
+        watchLater: [...(prev.watchLater || []), showId],
+      }
+    })
+  }
+
+  // Remove from watch later
+  const removeFromWatchLater = async (showId: string) => {
+    if (!user) return
+
+    const userRef = doc(db, "users", user.uid)
+    await updateDoc(userRef, {
+      watchLater: arrayRemove(showId),
+    })
+
+    // Update local state
+    setProfile((prev) => {
+      if (!prev) return prev
+      return {
+        ...prev,
+        watchLater: (prev.watchLater || []).filter((id) => id !== showId),
+      }
+    })
+  }
+
   // Update continue watching
   const updateContinueWatching = async (show: {
     id: string
     title: string
     poster: string
     progress: number
+    duration: string
   }) => {
     if (!user) return
 
@@ -155,11 +201,12 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       const newEntry = {
         ...show,
         timestamp: Date.now(),
+        lastWatched: Date.now(),
       }
 
       // Update Firestore
       await updateDoc(userRef, {
-        continueWatching: [newEntry, ...filtered].slice(0, 10), // Keep only 10 most recent
+        continueWatching: [newEntry, ...filtered].slice(0, 15), // Keep only 15 most recent
       })
 
       // Update local state
@@ -167,7 +214,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         if (!prev) return prev
         return {
           ...prev,
-          continueWatching: [newEntry, ...filtered].slice(0, 10),
+          continueWatching: [newEntry, ...filtered].slice(0, 15),
         }
       })
     }
@@ -212,6 +259,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         signOut,
         addToWatchlist,
         removeFromWatchlist,
+        addToWatchLater,
+        removeFromWatchLater,
         updateContinueWatching,
         removeContinueWatching,
       }}

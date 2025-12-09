@@ -33,6 +33,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import netflixShows from "@/lib/netflix-content";
+import { useUser } from "@/context/user-context";
+import ContinueWatching from "@/components/continue-watching";
 
 export default function ShowsPage() {
   const [filteredShows, setFilteredShows] = useState(netflixShows);
@@ -43,6 +45,7 @@ export default function ShowsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showFilters, setShowFilters] = useState(false);
+  const { profile } = useUser() || {};
 
   // Extract unique genres
   const allGenres = Array.from(
@@ -319,6 +322,50 @@ export default function ShowsPage() {
 
       {/* Content Section */}
       <div className="container mx-auto px-4 py-8">
+        {/* Continue Watching Section */}
+        {profile && profile.continueWatching && profile.continueWatching.length > 0 && (
+          <div className="mb-12">
+            <ContinueWatching />
+          </div>
+        )}
+
+        {/* My List Quick Access */}
+        {profile && profile.watchlist && profile.watchlist.length > 0 && (
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-3xl font-bold text-white">My List</h2>
+              <Link href="/watchlist">
+                <Button variant="outline" size="sm" className="text-white border-white/20 hover:bg-white/10">
+                  View All ({profile.watchlist.length})
+                </Button>
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+              {profile.watchlist.slice(0, 6).map((showId) => {
+                const show = netflixShows.find(s => s.id === showId);
+                if (!show) return null;
+                return (
+                  <Link key={show.id} href={`/shows/${show.id}`}>
+                    <div className="group relative aspect-[2/3] rounded-lg overflow-hidden border border-zinc-800 hover:border-red-500/50 transition-all hover:scale-105">
+                      <Image
+                        src={show.poster || "/placeholder.svg?height=450&width=300"}
+                        alt={show.title}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute bottom-0 left-0 right-0 p-3">
+                          <h3 className="text-white text-sm font-semibold truncate">{show.title}</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-gray-400">

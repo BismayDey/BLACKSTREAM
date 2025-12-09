@@ -374,10 +374,20 @@ export default function ShowPage() {
   const { toast } = useToast();
   const authContext = useAuth();
   const user = authContext?.user || null;
-  const { profile, addToWatchlist, removeFromWatchlist } = useUser() || {
+  const { 
+    profile, 
+    addToWatchlist, 
+    removeFromWatchlist,
+    addToWatchLater,
+    removeFromWatchLater,
+    updateContinueWatching
+  } = useUser() || {
     profile: null,
     addToWatchlist: null,
     removeFromWatchlist: null,
+    addToWatchLater: null,
+    removeFromWatchLater: null,
+    updateContinueWatching: null,
   };
 
   const [show, setShow] = useState<Show | null>(null);
@@ -391,8 +401,10 @@ export default function ShowPage() {
   const [currentSeason, setCurrentSeason] = useState(1);
   const [currentEpisode, setCurrentEpisode] = useState(1);
   const [relatedContent, setRelatedContent] = useState<any[]>([]);
+  const [videoProgress, setVideoProgress] = useState(0);
 
   const isInWatchlist = profile?.watchlist?.includes(id as string) || false;
+  const isInWatchLater = profile?.watchLater?.includes(id as string) || false;
 
   useEffect(() => {
     const fetchShow = async () => {
@@ -501,6 +513,41 @@ export default function ShowPage() {
     }
   };
 
+  const handleWatchLaterToggle = async () => {
+    if (!user || !addToWatchLater || !removeFromWatchLater) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to add shows to watch later",
+        variant: "destructive",
+      });
+      router.push("/login");
+      return;
+    }
+
+    try {
+      if (isInWatchLater) {
+        await removeFromWatchLater(id as string);
+        toast({
+          title: "Removed from watch later",
+          description: `${show?.title} removed from watch later`,
+        });
+      } else {
+        await addToWatchLater(id as string);
+        toast({
+          title: "Added to watch later",
+          description: `${show?.title} added to watch later`,
+        });
+      }
+    } catch (error: any) {
+      console.error("Error toggling watch later:", error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update watch later",
+        variant: "destructive",
+      });
+    }
+  };
+
   const toggleFavorite = async () => {
     if (!user) {
       toast({
@@ -553,6 +600,26 @@ export default function ShowPage() {
 
   const handleShare = () => {
     setShowShareDialog(true);
+  };
+
+  const handleVideoProgress = async (progress: number, currentTime: number, duration: number) => {
+    // Update progress state
+    setVideoProgress(progress);
+
+    // Only save to continue watching if user has watched at least 5% and less than 95%
+    if (progress >= 0.05 && progress < 0.95 && user && updateContinueWatching && show) {
+      try {
+        await updateContinueWatching({
+          id: show.id,
+          title: show.title,
+          poster: show.poster || show.thumbnail || "",
+          progress: progress,
+          duration: show.duration,
+        });
+      } catch (error) {
+        console.error("Error updating continue watching:", error);
+      }
+    }
   };
 
   const saveToWatchHistory = async () => {
@@ -733,7 +800,21 @@ export default function ShowPage() {
                 <Button
                   size="lg"
                   className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg gap-3 shadow-2xl hover:shadow-primary/50 transition-all"
-                  onClick={() => {
+                  onClick={async () => {
+                    // Save to continue watching when play is clicked
+                    if (user && updateContinueWatching && show) {
+                      try {
+                        await updateContinueWatching({
+                          id: show.id,
+                          title: show.title,
+                          poster: show.poster || show.thumbnail || "",
+                          progress: 0.01, // Just started
+                          duration: show.duration,
+                        });
+                      } catch (error) {
+                        console.error("Error updating continue watching:", error);
+                      }
+                    }
                     const playerElement =
                       document.getElementById("video-player");
                     playerElement?.scrollIntoView({ behavior: "smooth" });
@@ -806,8 +887,26 @@ export default function ShowPage() {
                   />
                   <span>
                     {isInWatchlist
-                      ? "Remove from Watchlist"
-                      : "Add to Watchlist"}
+                      ? "Remove from My List"
+                      : "Add to My List"}
+                  </span>
+                </Button>
+
+                <Button
+                  variant={isInWatchLater ? "default" : "outline"}
+                  size="lg"
+                  className={`w-full gap-3 justify-start ${
+                    isInWatchLater
+                      ? "bg-blue-500/90 hover:bg-blue-600 text-white border-blue-500"
+                      : "bg-white/5 hover:bg-white/10 text-white border-white/20"
+                  }`}
+                  onClick={handleWatchLaterToggle}
+                >
+                  <Clock
+                    className={`w-5 h-5 ${isInWatchLater ? "fill-white" : ""}`}
+                  />
+                  <span>
+                    {isInWatchLater ? "Remove from Watch Later" : "Watch Later"}
                   </span>
                 </Button>
 
@@ -906,7 +1005,22 @@ export default function ShowPage() {
                 <Bookmark
                   className={`w-4 h-4 ${isInWatchlist ? "fill-white" : ""}`}
                 />
-                <span className="hidden sm:inline">Watchlist</span>
+                <span className="hidden sm:inline">My List</span>
+              </Button>
+              <Button
+                variant={isInWatchLater ? "default" : "outline"}
+                size="sm"
+                className={`gap-2 ${
+                  isInWatchLater
+                    ? "bg-blue-500/80 hover:bg-blue-500/90 text-white border-blue-500/50"
+                    : "bg-white/10 hover:bg-white/20 text-white border-white/30"
+                } backdrop-blur-sm`}
+                onClick={handleWatchLaterToggle}
+              >
+                <Clock
+                  className={`w-4 h-4 ${isInWatchLater ? "fill-white" : ""}`}
+                />
+                <span className="hidden sm:inline">Later</span>
               </Button>
               <Button
                 variant="outline"
@@ -961,6 +1075,11 @@ export default function ShowPage() {
               episodeSelector={show.type === "series"}
               onProgressUpdate={(progress, timestamp) => {
                 console.log(`Progress: ${progress}%, Timestamp: ${timestamp}s`);
+                // Track progress for continue watching
+                if (progress && timestamp !== undefined) {
+                  const progressPercent = progress / 100; // Convert to 0-1 range
+                  handleVideoProgress(progressPercent, timestamp, 0);
+                }
               }}
             />
           ) : (
@@ -1289,8 +1408,22 @@ export default function ShowPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.05 }}
                         className="group relative flex flex-col sm:flex-row gap-4 p-4 rounded-xl border border-white/10 bg-muted/20 hover:bg-muted/40 hover:border-primary/50 transition-all duration-300 backdrop-blur-sm cursor-pointer"
-                        onClick={() => {
+                        onClick={async () => {
                           setCurrentEpisode(index + 1);
+                          // Save to continue watching when episode is clicked
+                          if (user && updateContinueWatching && show) {
+                            try {
+                              await updateContinueWatching({
+                                id: show.id,
+                                title: `${show.title} - S${currentSeason}E${index + 1}`,
+                                poster: show.poster || show.thumbnail || "",
+                                progress: 0.01, // Just started
+                                duration: episode.duration || show.duration,
+                              });
+                            } catch (error) {
+                              console.error("Error updating continue watching:", error);
+                            }
+                          }
                           // Scroll to video player
                           const videoPlayer = document.getElementById('video-player');
                           if (videoPlayer) {
@@ -1314,9 +1447,23 @@ export default function ShowPage() {
                               size="icon"
                               variant="ghost"
                               className="bg-primary/90 hover:bg-primary rounded-full w-14 h-14"
-                              onClick={(e) => {
+                              onClick={async (e) => {
                                 e.stopPropagation();
                                 setCurrentEpisode(index + 1);
+                                // Save to continue watching when play is clicked
+                                if (user && updateContinueWatching && show) {
+                                  try {
+                                    await updateContinueWatching({
+                                      id: show.id,
+                                      title: `${show.title} - S${currentSeason}E${index + 1}`,
+                                      poster: show.poster || show.thumbnail || "",
+                                      progress: 0.01, // Just started
+                                      duration: episode.duration || show.duration,
+                                    });
+                                  } catch (error) {
+                                    console.error("Error updating continue watching:", error);
+                                  }
+                                }
                                 // Scroll to video player
                                 const videoPlayer = document.getElementById('video-player');
                                 if (videoPlayer) {

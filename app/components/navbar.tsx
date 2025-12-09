@@ -329,17 +329,9 @@ export default function Navbar() {
                             <Button
                               asChild
                               size="sm"
-                              variant="outline"
                               className="w-full text-xs sm:text-sm h-8 sm:h-9"
                             >
                               <Link href="/login">Sign In</Link>
-                            </Button>
-                            <Button
-                              asChild
-                              size="sm"
-                              className="w-full text-xs sm:text-sm h-8 sm:h-9"
-                            >
-                              <Link href="/register">Sign Up</Link>
                             </Button>
                           </div>
                         )}
@@ -608,18 +600,10 @@ export default function Navbar() {
                   <div className="hidden sm:flex items-center gap-2">
                     <Button
                       asChild
-                      variant="ghost"
                       size="sm"
                       className="h-8 sm:h-9 text-xs sm:text-sm"
                     >
                       <Link href="/login">Sign In</Link>
-                    </Button>
-                    <Button
-                      asChild
-                      size="sm"
-                      className="h-8 sm:h-9 text-xs sm:text-sm"
-                    >
-                      <Link href="/register">Sign Up</Link>
                     </Button>
                   </div>
                 )}

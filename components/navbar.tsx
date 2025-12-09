@@ -20,6 +20,7 @@ import {
   Settings,
   ChevronDown,
   Sparkles,
+  Clock,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -50,7 +51,6 @@ export default function Navbar() {
 
   const isAuthPage =
     pathname?.includes("/login") ||
-    pathname?.includes("/register") ||
     pathname?.includes("/forgot-password");
 
   useEffect(() => {
@@ -72,6 +72,12 @@ export default function Navbar() {
     { href: "/series", label: "Series", icon: Tv },
     { href: "/watchlist", label: "My List", icon: Bookmark },
   ];
+
+  const userMenuLinks = user ? [
+    { href: "/continue-watching", label: "Continue Watching", icon: PlayCircle },
+    { href: "/watchlist", label: "My List", icon: Bookmark },
+    { href: "/watch-later", label: "Watch Later", icon: Clock },
+  ] : [];
 
   const handleSignOut = async () => {
     if (signOut) {
@@ -266,6 +272,15 @@ export default function Navbar() {
                         asChild
                         className="hover:bg-white/5 cursor-pointer"
                       >
+                        <Link href="/continue-watching" className="flex items-center">
+                          <PlayCircle className="mr-3 h-4 w-4 text-gray-400" />
+                          <span className="text-gray-200">Continue Watching</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        asChild
+                        className="hover:bg-white/5 cursor-pointer"
+                      >
                         <Link href="/profile" className="flex items-center">
                           <User className="mr-3 h-4 w-4 text-gray-400" />
                           <span className="text-gray-200">Profile</span>
@@ -278,6 +293,15 @@ export default function Navbar() {
                         <Link href="/watchlist" className="flex items-center">
                           <Bookmark className="mr-3 h-4 w-4 text-gray-400" />
                           <span className="text-gray-200">My List</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        asChild
+                        className="hover:bg-white/5 cursor-pointer"
+                      >
+                        <Link href="/watch-later" className="flex items-center">
+                          <PlayCircle className="mr-3 h-4 w-4 text-gray-400" />
+                          <span className="text-gray-200">Watch Later</span>
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem
@@ -391,6 +415,30 @@ export default function Navbar() {
                 {user && (
                   <div className="mt-6 pt-6 border-t border-gray-800">
                     <div className="flex flex-col space-y-1">
+                      <Link
+                        href="/continue-watching"
+                        className="flex items-center gap-3 p-4 rounded-lg text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <PlayCircle className="w-5 h-5" />
+                        <span className="font-medium">Continue Watching</span>
+                      </Link>
+                      <Link
+                        href="/watchlist"
+                        className="flex items-center gap-3 p-4 rounded-lg text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <Bookmark className="w-5 h-5" />
+                        <span className="font-medium">My List</span>
+                      </Link>
+                      <Link
+                        href="/watch-later"
+                        className="flex items-center gap-3 p-4 rounded-lg text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <PlayCircle className="w-5 h-5" />
+                        <span className="font-medium">Watch Later</span>
+                      </Link>
                       <Link
                         href="/profile"
                         className="flex items-center gap-3 p-4 rounded-lg text-gray-300 hover:bg-white/5 hover:text-white transition-colors"

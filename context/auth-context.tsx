@@ -4,13 +4,13 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import {
   type User,
   onAuthStateChanged,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
   updateProfile,
-  sendPasswordResetEmail,
   signOut as firebaseSignOut,
+  sendSignInLinkToEmail,
+  isSignInWithEmailLink,
+  signInWithEmailLink,
 } from "firebase/auth"
 import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore"
 import { auth, db } from "@/lib/firebase"
@@ -18,14 +18,14 @@ import { auth, db } from "@/lib/firebase"
 interface AuthContextType {
   user: User | null
   loading: boolean
-  signUp: (email: string, password: string, name: string) => Promise<void>
-  signIn: (email: string, password: string) => Promise<void>
+  sendSignInLink: (email: string) => Promise<void>
+  completeSignInWithEmailLink: (email: string, emailLink: string) => Promise<void>
   signInWithGoogle: () => Promise<void>
-  resetPassword: (email: string) => Promise<void>
   signOut: () => Promise<void>
   updateUserProfile: (data: { displayName?: string; photoURL?: string }) => Promise<void>
   updateUserData: (data: any) => Promise<void>
   getUserData: () => Promise<any>
+  isSignInLink: (url: string) => boolean
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
@@ -45,46 +45,69 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribe()
   }, [])
 
-  const signUp = async (email: string, password: string, name: string) => {
+  const sendSignInLink = async (email: string) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-
-      // Update profile with display name
-      if (auth.currentUser) {
-        await updateProfile(auth.currentUser, {
-          displayName: name,
-        })
+      const actionCodeSettings = {
+        url: `${window.location.origin}/login`,
+        handleCodeInApp: true,
       }
-
-      // Create user document in Firestore
-      const userDoc = doc(db, "users", userCredential.user.uid)
-      await setDoc(userDoc, {
-        email,
-        displayName: name,
-        createdAt: new Date().toISOString(),
-        watchHistory: [],
-        watchlist: [],
-        favorites: [],
-        settings: {
-          notifications: true,
-          autoplay: true,
-          subtitlesLanguage: "en",
-          quality: "auto",
-        },
-      })
+      
+      await sendSignInLinkToEmail(auth, email, actionCodeSettings)
+      
+      // Save the email to localStorage so we can use it later
+      window.localStorage.setItem('emailForSignIn', email)
     } catch (error) {
-      console.error("Error signing up:", error)
+      console.error("Error sending sign in link:", error)
       throw error
     }
   }
 
-  const signIn = async (email: string, password: string) => {
+  const completeSignInWithEmailLink = async (email: string, emailLink: string) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password)
+      // Check if user is already signed in
+      if (auth.currentUser) {
+        // Already signed in, just clean up
+        window.localStorage.removeItem('emailForSignIn')
+        return
+      }
+
+      const result = await signInWithEmailLink(auth, email, emailLink)
+      
+      // Clear the email from localStorage
+      window.localStorage.removeItem('emailForSignIn')
+      
+      // Check if user document exists, if not create it
+      const userDoc = doc(db, "users", result.user.uid)
+      const docSnap = await getDoc(userDoc)
+
+      if (!docSnap.exists()) {
+        await setDoc(userDoc, {
+          uid: result.user.uid,
+          email: result.user.email,
+          displayName: result.user.displayName || result.user.email?.split('@')[0],
+          photoURL: result.user.photoURL,
+          createdAt: new Date().toISOString(),
+          watchHistory: [],
+          watchlist: [],
+          watchLater: [],
+          favorites: [],
+          continueWatching: [],
+          settings: {
+            notifications: true,
+            autoplay: true,
+            subtitlesLanguage: "en",
+            quality: "auto",
+          },
+        })
+      }
     } catch (error) {
-      console.error("Error signing in:", error)
+      console.error("Error completing sign in with email link:", error)
       throw error
     }
+  }
+
+  const isSignInLink = (url: string) => {
+    return isSignInWithEmailLink(auth, url)
   }
 
   const signInWithGoogle = async () => {
@@ -98,13 +121,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (!docSnap.exists()) {
         await setDoc(userDoc, {
+          uid: result.user.uid,
           email: result.user.email,
           displayName: result.user.displayName,
           photoURL: result.user.photoURL,
           createdAt: new Date().toISOString(),
           watchHistory: [],
           watchlist: [],
+          watchLater: [],
           favorites: [],
+          continueWatching: [],
           settings: {
             notifications: true,
             autoplay: true,
@@ -115,15 +141,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     } catch (error) {
       console.error("Error signing in with Google:", error)
-      throw error
-    }
-  }
-
-  const resetPassword = async (email: string) => {
-    try {
-      await sendPasswordResetEmail(auth, email)
-    } catch (error) {
-      console.error("Error resetting password:", error)
       throw error
     }
   }
@@ -185,14 +202,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = {
     user,
     loading,
-    signUp,
-    signIn,
+    sendSignInLink,
+    completeSignInWithEmailLink,
     signInWithGoogle,
-    resetPassword,
     signOut,
     updateUserProfile,
     updateUserData,
     getUserData,
+    isSignInLink,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

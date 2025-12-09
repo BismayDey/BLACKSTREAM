@@ -1,0 +1,95 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user owns the document
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      // Allow users to read and write their own data
+      allow read: if isOwner(userId);
+      allow write: if isOwner(userId);
+      
+      // Validate user document structure on create (auto-created on first sign-in)
+      allow create: if isOwner(userId) && 
+        request.resource.data.keys().hasAll(['uid', 'email']) &&
+        request.resource.data.uid == userId &&
+        // Optional fields with type validation
+        (!request.resource.data.keys().hasAny(['watchlist']) || request.resource.data.watchlist is list) &&
+        (!request.resource.data.keys().hasAny(['watchLater']) || request.resource.data.watchLater is list) &&
+        (!request.resource.data.keys().hasAny(['continueWatching']) || request.resource.data.continueWatching is list) &&
+        (!request.resource.data.keys().hasAny(['favorites']) || request.resource.data.favorites is list) &&
+        (!request.resource.data.keys().hasAny(['displayName']) || request.resource.data.displayName is string) &&
+        (!request.resource.data.keys().hasAny(['photoURL']) || request.resource.data.photoURL is string);
+      
+      allow update: if isOwner(userId) &&
+        // Ensure uid and email cannot be changed
+        request.resource.data.uid == resource.data.uid &&
+        request.resource.data.email == resource.data.email &&
+        // Validate array fields if present
+        (!request.resource.data.keys().hasAny(['watchlist']) || request.resource.data.watchlist is list) &&
+        (!request.resource.data.keys().hasAny(['watchLater']) || request.resource.data.watchLater is list) &&
+        (!request.resource.data.keys().hasAny(['continueWatching']) || request.resource.data.continueWatching is list) &&
+        (!request.resource.data.keys().hasAny(['favorites']) || request.resource.data.favorites is list);
+      
+      // Sub-collection for watch history
+      match /watchHistory/{showId} {
+        allow read: if isOwner(userId);
+        allow write: if isOwner(userId);
+      }
+    }
+    
+    // Shows collection (read-only for all authenticated users)
+    match /shows/{showId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only admins can write (handle via backend)
+    }
+    
+    // Categories collection (read-only for all authenticated users)
+    match /categories/{categoryId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only admins can write
+    }
+    
+    // Reviews collection
+    match /reviews/{reviewId} {
+      // Anyone authenticated can read reviews
+      allow read: if isAuthenticated();
+      
+      // Only the review owner can update or delete
+      allow update, delete: if isAuthenticated() && 
+        resource.data.userId == request.auth.uid;
+      
+      // Anyone authenticated can create a review
+      allow create: if isAuthenticated() &&
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.keys().hasAll(['userId', 'showId', 'rating', 'content', 'createdAt']);
+    }
+    
+    // Ratings collection
+    match /ratings/{ratingId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && 
+        request.resource.data.userId == request.auth.uid;
+    }
+    
+    // Analytics collection (write-only for authenticated users)
+    match /analytics/{document=**} {
+      allow read: if false; // Only backend can read
+      allow write: if isAuthenticated();
+    }
+    
+    // Default deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
