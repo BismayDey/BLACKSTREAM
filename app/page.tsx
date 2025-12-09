@@ -24,6 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 import netflixShows from "@/lib/netflix-content";
 import Footer from "@/components/footer";
 import ContinueWatching from "@/components/continue-watching";
+import ClientOnly from "@/components/client-only";
 
 export default function HomePage() {
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
@@ -313,11 +314,13 @@ export default function HomePage() {
       {/* Content Sections */}
       <div className="relative z-20 -mt-24 pb-16 space-y-12">
         {/* Continue Watching - Only show for logged in users */}
+        <ClientOnly>
         {user && profile && (
           <div className="container mx-auto px-4">
             <ContinueWatching />
           </div>
         )}
+        </ClientOnly>
 
         {/* Trending Series */}
         <ContentRow

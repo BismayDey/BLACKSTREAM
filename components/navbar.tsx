@@ -28,6 +28,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
+import ClientOnly from "@/components/client-only";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/context/auth-context";
 import {
@@ -272,6 +273,7 @@ export default function Navbar() {
                 )}
               </AnimatePresence>
 
+              <ClientOnly>
               <div suppressHydrationWarning>
               {user ? (
                 <>
@@ -489,6 +491,7 @@ export default function Navbar() {
                 </Button>
               )}
               </div>
+              </ClientOnly>
 
               {/* Mobile menu button */}
               <Button

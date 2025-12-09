@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useAuth } from "@/context/auth-context"
 import { useRouter } from "next/navigation"
+import ClientOnly from "@/components/client-only"
 
 export default function RequestPage() {
   const [result, setResult] = useState("")
@@ -79,6 +80,7 @@ export default function RequestPage() {
   }
 
   return (
+    <ClientOnly>
     <div className="min-h-screen py-20 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-2xl">
         <motion.div
@@ -239,5 +241,6 @@ export default function RequestPage() {
         </motion.div>
       </div>
     </div>
+    </ClientOnly>
   )
 }
