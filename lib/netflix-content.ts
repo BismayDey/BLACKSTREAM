@@ -1177,6 +1177,1302 @@ export const netflixShows: NetflixContent[] = [
     studio: "Netflix",
     awards: "Academy Award Nominations",
   },
+  // === BENGALI MOVIES ===
+  {
+    id: "20",
+    title: "Dawshom Awbotaar",
+    tmdbId: "1029673",
+    type: "movie",
+    genre: ["Thriller", "Mystery", "Crime"],
+    duration: "135 min",
+    releaseYear: 2023,
+    releaseDate: "October 19, 2023",
+    rating: 8.1,
+    userRating: 8.3,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/gOWJPyYXKHEK0BfLwDzZVt8NfJm.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/gOWJPyYXKHEK0BfLwDzZVt8NfJm.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/2YdQJAVhWvyTZZHLhGl3a7gOxwI.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    description:
+      "A gripping thriller where detective Probir Roy Chowdhury investigates a series of mysterious murders in Kolkata. A masterpiece of Bengali cinema with intense mystery and suspense.",
+    cast: [
+      "Prosenjit Chatterjee",
+      "Anirban Bhattacharya",
+      "Jisshu Sengupta",
+      "Jaya Ahsan",
+      "Priyanka Sarkar",
+    ],
+    director: "Srijit Mukherji",
+    studio: "SVF Entertainment",
+  },
+  {
+    id: "21",
+    title: "Chander Pahar",
+    tmdbId: "276727",
+    type: "movie",
+    genre: ["Action", "Adventure", "Thriller"],
+    duration: "148 min",
+    releaseYear: 2013,
+    releaseDate: "December 20, 2013",
+    rating: 7.5,
+    userRating: 7.8,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/fSbglOMZQaVdAjLpTbZTZXqJYpI.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/fSbglOMZQaVdAjLpTbZTZXqJYpI.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/8Z8dptJEypuLoOQro1WugXSAGV9.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    description:
+      "A young Bengali man embarks on an adventurous journey to Africa in search of legendary treasures and faces incredible dangers. Based on the classic novel by Bibhutibhushan Bandopadhyay.",
+    cast: [
+      "Dev",
+      "Gerard Rudolf",
+      "Martin Cito Otto",
+      "Laboni Sarkar",
+      "Nabeel Khan",
+    ],
+    director: "Kamaleswar Mukherjee",
+    studio: "Shree Venkatesh Films",
+    awards: "Bengali Film Awards - Best Adventure Film",
+  },
+  {
+    id: "22",
+    title: "Pather Panchali",
+    tmdbId: "11224",
+    type: "movie",
+    genre: ["Drama"],
+    duration: "125 min",
+    releaseYear: 1955,
+    releaseDate: "August 26, 1955",
+    rating: 8.3,
+    userRating: 8.4,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/8wmaNGmJrzJtyQ9SZVLPglMQhrH.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/8wmaNGmJrzJtyQ9SZVLPglMQhrH.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/aL7d6HauzXhc98eR8rEyLb8T5WL.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    description:
+      "The story of the Roy family living in rural Bengal, and their struggles and triumphs. A masterpiece by Satyajit Ray that revolutionized Indian cinema.",
+    cast: [
+      "Kanu Bannerjee",
+      "Karuna Bannerjee",
+      "Subir Banerjee",
+      "Uma Dasgupta",
+    ],
+    director: "Satyajit Ray",
+    studio: "Government of West Bengal",
+    awards: "Cannes Film Festival - Best Human Document",
+  },
+  {
+    id: "23",
+    title: "Sonar Kella",
+    tmdbId: "73608",
+    type: "movie",
+    genre: ["Adventure", "Mystery", "Family"],
+    duration: "136 min",
+    releaseYear: 1974,
+    releaseDate: "December 27, 1974",
+    rating: 8.5,
+    userRating: 8.6,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/8bRIfcXRjNRpxGLwjHDx8UhHDgS.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/8bRIfcXRjNRpxGLwjHDx8UhHDgS.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/kNZsrxkTgbxLnEqKDL5U3pLYLZA.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    description:
+      "Detective Feluda investigates the case of a young boy who claims to have memories of his previous life in a golden fortress in Rajasthan. A Satyajit Ray masterpiece.",
+    cast: [
+      "Soumitra Chatterjee",
+      "Santosh Dutta",
+      "Siddhartha Chatterjee",
+      "Kushal Chakraborty",
+    ],
+    director: "Satyajit Ray",
+    studio: "Government of West Bengal",
+  },
+  {
+    id: "24",
+    title: "Chokher Bali",
+    tmdbId: "39102",
+    type: "movie",
+    genre: ["Drama", "Romance"],
+    duration: "167 min",
+    releaseYear: 2003,
+    releaseDate: "August 8, 2003",
+    rating: 7.1,
+    userRating: 7.3,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/tMWpVLN0r0AFkJ4v3ggEAjfOGBh.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/tMWpVLN0r0AFkJ4v3ggEAjfOGBh.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/8gX3YjPXLvV4FYJpDnKqF2QzYmB.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    description:
+      "A young widow, rejected by society, becomes entangled in a complex web of relationships in colonial Bengal. Based on Rabindranath Tagore's classic novel.",
+    cast: [
+      "Aishwarya Rai Bachchan",
+      "Prosenjit Chatterjee",
+      "Raima Sen",
+      "Tota Roy Chowdhury",
+    ],
+    director: "Rituparno Ghosh",
+    studio: "Shree Venkatesh Films",
+  },
+  // === HINDI MOVIES ===
+  {
+    id: "25",
+    title: "Jawan",
+    tmdbId: "939335",
+    type: "movie",
+    genre: ["Action", "Thriller", "Drama"],
+    duration: "169 min",
+    releaseYear: 2023,
+    releaseDate: "September 7, 2023",
+    rating: 7.2,
+    userRating: 7.5,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/v1qeHW8Fg0yre9L9TGTRLVItzTa.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/v1qeHW8Fg0yre9L9TGTRLVItzTa.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/rmRM7nMDvd1omfBKaF5EvU4ovVA.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    description:
+      "A high-octane action thriller which outlines the emotional journey of a man who is set to rectify the wrongs in the society.",
+    cast: [
+      "Shah Rukh Khan",
+      "Nayanthara",
+      "Vijay Sethupathi",
+      "Deepika Padukone",
+      "Priyamani",
+    ],
+    director: "Atlee",
+    studio: "Red Chillies Entertainment",
+    awards: "Blockbuster Hit 2023",
+  },
+  {
+    id: "26",
+    title: "Pathaan",
+    tmdbId: "840705",
+    type: "movie",
+    genre: ["Action", "Thriller", "Adventure"],
+    duration: "146 min",
+    releaseYear: 2023,
+    releaseDate: "January 25, 2023",
+    rating: 6.1,
+    userRating: 6.8,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/kIlIRyg7e5kvJEb8bETBz5zgHQo.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/kIlIRyg7e5kvJEb8bETBz5zgHQo.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/s16H6tpK2utvwDtzZ8Qy4qm5Emw.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    description:
+      "A soldier caught by enemies and presumed dead comes back to complete his mission along with RAW agents. An action-packed spy thriller from the YRF Spy Universe.",
+    cast: [
+      "Shah Rukh Khan",
+      "Deepika Padukone",
+      "John Abraham",
+      "Dimple Kapadia",
+      "Ashutosh Rana",
+    ],
+    director: "Siddharth Anand",
+    studio: "Yash Raj Films",
+  },
+  {
+    id: "27",
+    title: "Dunki",
+    tmdbId: "1029575",
+    type: "movie",
+    genre: ["Comedy", "Drama"],
+    duration: "161 min",
+    releaseYear: 2023,
+    releaseDate: "December 21, 2023",
+    rating: 6.3,
+    userRating: 6.9,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/mc8iVe6RXTpQcRhP7HmRkRwM6zG.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/mc8iVe6RXTpQcRhP7HmRkRwM6zG.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/gMQibswTP7BkU7RKGCadqQ0GpbJ.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    description:
+      "Four friends from a village in Punjab share a common dream: to go to England. Their problem is that they have neither the visa nor the ticket. A soldier promises to take them to the land of their dreams.",
+    cast: [
+      "Shah Rukh Khan",
+      "Taapsee Pannu",
+      "Vicky Kaushal",
+      "Boman Irani",
+      "Vikram Kochhar",
+    ],
+    director: "Rajkumar Hirani",
+    studio: "Red Chillies Entertainment",
+  },
+  {
+    id: "28",
+    title: "12th Fail",
+    tmdbId: "1079091",
+    type: "movie",
+    genre: ["Drama", "Biography"],
+    duration: "147 min",
+    releaseYear: 2023,
+    releaseDate: "October 27, 2023",
+    rating: 9.1,
+    userRating: 9.2,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/fYaYwY7xMDx0G3JppAc8abMPZCp.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/fYaYwY7xMDx0G3JppAc8abMPZCp.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/9n7tZEjlgS62Zr9DvD2kqsNYQTL.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    description:
+      "The real-life story of IPS officer Manoj Kumar Sharma and IRS officer Shraddha Joshi. Despite failing his 12th-grade exams, Manoj's determination led him to become an IPS officer.",
+    cast: [
+      "Vikrant Massey",
+      "Medha Shankar",
+      "Anant Joshi",
+      "Anshumaan Pushkar",
+      "Priya Bhardwaj",
+    ],
+    director: "Vidhu Vinod Chopra",
+    studio: "Vinod Chopra Films",
+    awards: "National Film Award 2024",
+  },
+  {
+    id: "29",
+    title: "Gadar 2",
+    tmdbId: "980078",
+    type: "movie",
+    genre: ["Action", "Drama", "Romance"],
+    duration: "170 min",
+    releaseYear: 2023,
+    releaseDate: "August 11, 2023",
+    rating: 7.2,
+    userRating: 7.8,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/okKp7vTQBPqJCTVFsGdNcqBG3Hv.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/okKp7vTQBPqJCTVFsGdNcqBG3Hv.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/pBd7vTrqC2pFHZrLYRUd0I3t2oo.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+    description:
+      "During the Indo-Pakistani War of 1971, the Tara Singh family face a new threat as their son is captured. Tara must cross the border once again to bring him back.",
+    cast: [
+      "Sunny Deol",
+      "Ameesha Patel",
+      "Utkarsh Sharma",
+      "Simratt Kaur",
+      "Manish Wadhwa",
+    ],
+    director: "Anil Sharma",
+    studio: "Zee Studios",
+  },
+  {
+    id: "30",
+    title: "Tiger 3",
+    tmdbId: "700391",
+    type: "movie",
+    genre: ["Action", "Thriller", "Adventure"],
+    duration: "155 min",
+    releaseYear: 2023,
+    releaseDate: "November 12, 2023",
+    rating: 6.5,
+    userRating: 7.1,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/2eMgeeFj2pRBiBe5fRDHGDGCCe0.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/2eMgeeFj2pRBiBe5fRDHGDGCCe0.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/gBenxR01Uy0Ev9RTIw6dVBPoyQU.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    description:
+      "Tiger and Zoya are back - to save the country and their family. This time it's personal. Part of the YRF Spy Universe.",
+    cast: [
+      "Salman Khan",
+      "Katrina Kaif",
+      "Emraan Hashmi",
+      "Revathi",
+      "Simran",
+    ],
+    director: "Maneesh Sharma",
+    studio: "Yash Raj Films",
+  },
+  {
+    id: "31",
+    title: "Rocky Aur Rani Kii Prem Kahaani",
+    tmdbId: "787699",
+    type: "movie",
+    genre: ["Romance", "Comedy", "Drama"],
+    duration: "168 min",
+    releaseYear: 2023,
+    releaseDate: "July 28, 2023",
+    rating: 6.5,
+    userRating: 7.2,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/ubFfkW2UECsVYuqEqhpF7rxaHm2.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/ubFfkW2UECsVYuqEqhpF7rxaHm2.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/j41LPgaFWRkRpehIDLGpZ7Jw8pj.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    description:
+      "A romantic comedy that brings together two people from completely different backgrounds and their journey of love and family acceptance.",
+    cast: [
+      "Ranveer Singh",
+      "Alia Bhatt",
+      "Dharmendra",
+      "Jaya Bachchan",
+      "Shabana Azmi",
+    ],
+    director: "Karan Johar",
+    studio: "Dharma Productions",
+  },
+  // === MORE ENGLISH MOVIES ===
+  {
+    id: "32",
+    title: "The Irishman",
+    tmdbId: "398978",
+    type: "movie",
+    genre: ["Crime", "Drama"],
+    duration: "209 min",
+    releaseYear: 2019,
+    releaseDate: "November 27, 2019",
+    rating: 7.8,
+    userRating: 7.8,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/mbm8k3GFhXS0ROd9AD1gqYbIFbM.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/mbm8k3GFhXS0ROd9AD1gqYbIFbM.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/bQ7Y3fLAcZlrJJcMLo4r1TKD8fF.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    description:
+      "An aging hitman recalls his time with the mob and the intersecting events with his friend, Jimmy Hoffa, through the 1950-70s.",
+    cast: [
+      "Robert De Niro",
+      "Al Pacino",
+      "Joe Pesci",
+      "Harvey Keitel",
+      "Anna Paquin",
+    ],
+    director: "Martin Scorsese",
+    studio: "Netflix",
+    awards: "Academy Award Nominations",
+  },
+  {
+    id: "33",
+    title: "Murder Mystery 2",
+    tmdbId: "638974",
+    type: "movie",
+    genre: ["Comedy", "Mystery", "Action"],
+    duration: "89 min",
+    releaseYear: 2023,
+    releaseDate: "March 31, 2023",
+    rating: 5.7,
+    userRating: 5.9,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/s1VzVhXlqsevi8zeCMG9A16nEUf.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/s1VzVhXlqsevi8zeCMG9A16nEUf.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/zGoZB4CboMzY1z4G3nU6BWnMDB2.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    description:
+      "Full-time detectives Nick and Audrey are struggling to get their private eye agency off the ground when they're invited to celebrate the wedding of their friend Maharaja.",
+    cast: [
+      "Adam Sandler",
+      "Jennifer Aniston",
+      "Mark Strong",
+      "Mélanie Laurent",
+      "Jodie Turner-Smith",
+    ],
+    director: "Jeremy Garelick",
+    studio: "Netflix",
+  },
+  {
+    id: "34",
+    title: "The Mother",
+    tmdbId: "976573",
+    type: "movie",
+    genre: ["Action", "Thriller"],
+    duration: "115 min",
+    releaseYear: 2023,
+    releaseDate: "May 12, 2023",
+    rating: 5.6,
+    userRating: 6.1,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/vnRthEt7V75nzn9VOcsbKMNLobX.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/vnRthEt7V75nzn9VOcsbKMNLobX.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/iIvQnZyzgx9TkbrOgcXx0p7aLiq.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    description:
+      "A deadly female assassin comes out of hiding to protect the daughter she gave up years before, while on the run from dangerous men.",
+    cast: [
+      "Jennifer Lopez",
+      "Joseph Fiennes",
+      "Omari Hardwick",
+      "Gael García Bernal",
+      "Lucy Paez",
+    ],
+    director: "Niki Caro",
+    studio: "Netflix",
+  },
+  {
+    id: "35",
+    title: "You People",
+    tmdbId: "848187",
+    type: "movie",
+    genre: ["Comedy", "Romance"],
+    duration: "117 min",
+    releaseYear: 2023,
+    releaseDate: "January 27, 2023",
+    rating: 5.5,
+    userRating: 5.8,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/x5E4TndwASNkaK2hwgeYfsIVo2x.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/x5E4TndwASNkaK2hwgeYfsIVo2x.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/i8dshLvq4LE3s0v8PrkDdUyb1ae.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    description:
+      "A new couple and their families find themselves examining modern love and family dynamics amidst clashing cultures, societal expectations and generational differences.",
+    cast: [
+      "Jonah Hill",
+      "Eddie Murphy",
+      "Julia Louis-Dreyfus",
+      "Lauren London",
+      "David Duchovny",
+    ],
+    director: "Kenya Barris",
+    studio: "Netflix",
+  },
+  {
+    id: "36",
+    title: "We Have a Ghost",
+    tmdbId: "807172",
+    type: "movie",
+    genre: ["Comedy", "Adventure", "Mystery"],
+    duration: "126 min",
+    releaseYear: 2023,
+    releaseDate: "February 24, 2023",
+    rating: 6.1,
+    userRating: 6.4,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/xo0eKxzLfioWhbY3RBNmuYZMAWf.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/xo0eKxzLfioWhbY3RBNmuYZMAWf.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/1Ue5HC6NPGALkTnTLTJR15LRKbK.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    description:
+      "After Kevin finds a ghost named Ernest haunting his new home, he becomes an overnight social media sensation. But when Kevin and Ernest go rogue to investigate the mystery.",
+    cast: [
+      "David Harbour",
+      "Jahi Di'Allo Winston",
+      "Anthony Mackie",
+      "Jennifer Coolidge",
+      "Tig Notaro",
+    ],
+    director: "Christopher Landon",
+    studio: "Netflix",
+  },
+  {
+    id: "37",
+    title: "Spiderhead",
+    tmdbId: "718930",
+    type: "movie",
+    genre: ["Science Fiction", "Thriller", "Drama"],
+    duration: "106 min",
+    releaseYear: 2022,
+    releaseDate: "June 17, 2022",
+    rating: 5.4,
+    userRating: 5.5,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/4E3vRfpXk6vBdEKNagPvnHWPWc7.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/4E3vRfpXk6vBdEKNagPvnHWPWc7.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/zGv3dYV6v6ViZOhTjGBqLvPcbMv.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
+    description:
+      "In the near future, convicts are offered the chance to volunteer as medical subjects to shorten their sentence. One prisoner finds himself in an ethical dilemma.",
+    cast: [
+      "Chris Hemsworth",
+      "Miles Teller",
+      "Jurnee Smollett",
+      "Tess Haubrich",
+      "BeBe Bettencourt",
+    ],
+    director: "Joseph Kosinski",
+    studio: "Netflix",
+  },
+  // === MORE BLOCKBUSTERS ===
+  {
+    id: "38",
+    title: "Extraction 2",
+    tmdbId: "677179",
+    type: "movie",
+    genre: ["Action", "Thriller"],
+    duration: "122 min",
+    releaseYear: 2023,
+    releaseDate: "June 16, 2023",
+    rating: 7.2,
+    userRating: 7.0,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/7gKI9hpEMcZUQpNgKrkDzJpbnNS.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/7gKI9hpEMcZUQpNgKrkDzJpbnNS.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/4XM8DUTQb3lhLemJC51Jx4a2EuA.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    description:
+      "After barely surviving his grievous wounds from his mission in Dhaka, Tyler Rake is back for another extraction mission in this high-octane action thriller.",
+    cast: [
+      "Chris Hemsworth",
+      "Golshifteh Farahani",
+      "Adam Bessa",
+      "Olga Kurylenko",
+      "Tornike Gogrichiani",
+    ],
+    director: "Sam Hargrave",
+    studio: "Netflix",
+  },
+  {
+    id: "39",
+    title: "The Killer",
+    tmdbId: "359724",
+    type: "movie",
+    genre: ["Action", "Thriller", "Crime"],
+    duration: "118 min",
+    releaseYear: 2023,
+    releaseDate: "November 10, 2023",
+    rating: 6.5,
+    userRating: 6.6,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/e7Jvsry47JJQruuezjU2X1Z6J77.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/e7Jvsry47JJQruuezjU2X1Z6J77.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/4ft6TR9wA6bra0RLL6G7JFDQ5t1.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    description:
+      "A methodical assassin begins to unravel psychologically after a botched job. David Fincher's stylish thriller starring Michael Fassbender.",
+    cast: [
+      "Michael Fassbender",
+      "Tilda Swinton",
+      "Charles Parnell",
+      "Arliss Howard",
+      "Kerry O'Malley",
+    ],
+    director: "David Fincher",
+    studio: "Netflix",
+  },
+  {
+    id: "40",
+    title: "Leave the World Behind",
+    tmdbId: "842945",
+    type: "movie",
+    genre: ["Thriller", "Drama", "Mystery"],
+    duration: "141 min",
+    releaseYear: 2023,
+    releaseDate: "December 8, 2023",
+    rating: 6.5,
+    userRating: 6.4,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/29rCB4qGANvmUvW0gR5EJ21DuWq.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/29rCB4qGANvmUvW0gR5EJ21DuWq.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/nVRyd3xXpXjuKR0VVeKKXbJlZjk.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    description:
+      "A family's vacation is interrupted by two strangers bearing news of a mysterious blackout. As the threat grows more terrifying, they must figure out how to save themselves.",
+    cast: [
+      "Julia Roberts",
+      "Mahershala Ali",
+      "Ethan Hawke",
+      "Myha'la",
+      "Kevin Bacon",
+    ],
+    director: "Sam Esmail",
+    studio: "Netflix",
+  },
+  {
+    id: "41",
+    title: "Heart of Stone",
+    tmdbId: "724209",
+    type: "movie",
+    genre: ["Action", "Thriller", "Adventure"],
+    duration: "122 min",
+    releaseYear: 2023,
+    releaseDate: "August 11, 2023",
+    rating: 5.7,
+    userRating: 6.0,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/vB8o2p4ETnrfiWEgVxHmHWP9yRl.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/vB8o2p4ETnrfiWEgVxHmHWP9yRl.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/cHNqobjzfLr7of4RbIvLu5qEwt0.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    description:
+      "An intelligence operative for a shadowy global peacekeeping agency races to stop a hacker from stealing the world's most dangerous weapon.",
+    cast: [
+      "Gal Gadot",
+      "Jamie Dornan",
+      "Alia Bhatt",
+      "Sophie Okonedo",
+      "Matthias Schweighöfer",
+    ],
+    director: "Tom Harper",
+    studio: "Netflix",
+  },
+  {
+    id: "42",
+    title: "Pain Hustlers",
+    tmdbId: "939335",
+    type: "movie",
+    genre: ["Drama", "Crime"],
+    duration: "123 min",
+    releaseYear: 2023,
+    releaseDate: "October 27, 2023",
+    rating: 6.2,
+    userRating: 6.3,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/qUJPkfFd3NbWPx6eBZk0G5PK3OL.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/qUJPkfFd3NbWPx6eBZk0G5PK3OL.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/w2nFc2Rsm93PDkvjY4LTn17ePO0.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+    description:
+      "A high school dropout lands a job at a failing pharmaceutical start-up, where she finds herself trapped in a dangerous opioid conspiracy.",
+    cast: [
+      "Emily Blunt",
+      "Chris Evans",
+      "Catherine O'Hara",
+      "Andy García",
+      "Jay Duplass",
+    ],
+    director: "David Yates",
+    studio: "Netflix",
+  },
+  {
+    id: "43",
+    title: "Society of the Snow",
+    tmdbId: "850871",
+    type: "movie",
+    genre: ["Drama", "History", "Thriller"],
+    duration: "144 min",
+    releaseYear: 2023,
+    releaseDate: "December 15, 2023",
+    rating: 8.0,
+    userRating: 7.9,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/k7rEpZfNMB35WWLJHVsziPEsP4x.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/k7rEpZfNMB35WWLJHVsziPEsP4x.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/gU8VqrxqMZLKMWZxWxvhCPd1hss.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    description:
+      "The true story of the Uruguayan rugby team whose plane crashed in the Andes in 1972 and their extraordinary fight for survival.",
+    cast: [
+      "Enzo Vogrincic",
+      "Agustín Pardella",
+      "Matías Recalt",
+      "Esteban Bigliardi",
+      "Diego Vegezzi",
+    ],
+    director: "J.A. Bayona",
+    studio: "Netflix",
+    awards: "Academy Award Nominee 2024",
+  },
+  {
+    id: "44",
+    title: "Luther: The Fallen Sun",
+    tmdbId: "756999",
+    type: "movie",
+    genre: ["Crime", "Thriller", "Mystery"],
+    duration: "129 min",
+    releaseYear: 2023,
+    releaseDate: "March 10, 2023",
+    rating: 6.4,
+    userRating: 6.6,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/tvX2JltXjmpHSVpUNHFVf3MPrJF.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/tvX2JltXjmpHSVpUNHFVf3MPrJF.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/jRJGrD0YkfyRxNRJDuIL5e6p3WD.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    description:
+      "A serial killer terrorizes London while brilliant detective John Luther sits behind bars. Haunted by his failure to capture the killer, Luther breaks out to finish the job.",
+    cast: [
+      "Idris Elba",
+      "Cynthia Erivo",
+      "Andy Serkis",
+      "Dermot Crowley",
+      "Thomas Coombes",
+    ],
+    director: "Jamie Payne",
+    studio: "Netflix",
+  },
+  {
+    id: "45",
+    title: "Nimona",
+    tmdbId: "550205",
+    type: "movie",
+    genre: ["Animation", "Fantasy", "Adventure"],
+    duration: "101 min",
+    releaseYear: 2023,
+    releaseDate: "June 30, 2023",
+    rating: 7.7,
+    userRating: 7.8,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/8wmaN5NKXMEzL86NJbmPFqzJm0Z.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/8wmaN5NKXMEzL86NJbmPFqzJm0Z.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/eTM4BZf3RpNT1TLbOVZXoxL7JNp.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    description:
+      "A knight framed for a crime he didn't commit teams up with a shape-shifting teen to prove his innocence in this action-packed animated adventure.",
+    cast: [
+      "Chloë Grace Moretz",
+      "Riz Ahmed",
+      "Eugene Lee Yang",
+      "Frances Conroy",
+      "Lorraine Toussaint",
+    ],
+    director: "Nick Bruno, Troy Quane",
+    studio: "Netflix",
+    awards: "Academy Award Nominee 2024",
+  },
+  // === MORE BENGALI MOVIES ===
+  {
+    id: "46",
+    title: "Aparajito",
+    tmdbId: "11225",
+    type: "movie",
+    genre: ["Drama"],
+    duration: "113 min",
+    releaseYear: 1956,
+    releaseDate: "October 11, 1956",
+    rating: 8.2,
+    userRating: 8.3,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/z1p34vh7dEOnLDmyCrlUVLuoDzd.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/z1p34vh7dEOnLDmyCrlUVLuoDzd.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/9yBVqNruk6Ykrwc32qrK2TIE5xw.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    description:
+      "Continuing Apu's story from Pather Panchali, this Satyajit Ray masterpiece follows Apu's adolescence and his mother's struggle in poverty.",
+    cast: [
+      "Pinaki Sengupta",
+      "Smaran Ghosal",
+      "Karuna Banerjee",
+      "Kanu Banerjee",
+    ],
+    director: "Satyajit Ray",
+    studio: "Epic Films",
+    awards: "Golden Lion - Venice Film Festival",
+  },
+  {
+    id: "47",
+    title: "Vinci Da",
+    tmdbId: "498160",
+    type: "movie",
+    genre: ["Thriller", "Crime"],
+    duration: "110 min",
+    releaseYear: 2019,
+    releaseDate: "October 11, 2019",
+    rating: 7.5,
+    userRating: 7.6,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/qyVKUqHjdPcxiYBYfJYLzpJLxFP.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/qyVKUqHjdPcxiYBYfJYLzpJLxFP.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/3G1jVvxHZlKfJNVYaMV3dVXgL5b.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    description:
+      "A Bengali thriller about a brilliant painter who gets entangled in a dangerous world of crime and deception. A modern noir masterpiece.",
+    cast: [
+      "Rudranil Ghosh",
+      "Sohini Sarkar",
+      "Anirban Bhattacharya",
+      "Riddhi Sen",
+    ],
+    director: "Srijit Mukherji",
+    studio: "SVF Entertainment",
+  },
+  // === MORE HINDI BLOCKBUSTERS ===
+  {
+    id: "48",
+    title: "Bajrangi Bhaijaan",
+    tmdbId: "297222",
+    type: "movie",
+    genre: ["Drama", "Comedy", "Action"],
+    duration: "163 min",
+    releaseYear: 2015,
+    releaseDate: "July 17, 2015",
+    rating: 8.0,
+    userRating: 8.1,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/4SLKVIcEbOl4YnwEFqQHTvrhYBW.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/4SLKVIcEbOl4YnwEFqQHTvrhYBW.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/sOht4FMuQfqPdZ3s8cXl7RhfUb4.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    description:
+      "A man with a simple mind takes on the mission to reunite a Pakistani girl with her family across the India-Pakistan border. A heartwarming tale of humanity.",
+    cast: [
+      "Salman Khan",
+      "Harshaali Malhotra",
+      "Nawazuddin Siddiqui",
+      "Kareena Kapoor",
+    ],
+    director: "Kabir Khan",
+    studio: "Salman Khan Films",
+  },
+  {
+    id: "49",
+    title: "Dangal",
+    tmdbId: "360814",
+    type: "movie",
+    genre: ["Action", "Drama", "Biography"],
+    duration: "161 min",
+    releaseYear: 2016,
+    releaseDate: "December 23, 2016",
+    rating: 8.3,
+    userRating: 8.4,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/o8hhLlHjWDgSYqvF9lIu8rxJ0Lx.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/o8hhLlHjWDgSYqvF9lIu8rxJ0Lx.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/dhOCqYLPt0mYEyIvIMLYVX5Gc6c.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    description:
+      "Former wrestler Mahavir Singh Phogat trains his daughters to become world-class wrestlers. Based on a true story that inspired a nation.",
+    cast: [
+      "Aamir Khan",
+      "Fatima Sana Shaikh",
+      "Sanya Malhotra",
+      "Sakshi Tanwar",
+    ],
+    director: "Nitesh Tiwari",
+    studio: "Aamir Khan Productions",
+    awards: "Multiple National Film Awards",
+  },
+  {
+    id: "50",
+    title: "3 Idiots",
+    tmdbId: "20453",
+    type: "movie",
+    genre: ["Comedy", "Drama"],
+    duration: "171 min",
+    releaseYear: 2009,
+    releaseDate: "December 25, 2009",
+    rating: 8.4,
+    userRating: 8.4,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/66A9MqXOyVFCssoloscw79z8CVC.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/66A9MqXOyVFCssoloscw79z8CVC.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/6y8YcPHKlJUJSdZLiSVrCQNYL2R.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    description:
+      "Two friends search for their long-lost friend while recalling their college days filled with laughter, pressure, and unconventional wisdom.",
+    cast: [
+      "Aamir Khan",
+      "Kareena Kapoor",
+      "R. Madhavan",
+      "Sharman Joshi",
+      "Boman Irani",
+    ],
+    director: "Rajkumar Hirani",
+    studio: "Vinod Chopra Films",
+    awards: "Highest-grossing Bollywood film of its time",
+  },
+  {
+    id: "51",
+    title: "PK",
+    tmdbId: "274877",
+    type: "movie",
+    genre: ["Comedy", "Drama", "Sci-Fi"],
+    duration: "153 min",
+    releaseYear: 2014,
+    releaseDate: "December 19, 2014",
+    rating: 8.1,
+    userRating: 8.2,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/wEU67AioBBH9SGNvJ5xGmTLFLCZ.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/wEU67AioBBH9SGNvJ5xGmTLFLCZ.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/4j8j3qRqOXq4aCDqGPLDJqNtvWP.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    description:
+      "An alien on Earth loses his connection to his spaceship and questions human nature and religion with child-like curiosity and humor.",
+    cast: [
+      "Aamir Khan",
+      "Anushka Sharma",
+      "Sushant Singh Rajput",
+      "Boman Irani",
+      "Saurabh Shukla",
+    ],
+    director: "Rajkumar Hirani",
+    studio: "Rajkumar Hirani Films",
+  },
+  // === MORE PREMIUM ENGLISH MOVIES ===
+  {
+    id: "52",
+    title: "Oppenheimer",
+    tmdbId: "872585",
+    type: "movie",
+    genre: ["Drama", "History", "Thriller"],
+    duration: "180 min",
+    releaseYear: 2023,
+    releaseDate: "July 21, 2023",
+    rating: 8.3,
+    userRating: 8.4,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    description:
+      "The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb during World War II.",
+    cast: [
+      "Cillian Murphy",
+      "Emily Blunt",
+      "Matt Damon",
+      "Robert Downey Jr.",
+      "Florence Pugh",
+    ],
+    director: "Christopher Nolan",
+    studio: "Universal Pictures",
+    awards: "Academy Award Winner 2024 - Best Picture",
+  },
+  {
+    id: "53",
+    title: "Dune",
+    tmdbId: "438631",
+    type: "movie",
+    genre: ["Science Fiction", "Adventure", "Action"],
+    duration: "155 min",
+    releaseYear: 2021,
+    releaseDate: "October 22, 2021",
+    rating: 7.8,
+    userRating: 8.0,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/d5NXSklXo0qyIYkgV94XAgMIckC.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/xtYyGJCTyFuFXZdlHkFSjLRXIFN.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    description:
+      "Paul Atreides arrives on Arrakis, the desert planet known as Dune, where he must navigate political intrigue and mysterious powers to secure his family's future.",
+    cast: [
+      "Timothée Chalamet",
+      "Zendaya",
+      "Rebecca Ferguson",
+      "Oscar Isaac",
+      "Jason Momoa",
+    ],
+    director: "Denis Villeneuve",
+    studio: "Warner Bros.",
+    awards: "Academy Award Winner - Best Visual Effects",
+  },
+  {
+    id: "54",
+    title: "The Batman",
+    tmdbId: "414906",
+    type: "movie",
+    genre: ["Action", "Crime", "Thriller"],
+    duration: "176 min",
+    releaseYear: 2022,
+    releaseDate: "March 4, 2022",
+    rating: 7.8,
+    userRating: 7.9,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/b0PlSFdDwbyK0cf5RxwDpaOJQvQ.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    description:
+      "In his second year of fighting crime, Batman uncovers corruption in Gotham City while pursuing the Riddler, a serial killer who targets Gotham's elite.",
+    cast: [
+      "Robert Pattinson",
+      "Zoë Kravitz",
+      "Paul Dano",
+      "Jeffrey Wright",
+      "Colin Farrell",
+    ],
+    director: "Matt Reeves",
+    studio: "Warner Bros.",
+  },
+  {
+    id: "55",
+    title: "Top Gun: Maverick",
+    tmdbId: "361743",
+    type: "movie",
+    genre: ["Action", "Drama"],
+    duration: "130 min",
+    releaseYear: 2022,
+    releaseDate: "May 27, 2022",
+    rating: 8.3,
+    userRating: 8.4,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/62HCnUTziyWcpDaBO2i1DX17ljH.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/odJ4hx6g6vBt4lBWKFD1tI8WS4x.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    description:
+      "After thirty years, Maverick is still pushing the envelope as a top naval aviator, training a detachment of TOP GUN graduates for a specialized mission.",
+    cast: [
+      "Tom Cruise",
+      "Miles Teller",
+      "Jennifer Connelly",
+      "Jon Hamm",
+      "Glen Powell",
+    ],
+    director: "Joseph Kosinski",
+    studio: "Paramount Pictures",
+    awards: "Academy Award Nominee - Best Picture",
+  },
+  {
+    id: "56",
+    title: "No Time to Die",
+    tmdbId: "370172",
+    type: "movie",
+    genre: ["Action", "Adventure", "Thriller"],
+    duration: "163 min",
+    releaseYear: 2021,
+    releaseDate: "October 8, 2021",
+    rating: 7.3,
+    userRating: 7.4,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/iUgygt3fscRoKWCV1d0C7FbM9TP.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/iUgygt3fscRoKWCV1d0C7FbM9TP.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/4RpLr2r8j1I3hgxXDOF6C2EXqAL.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    description:
+      "James Bond has left active service. His peace is short-lived when Felix Leiter, an old friend from the CIA, turns up asking for help on a dangerous mission.",
+    cast: [
+      "Daniel Craig",
+      "Rami Malek",
+      "Léa Seydoux",
+      "Lashana Lynch",
+      "Ana de Armas",
+    ],
+    director: "Cary Joji Fukunaga",
+    studio: "MGM",
+  },
+  {
+    id: "57",
+    title: "Inception",
+    tmdbId: "27205",
+    type: "movie",
+    genre: ["Action", "Science Fiction", "Thriller"],
+    duration: "148 min",
+    releaseYear: 2010,
+    releaseDate: "July 16, 2010",
+    rating: 8.8,
+    userRating: 8.8,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/s3TBrRGB1iav7gFOCNx3H31MoES.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    description:
+      "A thief who steals corporate secrets through dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
+    cast: [
+      "Leonardo DiCaprio",
+      "Joseph Gordon-Levitt",
+      "Elliot Page",
+      "Tom Hardy",
+      "Marion Cotillard",
+    ],
+    director: "Christopher Nolan",
+    studio: "Warner Bros.",
+    awards: "Academy Award Winner - Best Visual Effects",
+  },
+  {
+    id: "58",
+    title: "Interstellar",
+    tmdbId: "157336",
+    type: "movie",
+    genre: ["Adventure", "Drama", "Science Fiction"],
+    duration: "169 min",
+    releaseYear: 2014,
+    releaseDate: "November 7, 2014",
+    rating: 8.6,
+    userRating: 8.7,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/xJHokMbljvjADYdit5fK5VQsXEG.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    description:
+      "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+    cast: [
+      "Matthew McConaughey",
+      "Anne Hathaway",
+      "Jessica Chastain",
+      "Michael Caine",
+      "Matt Damon",
+    ],
+    director: "Christopher Nolan",
+    studio: "Paramount Pictures",
+    awards: "Academy Award Winner - Best Visual Effects",
+  },
+  {
+    id: "59",
+    title: "The Dark Knight",
+    tmdbId: "155",
+    type: "movie",
+    genre: ["Action", "Crime", "Drama", "Thriller"],
+    duration: "152 min",
+    releaseYear: 2008,
+    releaseDate: "July 18, 2008",
+    rating: 9.0,
+    userRating: 9.0,
+    thumbnail:
+      "https://image.tmdb.org/t/p/w1280/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/hkBaDkMWbLaf8B1lsWsKX7Ew3Xq.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+    trailerUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+    description:
+      "When the menace known as the Joker wreaks havoc on Gotham, Batman must face one of his greatest challenges yet to save the city.",
+    cast: [
+      "Christian Bale",
+      "Heath Ledger",
+      "Aaron Eckhart",
+      "Michael Caine",
+      "Gary Oldman",
+    ],
+    director: "Christopher Nolan",
+    studio: "Warner Bros.",
+    awards: "Academy Award Winner - Best Supporting Actor",
+  },
 ];
 
 export default netflixShows;

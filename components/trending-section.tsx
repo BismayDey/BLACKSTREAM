@@ -86,7 +86,7 @@ export default function TrendingSection({ shows }: TrendingSectionProps) {
                 className="w-[280px] shrink-0 card-hover"
               >
                 <Link href={`/shows/${show.id}`} className="group block">
-                  <div className="relative aspect-video rounded-xl overflow-hidden mb-3 shine">
+                  <div className="relative aspect-[16/10] rounded-xl overflow-hidden mb-3 shine">
                     <Image
                       src={show.thumbnail || "/placeholder.svg"}
                       alt={show.title}

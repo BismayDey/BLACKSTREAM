@@ -54,6 +54,43 @@ export default function HomePage() {
     .sort((a, b) => b.releaseYear - a.releaseYear)
     .slice(0, 6);
 
+  // Bengali Movies
+  const bengaliMovies = netflixShows.filter(
+    (show) => 
+      show.type === "movie" && 
+      (show.id === "20" || 
+       show.id === "21" || 
+       show.id === "22" || 
+       show.id === "23" || 
+       show.id === "24" ||
+       show.id === "46" ||
+       show.id === "47")
+  );
+
+  // Hindi Movies (Latest Bollywood Blockbusters)
+  const hindiMovies = netflixShows.filter(
+    (show) => 
+      show.type === "movie" && 
+      (show.id === "25" || 
+       show.id === "26" || 
+       show.id === "27" || 
+       show.id === "28" || 
+       show.id === "29" || 
+       show.id === "30" || 
+       show.id === "31" ||
+       show.id === "48" ||
+       show.id === "49" ||
+       show.id === "50" ||
+       show.id === "51")
+  );
+
+  // Action Blockbusters
+  const actionMovies = netflixShows.filter(
+    (show) => 
+      show.type === "movie" && 
+      show.genre.includes("Action")
+  ).slice(0, 6);
+
   // Continue Watching (mock for now)
   const [continueWatching, setContinueWatching] = useState<any[]>([]);
 
@@ -280,6 +317,38 @@ export default function HomePage() {
           isInWatchlist={isInWatchlist}
         />
 
+        {/* Bengali Cinema */}
+        {bengaliMovies.length > 0 && (
+          <ContentRow
+            title="Bengali Cinema"
+            icon={<Star className="w-6 h-6 fill-orange-400 text-orange-400" />}
+            items={bengaliMovies}
+            onWatchlistToggle={handleWatchlistToggle}
+            isInWatchlist={isInWatchlist}
+          />
+        )}
+
+        {/* Hindi Blockbusters */}
+        {hindiMovies.length > 0 && (
+          <ContentRow
+            title="Hindi Blockbusters"
+            icon={<Star className="w-6 h-6 fill-red-500 text-red-500" />}
+            items={hindiMovies}
+            onWatchlistToggle={handleWatchlistToggle}
+            isInWatchlist={isInWatchlist}
+          />
+        )}
+
+        {/* Action Movies */}
+        {actionMovies.length > 0 && (
+          <ContentRow
+            title="Action Blockbusters"
+            items={actionMovies}
+            onWatchlistToggle={handleWatchlistToggle}
+            isInWatchlist={isInWatchlist}
+          />
+        )}
+
         {/* Top Rated Movies */}
         <ContentRow
           title="Top Rated Movies"
@@ -442,7 +511,7 @@ function ContentCard({
       <Link href={`/shows/${item.id}`}>
         <Card className="overflow-hidden bg-gray-900 border-gray-800 hover:border-red-600 transition-all duration-300 transform group-hover:scale-105">
           {/* Thumbnail */}
-          <div className="relative aspect-video">
+          <div className="relative aspect-[16/10]">
             <Image
               src={item.thumbnail}
               alt={item.title}

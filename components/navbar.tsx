@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Menu,
@@ -92,9 +93,14 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-purple-600 blur-xl opacity-50 group-hover:opacity-75 transition-opacity" />
-                <Sparkles className="w-8 h-8 text-red-500 relative z-10" />
+              <div className="relative w-12 h-12">
+                <Image
+                  src="/icon.png"
+                  alt="BLACKSTREAM"
+                  fill
+                  className="object-contain"
+                  priority
+                />
               </div>
               <span className="text-2xl font-black tracking-tighter">
                 <span className="bg-gradient-to-r from-red-500 via-red-600 to-purple-600 bg-clip-text text-transparent">

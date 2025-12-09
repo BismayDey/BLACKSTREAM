@@ -13,7 +13,39 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "BLACKSTREAM - Streaming Platform",
   description: "A modern streaming platform for movies and TV shows",
-
+  keywords: ["streaming", "movies", "tv shows", "series", "entertainment", "bengali movies", "hindi movies", "hollywood", "bollywood"],
+  authors: [{ name: "BLACKSTREAM Team" }],
+  creator: "BLACKSTREAM",
+  publisher: "BLACKSTREAM",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://blackstream.vercel.app",
+    title: "BLACKSTREAM - Streaming Platform",
+    description: "A modern streaming platform for movies and TV shows",
+    siteName: "BLACKSTREAM",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BLACKSTREAM - Streaming Platform",
+    description: "A modern streaming platform for movies and TV shows",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -23,6 +55,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-7NP46PQTQY"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-7NP46PQTQY');
+            `,
+          }}
+        />
+      </head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"

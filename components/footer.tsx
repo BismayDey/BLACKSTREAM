@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Facebook, Twitter, Instagram, Youtube, Github } from "lucide-react"
 
 export default function Footer() {
@@ -9,9 +10,19 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <h3 className="text-xl font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-purple-600">
-              BLACKSTREAM
-            </h3>
+            <div className="flex items-center gap-2">
+              <div className="relative w-12 h-12">
+                <Image
+                  src="/icon.png"
+                  alt="BLACKSTREAM"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <h3 className="text-xl font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-purple-600">
+                BLACKSTREAM
+              </h3>
+            </div>
             <p className="text-muted-foreground">The ultimate streaming platform for all your entertainment needs.</p>
             <div className="flex space-x-4">
               <Link href="#" className="text-muted-foreground hover:text-primary">
