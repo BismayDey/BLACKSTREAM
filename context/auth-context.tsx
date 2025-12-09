@@ -81,29 +81,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Clear the email from localStorage
       window.localStorage.removeItem('emailForSignIn')
       
-      // Check if user document exists, if not create it
-      const userDoc = doc(db, "users", result.user.uid)
-      const docSnap = await getDoc(userDoc)
+      // Try to check and create user document, but don't fail sign-in if offline
+      try {
+        const userDoc = doc(db, "users", result.user.uid)
+        const docSnap = await getDoc(userDoc)
 
-      if (!docSnap.exists()) {
-        await setDoc(userDoc, {
-          uid: result.user.uid,
-          email: result.user.email,
-          displayName: result.user.displayName || result.user.email?.split('@')[0],
-          photoURL: result.user.photoURL,
-          createdAt: new Date().toISOString(),
-          watchHistory: [],
-          watchlist: [],
-          watchLater: [],
-          favorites: [],
-          continueWatching: [],
-          settings: {
-            notifications: true,
-            autoplay: true,
-            subtitlesLanguage: "en",
-            quality: "auto",
-          },
-        })
+        if (!docSnap.exists()) {
+          await setDoc(userDoc, {
+            uid: result.user.uid,
+            email: result.user.email,
+            displayName: result.user.displayName || result.user.email?.split('@')[0],
+            photoURL: result.user.photoURL,
+            createdAt: new Date().toISOString(),
+            watchHistory: [],
+            watchlist: [],
+            watchLater: [],
+            favorites: [],
+            continueWatching: [],
+            settings: {
+              notifications: true,
+              autoplay: true,
+              subtitlesLanguage: "en",
+              quality: "auto",
+            },
+          })
+        }
+      } catch (firestoreError: any) {
+        // If offline or other Firestore error, log but don't fail the sign-in
+        console.warn("Could not create user document (possibly offline):", firestoreError)
+        // Sign-in is still successful, document will be created when online
       }
     } catch (error) {
       console.error("Error completing sign in with email link:", error)
@@ -120,29 +126,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const provider = new GoogleAuthProvider()
       const result = await signInWithPopup(auth, provider)
 
-      // Check if user document exists, if not create it
-      const userDoc = doc(db, "users", result.user.uid)
-      const docSnap = await getDoc(userDoc)
+      // Try to check and create user document, but don't fail sign-in if offline
+      try {
+        const userDoc = doc(db, "users", result.user.uid)
+        const docSnap = await getDoc(userDoc)
 
-      if (!docSnap.exists()) {
-        await setDoc(userDoc, {
-          uid: result.user.uid,
-          email: result.user.email,
-          displayName: result.user.displayName,
-          photoURL: result.user.photoURL,
-          createdAt: new Date().toISOString(),
-          watchHistory: [],
-          watchlist: [],
-          watchLater: [],
-          favorites: [],
-          continueWatching: [],
-          settings: {
-            notifications: true,
-            autoplay: true,
-            subtitlesLanguage: "en",
-            quality: "auto",
-          },
-        })
+        if (!docSnap.exists()) {
+          await setDoc(userDoc, {
+            uid: result.user.uid,
+            email: result.user.email,
+            displayName: result.user.displayName,
+            photoURL: result.user.photoURL,
+            createdAt: new Date().toISOString(),
+            watchHistory: [],
+            watchlist: [],
+            watchLater: [],
+            favorites: [],
+            continueWatching: [],
+            settings: {
+              notifications: true,
+              autoplay: true,
+              subtitlesLanguage: "en",
+              quality: "auto",
+            },
+          })
+        }
+      } catch (firestoreError: any) {
+        // If offline or other Firestore error, log but don't fail the sign-in
+        console.warn("Could not create user document (possibly offline):", firestoreError)
+        // Sign-in is still successful, document will be created when online
       }
     } catch (error) {
       console.error("Error signing in with Google:", error)
@@ -167,7 +179,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       // Also update the user data in Firestore
       const userDoc = doc(db, "users", auth.currentUser.uid)
-      await updateDoc(userDoc, data)
+      await setDoc(userDoc, data, { merge: true })
     } catch (error) {
       console.error("Error updating profile:", error)
       throw error
@@ -179,7 +191,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const userDoc = doc(db, "users", auth.currentUser.uid)
-      await updateDoc(userDoc, data)
+      await setDoc(userDoc, data, { merge: true })
     } catch (error) {
       console.error("Error updating user data:", error)
       throw error
@@ -196,7 +208,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (docSnap.exists()) {
         return docSnap.data()
       } else {
-        return null
+        // Document doesn't exist, create it with default data
+        const defaultData = {
+          uid: auth.currentUser.uid,
+          email: auth.currentUser.email,
+          displayName: auth.currentUser.displayName || auth.currentUser.email?.split('@')[0],
+          photoURL: auth.currentUser.photoURL,
+          createdAt: new Date().toISOString(),
+          watchHistory: [],
+          watchlist: [],
+          watchLater: [],
+          favorites: [],
+          continueWatching: [],
+          settings: {
+            notifications: true,
+            autoplay: true,
+            subtitlesLanguage: "en",
+            quality: "auto",
+          },
+        }
+        await setDoc(userDoc, defaultData)
+        return defaultData
       }
     } catch (error) {
       console.error("Error getting user data:", error)

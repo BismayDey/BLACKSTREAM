@@ -70,15 +70,32 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       setUser(user)
 
       if (user) {
-        // Get or create user profile
-        const userRef = doc(db, "users", user.uid)
-        const userSnap = await getDoc(userRef)
+        try {
+          // Get or create user profile
+          const userRef = doc(db, "users", user.uid)
+          const userSnap = await getDoc(userRef)
 
-        if (userSnap.exists()) {
-          setProfile(userSnap.data() as UserProfile)
-        } else {
-          // Create new profile
-          const newProfile: UserProfile = {
+          if (userSnap.exists()) {
+            setProfile(userSnap.data() as UserProfile)
+          } else {
+            // Create new profile
+            const newProfile: UserProfile = {
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+              photoURL: user.photoURL,
+              watchlist: [],
+              watchLater: [],
+              continueWatching: [],
+            }
+
+            await setDoc(userRef, newProfile)
+            setProfile(newProfile)
+          }
+        } catch (error) {
+          console.warn("Could not load/create user profile (possibly offline):", error)
+          // Set a minimal profile for offline use
+          setProfile({
             uid: user.uid,
             email: user.email,
             displayName: user.displayName,
@@ -86,10 +103,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             watchlist: [],
             watchLater: [],
             continueWatching: [],
-          }
-
-          await setDoc(userRef, newProfile)
-          setProfile(newProfile)
+          })
         }
       } else {
         setProfile(null)
