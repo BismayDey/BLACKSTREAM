@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { UserProvider } from "@/context/user-context";
 import { AuthProvider } from "@/context/auth-context";
 import Navbar from "@/components/navbar";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -57,19 +58,20 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="google-site-verification" content="26CLvvCnF62u0CmaIRoofb0T7S1eoX4M2scl_sMkD-g" />
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-7NP46PQTQY"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-7NP46PQTQY');
-            `,
-          }}
-        />
       </head>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-7NP46PQTQY"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-7NP46PQTQY');
+          `}
+        </Script>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -88,5 +90,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-import "./globals.css";

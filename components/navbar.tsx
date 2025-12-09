@@ -54,12 +54,18 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
   const auth = useAuth();
   const user = auth?.user;
   const signOut = auth?.signOut;
+
+  // Handle mounting to prevent hydration issues
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Subscribe to real-time notifications
   useEffect(() => {

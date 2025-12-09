@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -436,10 +436,10 @@ function ContentRow({
   isInWatchlist,
 }: ContentRowProps) {
   const [scrollPosition, setScrollPosition] = useState(0);
-  const scrollContainerRef = useState<HTMLDivElement | null>(null)[0];
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const scroll = (direction: "left" | "right") => {
-    const container = document.getElementById(
+    const container = scrollContainerRef.current || document.getElementById(
       `scroll-${title.replace(/\s/g, "")}`
     );
     if (container) {
@@ -476,6 +476,7 @@ function ContentRow({
       </div>
 
       <div
+        ref={scrollContainerRef}
         id={`scroll-${title.replace(/\s/g, "")}`}
         className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
