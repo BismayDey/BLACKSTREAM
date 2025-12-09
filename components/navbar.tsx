@@ -21,6 +21,7 @@ import {
   ChevronDown,
   Sparkles,
   Clock,
+  Send,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -37,17 +38,42 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { 
+  subscribeToNotifications, 
+  markNotificationAsRead,
+  markAllNotificationsAsRead,
+  formatTimeAgo,
+  type Notification
+} from "@/lib/notification-service";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const pathname = usePathname();
+  const router = useRouter();
 
   const auth = useAuth();
   const user = auth?.user;
   const signOut = auth?.signOut;
+
+  // Subscribe to real-time notifications
+  useEffect(() => {
+    if (!user) {
+      setNotifications([])
+      return
+    }
+
+    const unsubscribe = subscribeToNotifications(user.uid, (newNotifications) => {
+      setNotifications(newNotifications)
+    })
+
+    return () => unsubscribe()
+  }, [user])
 
   const isAuthPage =
     pathname?.includes("/login") ||
@@ -71,12 +97,14 @@ export default function Navbar() {
     { href: "/movies", label: "Movies", icon: Film },
     { href: "/series", label: "Series", icon: Tv },
     { href: "/watchlist", label: "My List", icon: Bookmark },
+    { href: "/request", label: "Request", icon: Send },
   ];
 
   const userMenuLinks = user ? [
     { href: "/continue-watching", label: "Continue Watching", icon: PlayCircle },
     { href: "/watchlist", label: "My List", icon: Bookmark },
     { href: "/watch-later", label: "Watch Later", icon: Clock },
+    { href: "/request", label: "Request Content", icon: Send },
   ] : [];
 
   const handleSignOut = async () => {
@@ -84,6 +112,36 @@ export default function Navbar() {
       await signOut();
     }
   };
+
+  const handleNotificationClick = async (notification: Notification) => {
+    if (!notification.read) {
+      await markNotificationAsRead(notification.id)
+    }
+    if (notification.link) {
+      router.push(notification.link)
+      setShowNotifications(false)
+    }
+  }
+
+  const handleMarkAllAsRead = async () => {
+    if (user) {
+      await markAllNotificationsAsRead(user.uid)
+    }
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (showNotifications) {
+        const target = e.target as HTMLElement;
+        if (!target.closest(".notifications-container")) {
+          setShowNotifications(false);
+        }
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showNotifications]);
 
   const isShowsPage = pathname === "/shows";
 
@@ -211,14 +269,90 @@ export default function Navbar() {
               {user ? (
                 <>
                   {/* Notifications */}
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="hidden md:flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/10 transition-colors relative"
-                  >
-                    <Bell className="h-5 w-5 text-gray-300" />
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-600 rounded-full" />
-                  </motion.button>
+                  <div className="relative notifications-container">
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setShowNotifications(!showNotifications)}
+                      className="hidden md:flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/10 transition-colors relative"
+                    >
+                      <Bell className="h-5 w-5 text-gray-300" />
+                      {notifications.some((n) => !n.read) && (
+                        <span className="absolute top-1 right-1 w-2 h-2 bg-red-600 rounded-full" />
+                      )}
+                    </motion.button>
+
+                    <AnimatePresence>
+                      {showNotifications && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute right-0 mt-2 w-80 bg-slate-900 rounded-lg shadow-2xl overflow-hidden z-50 border border-slate-800"
+                        >
+                          <div className="p-3 border-b border-slate-800 flex justify-between items-center">
+                            <h3 className="font-medium text-sm text-white">
+                              Notifications
+                            </h3>
+                            {notifications.some((n) => !n.read) && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-xs h-6 px-2 text-gray-400 hover:text-white"
+                                onClick={handleMarkAllAsRead}
+                              >
+                                Mark all read
+                              </Button>
+                            )}
+                          </div>
+                          <div className="max-h-[400px] overflow-y-auto">
+                            {notifications.length === 0 ? (
+                              <div className="p-8 text-center text-gray-400">
+                                <Bell className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                                <p className="text-sm">No notifications yet</p>
+                              </div>
+                            ) : (
+                              notifications.map((notification) => (
+                                <div
+                                  key={notification.id}
+                                  onClick={() => handleNotificationClick(notification)}
+                                  className={`p-3 border-b border-slate-800 last:border-0 hover:bg-slate-800/50 transition-colors cursor-pointer ${
+                                    !notification.read ? "bg-red-500/5" : ""
+                                  }`}
+                                >
+                                  <div className="flex justify-between items-start mb-1 gap-2">
+                                    <h4 className="font-medium text-sm flex-1 text-white">
+                                      {notification.title}
+                                    </h4>
+                                    <span className="text-xs text-gray-400 whitespace-nowrap">
+                                      {formatTimeAgo(notification.createdAt)}
+                                    </span>
+                                  </div>
+                                  <p className="text-sm text-gray-400">
+                                    {notification.message}
+                                  </p>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                          <div className="p-2 border-t border-slate-800 text-center">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="w-full text-red-500 hover:text-red-400 text-xs"
+                              onClick={() => {
+                                setShowNotifications(false)
+                                router.push("/notifications")
+                              }}
+                            >
+                              View All Notifications
+                            </Button>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
 
                   {/* Profile Dropdown */}
                   <DropdownMenu>

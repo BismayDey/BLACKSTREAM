@@ -45,6 +45,12 @@ service cloud.firestore {
         allow read: if isOwner(userId);
         allow write: if isOwner(userId);
       }
+      
+      // Sub-collection for watch progress
+      match /watchProgress/{contentId} {
+        allow read: if isOwner(userId);
+        allow write: if isOwner(userId);
+      }
     }
     
     // Shows collection (read-only for all authenticated users)
@@ -85,6 +91,21 @@ service cloud.firestore {
     match /analytics/{document=**} {
       allow read: if false; // Only backend can read
       allow write: if isAuthenticated();
+    }
+    
+    // Notifications collection
+    match /notifications/{notificationId} {
+      // Users can read their own notifications
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Users can update their own notifications (mark as read)
+      allow update: if isAuthenticated() && 
+        resource.data.userId == request.auth.uid &&
+        request.resource.data.userId == resource.data.userId;
+      
+      // Only backend can create notifications (or use Cloud Functions)
+      allow create: if false;
+      allow delete: if false;
     }
     
     // Default deny all other access

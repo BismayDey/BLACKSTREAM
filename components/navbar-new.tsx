@@ -19,6 +19,7 @@ import {
   Settings,
   ChevronDown,
   Sparkles,
+  Send,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -69,6 +70,7 @@ export default function Navbar() {
     { href: "/movies", label: "Movies", icon: Film },
     { href: "/series", label: "Series", icon: Tv },
     { href: "/watchlist", label: "My List", icon: Bookmark },
+    { href: "/request", label: "Request", icon: Send },
   ];
 
   const handleSignOut = async () => {
