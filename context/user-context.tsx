@@ -255,17 +255,12 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  // Don't render children until mounted to prevent hydration mismatch
-  if (!mounted) {
-    return null
-  }
-
   return (
     <UserContext.Provider
       value={{
         user,
         profile,
-        loading,
+        loading: loading || !mounted,
         signOut,
         addToWatchlist,
         removeFromWatchlist,

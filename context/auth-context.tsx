@@ -206,7 +206,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const value = {
     user,
-    loading,
+    loading: loading || !mounted,
     sendSignInLink,
     completeSignInWithEmailLink,
     signInWithGoogle,
@@ -215,11 +215,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     updateUserData,
     getUserData,
     isSignInLink,
-  }
-
-  // Don't render children until mounted to prevent hydration mismatch
-  if (!mounted) {
-    return null
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

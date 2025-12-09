@@ -272,6 +272,7 @@ export default function Navbar() {
                 )}
               </AnimatePresence>
 
+              <div suppressHydrationWarning>
               {user ? (
                 <>
                   {/* Notifications */}
@@ -487,6 +488,7 @@ export default function Navbar() {
                   <Link href="/login">Sign In</Link>
                 </Button>
               )}
+              </div>
 
               {/* Mobile menu button */}
               <Button
@@ -494,6 +496,7 @@ export default function Navbar() {
                 size="icon"
                 className="lg:hidden hover:bg-white/10"
                 onClick={() => setIsOpen(!isOpen)}
+                suppressHydrationWarning
               >
                 {isOpen ? (
                   <X className="h-6 w-6 text-white" />
