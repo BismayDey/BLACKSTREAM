@@ -5,7 +5,6 @@ import {
   type User,
   onAuthStateChanged,
   GoogleAuthProvider,
-  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
   updateProfile,
@@ -122,24 +121,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const provider = new GoogleAuthProvider()
     provider.addScope('email')
     provider.addScope('profile')
-    try {
-      // Try popup first (better UX)
-      const result = await signInWithPopup(auth, provider)
-      await createUserDocument(result.user)
-    } catch (error: any) {
-      if (
-        error.code === 'auth/popup-blocked' ||
-        error.code === 'auth/popup-closed-by-user' ||
-        error.code === 'auth/cancelled-popup-request'
-      ) {
-        // Fallback to redirect when popup is blocked
-        await signInWithRedirect(auth, provider)
-        // Page will redirect — no return value needed
-      } else {
-        console.error("Error signing in with Google:", error)
-        throw error
-      }
-    }
+    // Always use redirect — more reliable than popup (popup is frequently blocked by browsers)
+    await signInWithRedirect(auth, provider)
+    // Page will navigate away to Google. On return, getRedirectResult() in useEffect handles sign-in.
   }
 
   const resetPassword = async (email: string) => {

@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
@@ -49,6 +49,13 @@ export default function RegisterPage() {
   const { toast } = useToast()
   const router = useRouter()
 
+  // Redirect to home if user is already signed in OR returns from Google redirect
+  useEffect(() => {
+    if (auth?.user && !auth.loading) {
+      router.replace("/")
+    }
+  }, [auth?.user, auth?.loading, router])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
@@ -58,7 +65,7 @@ export default function RegisterPage() {
     try {
       await auth?.signUp(email, password, displayName)
       toast({ title: "Account created!", description: "Welcome to BLACKSTREAM. Enjoy streaming!" })
-      router.push("/")
+      router.replace("/")
     } catch (err: any) {
       setError(getErrorMessage(err.code))
     } finally {
@@ -70,18 +77,14 @@ export default function RegisterPage() {
     setError("")
     setIsLoading(true)
     try {
+      // signInWithGoogle uses signInWithRedirect — page will navigate to Google.
+      // On return, the useEffect above will detect auth.user and redirect to /.
       await auth?.signInWithGoogle()
-      toast({ title: "Welcome!", description: "You have successfully signed in with Google." })
-      router.push("/")
     } catch (err: any) {
-      if (
-        err.code !== "auth/popup-closed-by-user" &&
-        err.code !== "auth/popup-blocked" &&
-        err.code !== "auth/cancelled-popup-request"
-      ) setError("Failed to sign in with Google. Please try again.")
-    } finally {
+      setError("Failed to sign in with Google. Please try again.")
       setIsLoading(false)
     }
+    // Note: isLoading intentionally stays true while redirect is in progress
   }
 
   return (
