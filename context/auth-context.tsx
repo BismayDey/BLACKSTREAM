@@ -5,8 +5,7 @@ import {
   type User,
   onAuthStateChanged,
   GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   updateProfile,
   signOut as firebaseSignOut,
   createUserWithEmailAndPassword,
@@ -72,27 +71,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user)
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser)
       setLoading(false)
     })
     return () => unsubscribe()
-  }, [])
-
-  // Handle redirect result (for popup-blocked fallback)
-  useEffect(() => {
-    getRedirectResult(auth)
-      .then(async (result) => {
-        if (result?.user) {
-          await createUserDocument(result.user)
-        }
-      })
-      .catch((err) => {
-        // Ignore errors from no pending redirect
-        if (err.code !== 'auth/no-auth-event') {
-          console.error("Error handling redirect result:", err)
-        }
-      })
   }, [])
 
   const signUp = async (email: string, password: string, displayName?: string) => {
@@ -117,13 +100,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  // signInWithGoogle — uses signInWithPopup (most reliable across browsers)
+  // The popup must be triggered directly from a user click; this function
+  // should be called as close to the button onClick as possible.
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider()
-    provider.addScope('email')
-    provider.addScope('profile')
-    // Always use redirect — more reliable than popup (popup is frequently blocked by browsers)
-    await signInWithRedirect(auth, provider)
-    // Page will navigate away to Google. On return, getRedirectResult() in useEffect handles sign-in.
+    provider.addScope("email")
+    provider.addScope("profile")
+    // Force account picker every time so user can switch accounts
+    provider.setCustomParameters({ prompt: "select_account" })
+    try {
+      const result = await signInWithPopup(auth, provider)
+      await createUserDocument(result.user)
+    } catch (error: any) {
+      // Re-throw so the calling component can handle specific codes
+      throw error
+    }
   }
 
   const resetPassword = async (email: string) => {

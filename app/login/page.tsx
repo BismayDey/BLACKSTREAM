@@ -74,14 +74,24 @@ export default function LoginPage() {
     setError("")
     setIsLoading(true)
     try {
-      // signInWithGoogle uses signInWithRedirect — page will navigate to Google.
-      // On return, the useEffect above will detect auth.user and redirect to /.
       await auth?.signInWithGoogle()
+      // signInWithPopup resolves with the signed-in user \u2014 redirect home
+      toast({ title: "Welcome!", description: "Signed in with Google successfully." })
+      router.replace("/")
     } catch (err: any) {
-      setError("Failed to sign in with Google. Please try again.")
       setIsLoading(false)
+      if (err.code === "auth/popup-blocked") {
+        setError("Pop-up was blocked by your browser. Please click the address bar, allow pop-ups for this site, then try again.")
+      } else if (err.code === "auth/popup-closed-by-user" || err.code === "auth/cancelled-popup-request") {
+        // User closed the popup — not an error, just reset
+        setError("")
+      } else if (err.code === "auth/unauthorized-domain") {
+        setError("This domain is not authorised in Firebase. Add 'localhost' to Firebase Console → Authentication → Settings → Authorised domains.")
+      } else {
+        setError("Failed to sign in with Google. Please try again.")
+        console.error("Google sign-in error:", err)
+      }
     }
-    // Note: isLoading intentionally stays true while redirect is in progress
   }
 
   return (
