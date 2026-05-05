@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Menu,
@@ -20,7 +19,6 @@ import {
   Settings,
   ChevronDown,
   Sparkles,
-  Clock,
   Send,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -28,7 +26,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import ClientOnly from "@/components/client-only";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/context/auth-context";
 import {
@@ -39,48 +36,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { 
-  subscribeToNotifications, 
-  markNotificationAsRead,
-  markAllNotificationsAsRead,
-  formatTimeAgo,
-  type Notification
-} from "@/lib/notification-service";
-import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
 
   const auth = useAuth();
   const user = auth?.user;
   const signOut = auth?.signOut;
-
-  // Handle mounting to prevent hydration issues
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Subscribe to real-time notifications
-  useEffect(() => {
-    if (!user) {
-      setNotifications([])
-      return
-    }
-
-    const unsubscribe = subscribeToNotifications(user.uid, (newNotifications) => {
-      setNotifications(newNotifications)
-    })
-
-    return () => unsubscribe()
-  }, [user])
 
   const isAuthPage =
     pathname?.includes("/login") ||
@@ -107,50 +73,11 @@ export default function Navbar() {
     { href: "/request", label: "Request", icon: Send },
   ];
 
-  const userMenuLinks = user ? [
-    { href: "/continue-watching", label: "Continue Watching", icon: PlayCircle },
-    { href: "/watchlist", label: "My List", icon: Bookmark },
-    { href: "/watch-later", label: "Watch Later", icon: Clock },
-    { href: "/request", label: "Request Content", icon: Send },
-  ] : [];
-
   const handleSignOut = async () => {
     if (signOut) {
       await signOut();
     }
   };
-
-  const handleNotificationClick = async (notification: Notification) => {
-    if (!notification.read) {
-      await markNotificationAsRead(notification.id)
-    }
-    if (notification.link) {
-      router.push(notification.link)
-      setShowNotifications(false)
-    }
-  }
-
-  const handleMarkAllAsRead = async () => {
-    if (user) {
-      await markAllNotificationsAsRead(user.uid)
-    }
-  }
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (showNotifications) {
-        const target = e.target as HTMLElement;
-        if (!target.closest(".notifications-container")) {
-          setShowNotifications(false);
-        }
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showNotifications]);
-
-  const isShowsPage = pathname === "/shows";
 
   return (
     <>
@@ -158,20 +85,18 @@ export default function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.3 }}
-        className={`${isShowsPage ? "relative" : "fixed top-0 left-0 right-0"} z-50 transition-all duration-500`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
+            ? "bg-black/95 backdrop-blur-xl shadow-2xl shadow-red-500/10"
+            : "bg-gradient-to-b from-black/80 via-black/40 to-transparent"
+          }`}
       >
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative w-12 h-12">
-                <Image
-                  src="/icon.png"
-                  alt="BLACKSTREAM"
-                  fill
-                  className="object-contain"
-                  priority
-                />
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-purple-600 blur-xl opacity-50 group-hover:opacity-75 transition-opacity" />
+                <Sparkles className="w-8 h-8 text-red-500 relative z-10" />
               </div>
               <span className="text-2xl font-black tracking-tighter">
                 <span className="bg-gradient-to-r from-red-500 via-red-600 to-purple-600 bg-clip-text text-transparent">
@@ -196,11 +121,10 @@ export default function Navbar() {
                     className="relative group px-4 py-2"
                   >
                     <motion.div
-                      className={`flex items-center gap-2 text-sm font-semibold transition-all ${
-                        isActive
+                      className={`flex items-center gap-2 text-sm font-semibold transition-all ${isActive
                           ? "text-white"
                           : "text-gray-300 group-hover:text-white"
-                      }`}
+                        }`}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
@@ -273,95 +197,17 @@ export default function Navbar() {
                 )}
               </AnimatePresence>
 
-              <ClientOnly>
-              <div suppressHydrationWarning>
               {user ? (
                 <>
                   {/* Notifications */}
-                  <div className="relative notifications-container">
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => setShowNotifications(!showNotifications)}
-                      className="hidden md:flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/10 transition-colors relative"
-                    >
-                      <Bell className="h-5 w-5 text-gray-300" />
-                      {notifications.some((n) => !n.read) && (
-                        <span className="absolute top-1 right-1 w-2 h-2 bg-red-600 rounded-full" />
-                      )}
-                    </motion.button>
-
-                    <AnimatePresence>
-                      {showNotifications && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                          transition={{ duration: 0.15 }}
-                          className="absolute right-0 mt-2 w-80 bg-slate-900 rounded-lg shadow-2xl overflow-hidden z-50 border border-slate-800"
-                        >
-                          <div className="p-3 border-b border-slate-800 flex justify-between items-center">
-                            <h3 className="font-medium text-sm text-white">
-                              Notifications
-                            </h3>
-                            {notifications.some((n) => !n.read) && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-xs h-6 px-2 text-gray-400 hover:text-white"
-                                onClick={handleMarkAllAsRead}
-                              >
-                                Mark all read
-                              </Button>
-                            )}
-                          </div>
-                          <div className="max-h-[400px] overflow-y-auto">
-                            {notifications.length === 0 ? (
-                              <div className="p-8 text-center text-gray-400">
-                                <Bell className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                                <p className="text-sm">No notifications yet</p>
-                              </div>
-                            ) : (
-                              notifications.map((notification) => (
-                                <div
-                                  key={notification.id}
-                                  onClick={() => handleNotificationClick(notification)}
-                                  className={`p-3 border-b border-slate-800 last:border-0 hover:bg-slate-800/50 transition-colors cursor-pointer ${
-                                    !notification.read ? "bg-red-500/5" : ""
-                                  }`}
-                                >
-                                  <div className="flex justify-between items-start mb-1 gap-2">
-                                    <h4 className="font-medium text-sm flex-1 text-white">
-                                      {notification.title}
-                                    </h4>
-                                    <span className="text-xs text-gray-400 whitespace-nowrap">
-                                      {formatTimeAgo(notification.createdAt)}
-                                    </span>
-                                  </div>
-                                  <p className="text-sm text-gray-400">
-                                    {notification.message}
-                                  </p>
-                                </div>
-                              ))
-                            )}
-                          </div>
-                          <div className="p-2 border-t border-slate-800 text-center">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="w-full text-red-500 hover:text-red-400 text-xs"
-                              onClick={() => {
-                                setShowNotifications(false)
-                                router.push("/notifications")
-                              }}
-                            >
-                              View All Notifications
-                            </Button>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="hidden md:flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/10 transition-colors relative"
+                  >
+                    <Bell className="h-5 w-5 text-gray-300" />
+                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-600 rounded-full" />
+                  </motion.button>
 
                   {/* Profile Dropdown */}
                   <DropdownMenu>
@@ -384,7 +230,7 @@ export default function Navbar() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                      className="w-64 bg-black/90 backdrop-blur-2xl border-white/10"
+                      className="w-64 bg-black/95 backdrop-blur-xl border-gray-800"
                       align="end"
                       forceMount
                     >
@@ -415,15 +261,6 @@ export default function Navbar() {
                         asChild
                         className="hover:bg-white/5 cursor-pointer"
                       >
-                        <Link href="/continue-watching" className="flex items-center">
-                          <PlayCircle className="mr-3 h-4 w-4 text-gray-400" />
-                          <span className="text-gray-200">Continue Watching</span>
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        asChild
-                        className="hover:bg-white/5 cursor-pointer"
-                      >
                         <Link href="/profile" className="flex items-center">
                           <User className="mr-3 h-4 w-4 text-gray-400" />
                           <span className="text-gray-200">Profile</span>
@@ -436,15 +273,6 @@ export default function Navbar() {
                         <Link href="/watchlist" className="flex items-center">
                           <Bookmark className="mr-3 h-4 w-4 text-gray-400" />
                           <span className="text-gray-200">My List</span>
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        asChild
-                        className="hover:bg-white/5 cursor-pointer"
-                      >
-                        <Link href="/watch-later" className="flex items-center">
-                          <PlayCircle className="mr-3 h-4 w-4 text-gray-400" />
-                          <span className="text-gray-200">Watch Later</span>
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem
@@ -490,8 +318,6 @@ export default function Navbar() {
                   <Link href="/login">Sign In</Link>
                 </Button>
               )}
-              </div>
-              </ClientOnly>
 
               {/* Mobile menu button */}
               <Button
@@ -499,7 +325,6 @@ export default function Navbar() {
                 size="icon"
                 className="lg:hidden hover:bg-white/10"
                 onClick={() => setIsOpen(!isOpen)}
-                suppressHydrationWarning
               >
                 {isOpen ? (
                   <X className="h-6 w-6 text-white" />
@@ -519,7 +344,7 @@ export default function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="lg:hidden bg-black/95 backdrop-blur-xl border-t border-white/10"
+              className="lg:hidden bg-black/95 backdrop-blur-xl border-t border-gray-800"
             >
               <div className="container mx-auto px-4 py-6">
                 {/* Mobile Search */}
@@ -543,11 +368,10 @@ export default function Navbar() {
                       <Link
                         key={link.href}
                         href={link.href}
-                        className={`flex items-center gap-3 p-4 rounded-lg transition-colors ${
-                          isActive
+                        className={`flex items-center gap-3 p-4 rounded-lg transition-colors ${isActive
                             ? "bg-red-600 text-white"
                             : "text-gray-300 hover:bg-white/5 hover:text-white"
-                        }`}
+                          }`}
                         onClick={() => setIsOpen(false)}
                       >
                         <Icon className="w-5 h-5" />
@@ -561,30 +385,6 @@ export default function Navbar() {
                 {user && (
                   <div className="mt-6 pt-6 border-t border-gray-800">
                     <div className="flex flex-col space-y-1">
-                      <Link
-                        href="/continue-watching"
-                        className="flex items-center gap-3 p-4 rounded-lg text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <PlayCircle className="w-5 h-5" />
-                        <span className="font-medium">Continue Watching</span>
-                      </Link>
-                      <Link
-                        href="/watchlist"
-                        className="flex items-center gap-3 p-4 rounded-lg text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <Bookmark className="w-5 h-5" />
-                        <span className="font-medium">My List</span>
-                      </Link>
-                      <Link
-                        href="/watch-later"
-                        className="flex items-center gap-3 p-4 rounded-lg text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <PlayCircle className="w-5 h-5" />
-                        <span className="font-medium">Watch Later</span>
-                      </Link>
                       <Link
                         href="/profile"
                         className="flex items-center gap-3 p-4 rounded-lg text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
@@ -611,6 +411,9 @@ export default function Navbar() {
           )}
         </AnimatePresence>
       </motion.header>
+
+      {/* Spacer to prevent content from going under navbar */}
+      <div className="h-20" />
     </>
   );
 }

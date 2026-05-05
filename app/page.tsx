@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -513,18 +514,26 @@ function ContentCard({
   isInWatchlist,
 }: ContentCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="relative flex-shrink-0 w-64 group"
+      className="relative flex-shrink-0 w-64 group cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link href={`/shows/${item.id}`}>
-        <Card className="overflow-hidden bg-gray-900 border-gray-800 hover:border-red-600 transition-all duration-300 transform group-hover:scale-105">
+      <Card className="overflow-hidden bg-gray-900 border-gray-800 hover:border-red-600 transition-all duration-300 transform group-hover:scale-105">
+        {/* Clickable thumbnail + title area — navigates to show page */}
+        <div
+          role="link"
+          tabIndex={0}
+          onClick={() => router.push(`/shows/${item.id}`)}
+          onKeyDown={(e) => e.key === "Enter" && router.push(`/shows/${item.id}`)}
+          className="block focus:outline-none"
+        >
           {/* Thumbnail */}
           <div className="relative aspect-[16/10]">
             <Image
@@ -566,8 +575,8 @@ function ContentCard({
             )}
           </div>
 
-          {/* Info */}
-          <div className="p-4">
+          {/* Title & meta */}
+          <div className="px-4 pt-4 pb-0">
             <h3 className="text-white font-semibold mb-2 line-clamp-1">
               {item.title}
             </h3>
@@ -586,36 +595,35 @@ function ContentCard({
                 </Badge>
               ))}
             </div>
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                className="flex-1 bg-white text-black hover:bg-gray-200"
-                asChild
-              >
-                <Link href={`/shows/${item.id}`}>
-                  <Play className="w-4 h-4 mr-1 fill-current" />
-                  Play
-                </Link>
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="border-gray-700 hover:border-white"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onWatchlistToggle(item.id, item.title);
-                }}
-              >
-                {isInWatchlist ? (
-                  <Check className="w-4 h-4" />
-                ) : (
-                  <Plus className="w-4 h-4" />
-                )}
-              </Button>
-            </div>
           </div>
-        </Card>
-      </Link>
+        </div>
+
+        {/* Action buttons — outside the clickable area to avoid nested <a> */}
+        <div className="flex gap-2 px-4 pb-4">
+          <Button
+            size="sm"
+            className="flex-1 bg-white text-black hover:bg-gray-200"
+            asChild
+          >
+            <Link href={`/shows/${item.id}`}>
+              <Play className="w-4 h-4 mr-1 fill-current" />
+              Play
+            </Link>
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="border-gray-700 hover:border-white"
+            onClick={() => onWatchlistToggle(item.id, item.title)}
+          >
+            {isInWatchlist ? (
+              <Check className="w-4 h-4" />
+            ) : (
+              <Plus className="w-4 h-4" />
+            )}
+          </Button>
+        </div>
+      </Card>
     </motion.div>
   );
 }

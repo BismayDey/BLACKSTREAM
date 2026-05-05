@@ -8,29 +8,58 @@ import {
   signInWithPopup,
   updateProfile,
   signOut as firebaseSignOut,
-  sendSignInLinkToEmail,
-  isSignInWithEmailLink,
-  signInWithEmailLink,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "firebase/auth"
-import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore"
+import { doc, setDoc, getDoc } from "firebase/firestore"
 import { auth, db } from "@/lib/firebase"
 
 interface AuthContextType {
   user: User | null
   loading: boolean
-  sendSignInLink: (email: string) => Promise<void>
-  completeSignInWithEmailLink: (email: string, emailLink: string) => Promise<void>
+  signUp: (email: string, password: string, displayName?: string) => Promise<void>
+  signIn: (email: string, password: string) => Promise<void>
   signInWithGoogle: () => Promise<void>
+  resetPassword: (email: string) => Promise<void>
   signOut: () => Promise<void>
   updateUserProfile: (data: { displayName?: string; photoURL?: string }) => Promise<void>
   updateUserData: (data: any) => Promise<void>
   getUserData: () => Promise<any>
-  isSignInLink: (url: string) => boolean
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export const useAuth = () => useContext(AuthContext)
+
+const createUserDocument = async (user: User) => {
+  try {
+    const userDoc = doc(db, "users", user.uid)
+    const docSnap = await getDoc(userDoc)
+    if (!docSnap.exists()) {
+      await setDoc(userDoc, {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName || user.email?.split("@")[0],
+        photoURL: user.photoURL,
+        createdAt: new Date().toISOString(),
+        watchHistory: [],
+        watchlist: [],
+        watchLater: [],
+        favorites: [],
+        continueWatching: [],
+        settings: {
+          notifications: true,
+          autoplay: true,
+          subtitlesLanguage: "en",
+          quality: "auto",
+        },
+      })
+    }
+  } catch (err) {
+    console.warn("Could not create user document (possibly offline):", err)
+  }
+}
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
@@ -46,118 +75,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(user)
       setLoading(false)
     })
-
     return () => unsubscribe()
   }, [])
 
-  const sendSignInLink = async (email: string) => {
+  const signUp = async (email: string, password: string, displayName?: string) => {
     try {
-      const actionCodeSettings = {
-        url: `${window.location.origin}/login`,
-        handleCodeInApp: true,
+      const result = await createUserWithEmailAndPassword(auth, email, password)
+      if (displayName) {
+        await updateProfile(result.user, { displayName })
       }
-      
-      await sendSignInLinkToEmail(auth, email, actionCodeSettings)
-      
-      // Save the email to localStorage so we can use it later
-      window.localStorage.setItem('emailForSignIn', email)
+      await createUserDocument(result.user)
     } catch (error) {
-      console.error("Error sending sign in link:", error)
+      console.error("Error signing up:", error)
       throw error
     }
   }
 
-  const completeSignInWithEmailLink = async (email: string, emailLink: string) => {
+  const signIn = async (email: string, password: string) => {
     try {
-      // Check if user is already signed in
-      if (auth.currentUser) {
-        // Already signed in, just clean up
-        window.localStorage.removeItem('emailForSignIn')
-        return
-      }
-
-      const result = await signInWithEmailLink(auth, email, emailLink)
-      
-      // Clear the email from localStorage
-      window.localStorage.removeItem('emailForSignIn')
-      
-      // Try to check and create user document, but don't fail sign-in if offline
-      try {
-        const userDoc = doc(db, "users", result.user.uid)
-        const docSnap = await getDoc(userDoc)
-
-        if (!docSnap.exists()) {
-          await setDoc(userDoc, {
-            uid: result.user.uid,
-            email: result.user.email,
-            displayName: result.user.displayName || result.user.email?.split('@')[0],
-            photoURL: result.user.photoURL,
-            createdAt: new Date().toISOString(),
-            watchHistory: [],
-            watchlist: [],
-            watchLater: [],
-            favorites: [],
-            continueWatching: [],
-            settings: {
-              notifications: true,
-              autoplay: true,
-              subtitlesLanguage: "en",
-              quality: "auto",
-            },
-          })
-        }
-      } catch (firestoreError: any) {
-        // If offline or other Firestore error, log but don't fail the sign-in
-        console.warn("Could not create user document (possibly offline):", firestoreError)
-        // Sign-in is still successful, document will be created when online
-      }
+      await signInWithEmailAndPassword(auth, email, password)
     } catch (error) {
-      console.error("Error completing sign in with email link:", error)
+      console.error("Error signing in:", error)
       throw error
     }
-  }
-
-  const isSignInLink = (url: string) => {
-    return isSignInWithEmailLink(auth, url)
   }
 
   const signInWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider()
       const result = await signInWithPopup(auth, provider)
-
-      // Try to check and create user document, but don't fail sign-in if offline
-      try {
-        const userDoc = doc(db, "users", result.user.uid)
-        const docSnap = await getDoc(userDoc)
-
-        if (!docSnap.exists()) {
-          await setDoc(userDoc, {
-            uid: result.user.uid,
-            email: result.user.email,
-            displayName: result.user.displayName,
-            photoURL: result.user.photoURL,
-            createdAt: new Date().toISOString(),
-            watchHistory: [],
-            watchlist: [],
-            watchLater: [],
-            favorites: [],
-            continueWatching: [],
-            settings: {
-              notifications: true,
-              autoplay: true,
-              subtitlesLanguage: "en",
-              quality: "auto",
-            },
-          })
-        }
-      } catch (firestoreError: any) {
-        // If offline or other Firestore error, log but don't fail the sign-in
-        console.warn("Could not create user document (possibly offline):", firestoreError)
-        // Sign-in is still successful, document will be created when online
-      }
+      await createUserDocument(result.user)
     } catch (error) {
       console.error("Error signing in with Google:", error)
+      throw error
+    }
+  }
+
+  const resetPassword = async (email: string) => {
+    try {
+      await sendPasswordResetEmail(auth, email)
+    } catch (error) {
+      console.error("Error sending password reset:", error)
       throw error
     }
   }
@@ -173,11 +131,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const updateUserProfile = async (data: { displayName?: string; photoURL?: string }) => {
     if (!auth.currentUser) throw new Error("No user logged in")
-
     try {
       await updateProfile(auth.currentUser, data)
-
-      // Also update the user data in Firestore
       const userDoc = doc(db, "users", auth.currentUser.uid)
       await setDoc(userDoc, data, { merge: true })
     } catch (error) {
@@ -188,7 +143,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const updateUserData = async (data: any) => {
     if (!auth.currentUser) throw new Error("No user logged in")
-
     try {
       const userDoc = doc(db, "users", auth.currentUser.uid)
       await setDoc(userDoc, data, { merge: true })
@@ -200,19 +154,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const getUserData = async () => {
     if (!auth.currentUser) throw new Error("No user logged in")
-
     try {
       const userDoc = doc(db, "users", auth.currentUser.uid)
       const docSnap = await getDoc(userDoc)
-
       if (docSnap.exists()) {
         return docSnap.data()
       } else {
-        // Document doesn't exist, create it with default data
         const defaultData = {
           uid: auth.currentUser.uid,
           email: auth.currentUser.email,
-          displayName: auth.currentUser.displayName || auth.currentUser.email?.split('@')[0],
+          displayName: auth.currentUser.displayName || auth.currentUser.email?.split("@")[0],
           photoURL: auth.currentUser.photoURL,
           createdAt: new Date().toISOString(),
           watchHistory: [],
@@ -239,14 +190,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = {
     user,
     loading: loading || !mounted,
-    sendSignInLink,
-    completeSignInWithEmailLink,
+    signUp,
+    signIn,
     signInWithGoogle,
+    resetPassword,
     signOut,
     updateUserProfile,
     updateUserData,
     getUserData,
-    isSignInLink,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
