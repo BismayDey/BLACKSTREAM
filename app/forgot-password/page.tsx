@@ -24,14 +24,12 @@ const SHOWCASE_POSTERS = [
 ]
 
 export default function ForgotPasswordPage() {
-  // ── All hooks MUST be called unconditionally ──
   const [email, setEmail] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [emailSent, setEmailSent] = useState(false)
 
   const auth = useAuth()
-  // ─────────────────────────────────────────────
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,13 +39,9 @@ export default function ForgotPasswordPage() {
       await auth?.resetPassword(email)
       setEmailSent(true)
     } catch (err: any) {
-      if (err.code === "auth/user-not-found") {
-        setError("No account found with this email address.")
-      } else if (err.code === "auth/invalid-email") {
-        setError("Please enter a valid email address.")
-      } else {
-        setError("Failed to send reset email. Please try again.")
-      }
+      if (err.code === "auth/user-not-found") setError("No account found with this email address.")
+      else if (err.code === "auth/invalid-email") setError("Please enter a valid email address.")
+      else setError("Failed to send reset email. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -56,19 +50,28 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen flex bg-black">
       {/* ── LEFT: Form Panel ── */}
-      <div className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-12 relative z-10">
-        {/* Logo */}
-        <Link href="/" className="mb-10 inline-block">
-          <span className="text-2xl font-extrabold tracking-widest text-white">
-            BLACK<span className="text-red-500">STREAM</span>
-          </span>
-        </Link>
+      <div className="flex-1 flex flex-col px-8 sm:px-12 lg:px-16 py-10 relative z-10">
+        {/* Top bar */}
+        <div className="flex items-center justify-between mb-10 shrink-0">
+          <Link href="/" className="inline-block">
+            <span className="text-2xl font-extrabold tracking-widest text-white">
+              BLACK<span className="text-red-500">STREAM</span>
+            </span>
+          </Link>
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
+            Back to Movies
+          </Link>
+        </div>
 
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-sm w-full"
+          className="max-w-sm w-full mx-auto flex-1 flex flex-col justify-center"
         >
           <h1 className="text-4xl font-bold text-white mb-2">Reset password</h1>
           <p className="text-slate-400 mb-8">
@@ -98,7 +101,7 @@ export default function ForgotPasswordPage() {
               <Button
                 type="button"
                 variant="outline"
-                className="w-full border-white/10 bg-white/5 text-white hover:bg-white/10 h-11"
+                className="w-full h-11 border-slate-700 bg-slate-900 text-white hover:bg-slate-800"
                 onClick={() => { setEmailSent(false); setEmail("") }}
               >
                 Try a different email
@@ -107,14 +110,14 @@ export default function ForgotPasswordPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-slate-300 text-sm">Email Address</Label>
+                <Label htmlFor="email" className="text-slate-300 text-sm font-medium">Email Address</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-2.5 h-5 w-5 text-slate-500" />
+                  <Mail className="absolute left-3 top-3 h-5 w-5 text-slate-500 pointer-events-none" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="you@example.com"
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-red-500 focus:ring-red-500/20"
+                    className="h-11 pl-10 bg-slate-900 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-red-500 focus-visible:border-red-500"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
