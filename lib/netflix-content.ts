@@ -4222,6 +4222,226 @@ export const netflixShows: NetflixContent[] = [
       },
     ],
   },
+  // === KOREAN DRAMAS ===
+  {
+    id: "114",
+    title: "Tale of the Nine Tailed",
+    tmdbId: "108284", // ✅ Verified on TMDB — 구미호뎐
+    type: "series",
+    genre: ["Fantasy", "Drama", "Romance", "Mystery"],
+    duration: "70 min",
+    releaseYear: 2020,
+    releaseDate: "October 7, 2020",
+    rating: 8.3,
+    userRating: 8.1,
+    thumbnail:
+      "https://image.tmdb.org/t/p/original/jXx9vLO9bwKxl81oVQnzEH7960V.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/jXx9vLO9bwKxl81oVQnzEH7960V.jpg",
+    backdrop:
+      "https://image.tmdb.org/t/p/original/oPJQvS8Xyg7chAX0jQoC2smqMxv.jpg",
+    videoUrl:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    trailerUrl:
+      "https://www.youtube.com/watch?v=baSPRUFCFCo",
+    description:
+      "A TV producer discovers a secret supernatural world as she becomes entangled with a former mountain deity who has spent centuries searching for his lost lover. Lee Yeon, the legendary nine-tailed fox, navigates the human world while confronting his turbulent past and a dangerous enemy who threatens everything he holds dear.",
+    cast: [
+      "Lee Dong-wook",
+      "Cho Bo-ah",
+      "Kim Bum",
+      "Kim Yong-ji",
+      "Hwang Hee",
+      "Kim Jung-nan",
+      "Lee Tae-ri",
+    ],
+    director: "Kang Shin-hyo",
+    studio: "Studio Dragon / tvN",
+    awards: "2021 Asia Artist Awards",
+    currentSeason: 1,
+    currentEpisode: 1,
+    totalSeasons: 2,
+    totalEpisodes: 28,
+    seasons: [
+      {
+        seasonNumber: 1,
+        episodes: [
+          {
+            title: "The Incident That Occurred on Yeou Gogae",
+            duration: "65 min",
+            description: "As a child, Nam Ji-a loses her parents. Two decades later, a curious case involving a runaway bride and a man with a red umbrella catches her attention.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/zuDz4DIqYXsk7ovKpq0291gDQFe.jpg",
+          },
+          {
+            title: "I've Been Waiting for You",
+            duration: "70 min",
+            description: "Recognizing Lee Yeon as her childhood savior, Ji-a thinks he might have a lead in locating her parents. A skull is discovered on a fishing boat.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/w2n0TgjT70uMhDd6mFzcDTgST8Q.jpg",
+          },
+          {
+            title: "The Secret of the Dragon King",
+            duration: "67 min",
+            description: "A pattern emerges as Ji-a looks into the island's history of strange and suspicious deaths. Lee Rang keeps Yeon distracted.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/uvoOCe8dJ8WBEti0AleqGajPH42.jpg",
+          },
+          {
+            title: "Verge of Death",
+            duration: "69 min",
+            description: "Rang pledges to hurt Yeon for his past actions. Before leaving for hell to serve his punishment, Yeon enjoys a home-cooked meal with Ji-a.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/wRFmKTugX3F2mvftrjWkJgsCGjW.jpg",
+          },
+          {
+            title: "I Also Waited for You",
+            duration: "65 min",
+            description: "As he recovers, Yeon opens up to Ji-a about his first love. Rang and Ki Yu-ri are unable to ignore a creature that is crying out for help.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/lZMKk3hbWSvK5EdWlL1xpJotewX.jpg",
+          },
+          {
+            title: "Four Pillars of Destiny",
+            duration: "65 min",
+            description: "While seeking information about Ji-a's parents, Yeon is reunited with an old acquaintance. Rang tries to get his hands on a valuable artifact.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/t9swd6z3Oclwvc4sG6ViT9ueyC.jpg",
+          },
+          {
+            title: "The Trap of Samsara",
+            duration: "69 min",
+            description: "Worried that Ji-a might not be safe without her fox marble, Yeon insists on keeping a close eye on her. Rang loses his special eyeglasses.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/aE4qTZgbeqQiKcczNw0bZ2xDpsB.jpg",
+          },
+          {
+            title: "Reincarnation",
+            duration: "69 min",
+            description: "The eyeglasses give Ji-a a peek into her tragic history with Yeon. A woman in green traps Rang and Ji-a inside their own minds.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/hITtNqRS6oVTxjJujiwkwj9UT26.jpg",
+          },
+          {
+            title: "Spirit of Darkness",
+            duration: "69 min",
+            description: "Inside the forest of demons, Rang and Yeon fight to survive. Elsewhere, Ji-a begins to forget reality as she gives into a fantasy.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/pSMrQIDm9rdrXKEmRRUyOG473WW.jpg",
+          },
+          {
+            title: "Déjà Vu",
+            duration: "65 min",
+            description: "Rang seeks a way to release himself from the binding debt he owes Kwon Hae-ryong. At work, Ji-a's team welcomes a new intern.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/k55rGWro18bAjuA6g9lYTH7kkXg.jpg",
+          },
+          {
+            title: "Ground Cherries",
+            duration: "66 min",
+            description: "In a confrontation with Yeon, Imugi demonstrates the terrible power he possesses. A visit to death's door yields long-sought answers for Ji-a.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/j6UL0apdlTMyqKSsgA0BIZ58qnJ.jpg",
+          },
+          {
+            title: "Catch the Tail",
+            duration: "68 min",
+            description: "Imugi interrupts Ji-a's newfound happiness with an unsettling appearance in her dreams. Yu-ri temporarily loses control over her actions.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/fN4bBRovSgOV7RB1MKHQSlQTkVx.jpg",
+          },
+          {
+            title: "The Other Imoogi",
+            duration: "67 min",
+            description: "With new revelations weighing heavily in their hearts, Ji-a and Yeon go on a getaway. Yeon identifies a weapon that could be the key to defeating Imugi.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/luVFgXLAifVPvCeRAL6MOo1XiEf.jpg",
+          },
+          {
+            title: "Dead End",
+            duration: "67 min",
+            description: "A mysterious plague sweeps across Seoul. Knowing that Ji-a's life is in greater danger than ever, Yeon proposes a risky alliance.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/dxbA6NIfop0k7ZUKjhUOLEE6588.jpg",
+          },
+          {
+            title: "Without Knowing Imoogi's Plan",
+            duration: "71 min",
+            description: "While Yeon prepares to carry out his plan to put an end to Imugi's terror, Ji-a resolves to protect Yeon. Taluipa arrives at a difficult decision.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/wp3nUdm5P515INm1iq8pXflwmBc.jpg",
+          },
+          {
+            title: "The Rewritten Tale of the Nine Tailed",
+            duration: "80 min",
+            description: "Unable to move on, Ji-a begins a special project. Meanwhile, Rang refuses to give up on finding a way to bring Yeon back.",
+            thumbnail: "https://image.tmdb.org/t/p/w400/1QZZTS6vb56RGisi8nhLLLTLfdf.jpg",
+          },
+        ],
+      },
+      {
+        seasonNumber: 2,
+        episodes: [
+          {
+            title: "Into the Past",
+            duration: "70 min",
+            description: "Lee Yeon and Lee Rang are transported back to 1938 Joseon-era Korea. In an unfamiliar time, Yeon must navigate a dangerous world filled with supernatural threats and colonial tensions.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "The Demon of the Era",
+            duration: "70 min",
+            description: "Yeon encounters powerful demons threatening the people of 1938 Korea. He discovers that evil forces from the past are connected to dangers in the present day.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Shadows of the Past",
+            duration: "70 min",
+            description: "As Yeon and Rang try to find their way back to the present, they uncover dark secrets buried in the history of their family and the supernatural world.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "The Price of Power",
+            duration: "70 min",
+            description: "Yeon faces a formidable new enemy who wields ancient powers. Rang must choose between his own survival and protecting his brother.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Ties That Bind",
+            duration: "70 min",
+            description: "Bonds between Yeon and Rang are tested as they face increasing danger. A mysterious figure from their past resurfaces with hidden motives.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "The Forbidden Path",
+            duration: "70 min",
+            description: "Yeon discovers a forbidden path between the human world and the spirit realm. Using it could change everything — but at a terrible cost.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Betrayal",
+            duration: "70 min",
+            description: "A shocking betrayal puts Yeon and Rang in mortal danger. The brothers must trust each other like never before to survive the coming storm.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "The Heart of the Fox",
+            duration: "70 min",
+            description: "Yeon confronts the true nature of his nine-tailed fox powers as the final battle approaches. Love and loyalty are pushed to their absolute limits.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Between Two Worlds",
+            duration: "70 min",
+            description: "The boundary between the past and the present begins to collapse. Yeon races against time to seal a dangerous rift before both worlds are destroyed.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "The Final Curse",
+            duration: "70 min",
+            description: "An ancient curse threatens to consume Yeon forever. Ji-a, watching from the present, risks everything to reach across time and save him.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Brothers",
+            duration: "70 min",
+            description: "Yeon and Rang face their ultimate test as brothers. The sacrifice one of them makes will echo through centuries and reshape the fate of the supernatural world.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+          {
+            title: "Return",
+            duration: "80 min",
+            description: "The Season 2 finale. With the past finally at peace, Yeon and Rang must find their way home. But the journey back is fraught with one last dangerous trial.",
+            thumbnail: "/placeholder.svg?height=720&width=1280",
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export default netflixShows;
