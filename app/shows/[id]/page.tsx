@@ -1063,25 +1063,40 @@ export default function ShowPage() {
           className="rounded-2xl overflow-hidden shadow-2xl border border-white/10"
         >
           {show.tmdbId ? (
-            <VidkingPlayer
-              tmdbId={show.tmdbId}
-              type={show.type === "series" ? "tv" : "movie"}
-              season={currentSeason}
-              episode={currentEpisode}
-              title={show.title}
-              color="e50914"
-              autoPlay={false}
-              nextEpisode={show.type === "series"}
-              episodeSelector={show.type === "series"}
-              onProgressUpdate={(progress, timestamp) => {
-                console.log(`Progress: ${progress}%, Timestamp: ${timestamp}s`);
-                // Track progress for continue watching
-                if (progress && timestamp !== undefined) {
-                  const progressPercent = progress / 100; // Convert to 0-1 range
-                  handleVideoProgress(progressPercent, timestamp, 0);
-                }
-              }}
-            />
+            (() => {
+              // Resolve the correct TMDB ID for this season.
+              // Some shows (e.g. "Tale of the Nine Tailed" Season 2 = 1938)
+              // are registered as a completely separate TMDB entry.
+              const resolvedTmdbId =
+                show.seasonTmdbIds?.[currentSeason] ?? show.tmdbId;
+              // If the season has its own TMDB entry it is season 1 of that entry.
+              const resolvedSeason =
+                show.seasonTmdbIds?.[currentSeason] &&
+                show.seasonTmdbIds[currentSeason] !== show.tmdbId
+                  ? 1
+                  : currentSeason;
+
+              return (
+                <VidkingPlayer
+                  tmdbId={resolvedTmdbId}
+                  type={show.type === "series" ? "tv" : "movie"}
+                  season={resolvedSeason}
+                  episode={currentEpisode}
+                  title={show.title}
+                  color="e50914"
+                  autoPlay={false}
+                  nextEpisode={show.type === "series"}
+                  episodeSelector={show.type === "series"}
+                  onProgressUpdate={(progress, timestamp) => {
+                    console.log(`Progress: ${progress}%, Timestamp: ${timestamp}s`);
+                    if (progress && timestamp !== undefined) {
+                      const progressPercent = progress / 100;
+                      handleVideoProgress(progressPercent, timestamp, 0);
+                    }
+                  }}
+                />
+              );
+            })()
           ) : (
             <VideoPlayerSafe
               videoUrl={show.videoUrl}
@@ -1373,7 +1388,10 @@ export default function ShowPage() {
                         <div className="flex items-center justify-between mb-6">
                           <Select
                             value={currentSeason.toString()}
-                            onValueChange={(value) => setCurrentSeason(parseInt(value))}
+                            onValueChange={(value) => {
+                              setCurrentSeason(parseInt(value));
+                              setCurrentEpisode(1); // Always start at E1 when switching seasons
+                            }}
                           >
                             <SelectTrigger className="w-48">
                               <SelectValue placeholder="Select Season" />

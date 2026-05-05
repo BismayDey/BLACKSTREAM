@@ -46,6 +46,8 @@ export interface NetflixContent {
       thumbnail: string;
     }[];
   }[];
+  // Per-season TMDB IDs — used when a sequel/spin-off season has its own TMDB entry
+  seasonTmdbIds?: Record<number, string>;
 }
 
 export const netflixShows: NetflixContent[] = [
@@ -4261,6 +4263,11 @@ export const netflixShows: NetflixContent[] = [
     currentEpisode: 1,
     totalSeasons: 2,
     totalEpisodes: 28,
+    // Season 2 (1938) is a separate TMDB show — id 205663
+    seasonTmdbIds: {
+      1: "108284",
+      2: "205663",
+    },
     seasons: [
       {
         seasonNumber: 1,
